@@ -1,0 +1,5 @@
+<resources>
+    <string name="menu_title_tasks">Tasks</string>
+    <string name="menu_title_timer">Timer</string>
+    <string name="menu_title_settings">Settings</string>
+</resources>
