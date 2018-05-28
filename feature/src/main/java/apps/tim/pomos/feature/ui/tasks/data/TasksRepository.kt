@@ -1,7 +1,6 @@
 package apps.tim.pomos.feature.ui.tasks.data
 
 import apps.tim.pomos.feature.PomoApp
-import apps.tim.pomos.feature.ui.tasks.data.Task
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,6 +16,6 @@ class TasksRepository {
     }
 
     fun getTasks(pos: Int?): Flowable<List<Task>>? {
-        return PomoApp.database?.taskDao()?.getAllTasks()
+        return PomoApp.database?.taskDao()?.getTasksByDateRange()
     }
 }

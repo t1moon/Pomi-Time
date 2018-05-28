@@ -1,7 +1,6 @@
 package apps.tim.pomos.feature.ui.tasks
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -9,12 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.ui.base.BaseFragment
-import apps.tim.pomos.feature.ui.tasks.data.Task
 import apps.tim.pomos.feature.ui.tasks.data.TasksRepository
 import apps.tim.pomos.feature.ui.tasks.pager.PagerAdapter
 import apps.tim.pomos.feature.ui.tasks.pager.TaskListFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
 
 class TasksFragment : BaseFragment() {
@@ -40,8 +36,8 @@ class TasksFragment : BaseFragment() {
 
     private fun setupViewPager() {
         val adapter = PagerAdapter(childFragmentManager)
-        for (i in 1..4)
-            adapter.addFragment(TaskListFragment())
+        for (i in 0..3)
+            adapter.addFragment(TaskListFragment.newInstance(i))
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}

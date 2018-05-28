@@ -10,7 +10,7 @@ import io.reactivex.Flowable
 interface TaskDao {
 
     @Query("SELECT * FROM task")
-    fun getAllTasks(): Flowable<List<Task>>
+    fun getTasksByDateRange(): Flowable<List<Task>>
 
     @Insert(onConflict = REPLACE)
     fun insert(task: Task)
