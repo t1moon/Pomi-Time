@@ -1,7 +1,9 @@
 package apps.tim.pomos.feature
 
 import android.app.Application
+import android.arch.persistence.room.Room
 import android.content.Context
+import apps.tim.pomos.feature.ui.tasks.data.TaskDatabase
 
 class PomoApp: Application() {
     init {
@@ -10,6 +12,8 @@ class PomoApp: Application() {
 
     companion object {
         private var instance: PomoApp? = null
+        var database: TaskDatabase? = null
+
 
         fun applicationContext() : Context {
             return instance!!.applicationContext
@@ -18,10 +22,6 @@ class PomoApp: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // initialize for any
-
-        // Use ApplicationContext.
-        // example: SharedPreferences etc...
-        val context: Context = PomoApp.applicationContext()
+        PomoApp.database =  Room.databaseBuilder(this, TaskDatabase::class.java, "tasks_db").build()
     }
 }

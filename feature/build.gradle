@@ -1,6 +1,8 @@
 apply plugin: 'com.android.feature'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
 
 android {
     compileSdkVersion 27
@@ -15,6 +17,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
     }
 }
@@ -29,6 +32,13 @@ dependencies {
 
     api "io.reactivex.rxjava2:rxjava:2.1.8"
     api "io.reactivex.rxjava2:rxandroid:2.0.1"
+
+    api "android.arch.persistence.room:runtime:1.1.0"
+    kapt "android.arch.persistence.room:compiler:1.1.0"
+    // RxJava support for Room
+    api "android.arch.persistence.room:rxjava2:1.1.1-rc1"
+
+
 
 }
 repositories {
