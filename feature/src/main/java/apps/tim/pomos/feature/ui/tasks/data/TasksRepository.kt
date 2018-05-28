@@ -16,7 +16,7 @@ class TasksRepository {
                 .observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 
-    fun getTasks(pos: Int?): Flowable<List<Task>> {
-        return Flowable.just(listOf(Task("First $pos"), Task("Second $pos")))
+    fun getTasks(pos: Int?): Flowable<List<Task>>? {
+        return PomoApp.database?.taskDao()?.getAllTasks()
     }
 }

@@ -31,7 +31,7 @@ class TaskListFragment : BaseFragment() {
 
     fun loadTasks(position: Int) {
         compositeDisposable.add(TasksViewModel(TasksRepository())
-                .getTasks(position)
+                .getTasks(position)!!
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {  items: List<Task> -> this.setTasks(items) }

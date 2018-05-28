@@ -14,12 +14,10 @@ class TasksViewModel(val tasksRepository: TasksRepository) : ViewModel() {
 
 
     fun addTask() {
-        val task = Task("Some task")
-        Single.fromCallable { PomoApp.database?.taskDao()?.insert(task) }.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+        val task = Task(null, "Some task")
+        tasksRepository.addTask(task)
     }
-    fun getTasks(pos: Int?): Flowable<List<Task>> {
+    fun getTasks(pos: Int?): Flowable<List<Task>>? {
         return tasksRepository.getTasks(pos)
     }
 
