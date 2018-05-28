@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import apps.tim.pomos.feature.R
-import kotlinx.android.synthetic.main.fragment_tasks.*
+import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
 import kotlinx.android.synthetic.main.fragment_timer.*
 
 class TimerFragment : Fragment() {

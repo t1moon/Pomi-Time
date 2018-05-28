@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import apps.tim.pomos.feature.R
 import kotlinx.android.synthetic.main.fragment_settings.*
-import kotlinx.android.synthetic.main.fragment_tasks.*
+import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
 
 class SettingsFragment : Fragment() {
 

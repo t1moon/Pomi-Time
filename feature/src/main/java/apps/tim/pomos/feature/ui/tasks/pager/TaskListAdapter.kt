@@ -1,4 +1,4 @@
-package apps.tim.pomos.feature.ui.tasks
+package apps.tim.pomos.feature.ui.tasks.pager
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import apps.tim.pomos.feature.R
+import apps.tim.pomos.feature.ui.tasks.data.Task
 
-class TasksAdapter(val items : List<Task>, val context: Context?): RecyclerView.Adapter<TasksAdapter.TaskHolder>() {
+class TaskListAdapter(val items : List<Task>, val context: Context?): RecyclerView.Adapter<TaskListAdapter.TaskHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskHolder {
         return TaskHolder(LayoutInflater.from(context).inflate(R.layout.task_list_item, parent, false))

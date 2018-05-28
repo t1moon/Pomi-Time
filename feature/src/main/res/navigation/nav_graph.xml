@@ -21,7 +21,7 @@
         android:id="@+id/tasksFragment"
         android:name="apps.tim.pomos.feature.ui.tasks.TasksFragment"
         android:label="Tasks"
-        tools:layout="@layout/fragment_tasks">
+        tools:layout="@layout/fragment_tasks_tabs">
 
     </fragment>
 
