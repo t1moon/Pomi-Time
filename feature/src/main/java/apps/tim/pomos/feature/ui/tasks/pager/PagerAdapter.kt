@@ -23,8 +23,5 @@ class PagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
     }
 
     override fun getCount() = fragmentList.size
-    fun loadData(position: Int) {
-        fragmentList[position].loadTasks(position)
-    }
 
 }
