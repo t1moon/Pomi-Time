@@ -8,7 +8,7 @@ import io.reactivex.Flowable
 
 
 
-class TasksViewModel(val tasksRepository: TasksRepository) : ViewModel() {
+class TasksViewModel(private val tasksRepository: TasksRepository) : ViewModel() {
 
 
     fun addTask() {

@@ -14,7 +14,7 @@ import apps.tim.pomos.feature.ui.tasks.data.Task
 
 
 
-class TaskListAdapter(val items : List<Task>, val context: Context?): RecyclerView.Adapter<TaskListAdapter.TaskHolder>() {
+class TaskListAdapter(private val items : List<Task>, val context: Context): RecyclerView.Adapter<TaskListAdapter.TaskHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskHolder {
         return TaskHolder(LayoutInflater.from(context).inflate(R.layout.task_list_item, parent, false))

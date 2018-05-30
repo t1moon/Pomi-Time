@@ -1,7 +1,6 @@
 package apps.tim.pomos.feature.ui.tasks
 
 import android.os.Bundle
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
@@ -39,12 +38,6 @@ class TasksFragment : BaseFragment() {
         for (i in 0..3)
             adapter.addFragment(TaskListFragment.newInstance(i))
         viewPager.adapter = adapter
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-            override fun onPageSelected(position: Int) = adapter.loadData(position)
-        })
         tabs.setupWithViewPager(viewPager)
-        adapter.loadData(0)
     }
 }

@@ -7,5 +7,5 @@ import android.arch.persistence.room.PrimaryKey
 @Entity
 data class Task(
         @PrimaryKey(autoGenerate = true) val id: Long?,
-        @ColumnInfo val title: String
+        @ColumnInfo var title: String
 )

@@ -1,5 +1,6 @@
 package apps.tim.pomos.feature.ui.tasks.pager
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -17,46 +18,38 @@ import kotlinx.android.synthetic.main.fragment_tasks_list.*
 
 class TaskListFragment : BaseFragment() {
 
-
     companion object {
+        private const val position: String = "POSITION"
+
         fun newInstance(pos: Int) : TaskListFragment {
             val fragment = TaskListFragment()
             val bundle = Bundle()
-            bundle.putInt("pos", pos)
+            bundle.putInt(position, pos)
             fragment.arguments = bundle
             return fragment
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_tasks_list, container, false)
+        return container?.inflate(R.layout.fragment_tasks_list)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         compositeDisposable.add(TasksViewModel(TasksRepository())
-                .getTasks(this@TaskListFragment.arguments?.get("pos") as Int)!!
+                .getTasks(this@TaskListFragment.arguments?.get(position) as Int)!!
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {  items: List<Task> -> this.setTasks(items) }
         )
     }
     private fun setTasks(items: List<Task>) {
-        taskList.layoutManager = LinearLayoutManager(this@TaskListFragment.activity)
-//        val itemDecor = DividerItemDecoration(this@TaskListFragment.activity,
-//                (taskList.layoutManager as LinearLayoutManager).orientation)
-//        taskList.addItemDecoration(itemDecor)
-
-        taskList.adapter = TaskListAdapter(items, this@TaskListFragment.activity)
-        taskList.adapter.notifyDataSetChanged()
-    }
-
-    fun loadTasks(position: Int) {
-//        compositeDisposable.add(TasksViewModel(TasksRepository())
-//                .getTasks(position)!!
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe {  items: List<Task> -> this.setTasks(items) }
-//        )
+        context?.let {
+            taskList.layoutManager = LinearLayoutManager(context)
+            val decoration = ListSeparator(context as Context, resources.getColor(R.color.listSeparator), 1f)
+            taskList.addItemDecoration(decoration)
+            taskList.adapter = TaskListAdapter(items, context as Context)
+            taskList.adapter.notifyDataSetChanged()
+        }
     }
 }
