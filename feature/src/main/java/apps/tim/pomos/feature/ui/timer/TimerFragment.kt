@@ -2,10 +2,10 @@ package apps.tim.pomos.feature.ui.timer
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import apps.tim.pomos.feature.R
 import kotlinx.android.synthetic.main.fragment_timer.*
 
@@ -16,8 +16,10 @@ class TimerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (activity as AppCompatActivity).setSupportActionBar(timerToolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+        val taskTitleString = arguments?.get("Title") as String
+        taskTitle.text = taskTitleString
+        backButton.setOnClickListener { activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp() }
+        timer.setOnClickListener { timer.toggle() }
     }
 
 }

@@ -1,5 +1,6 @@
 package apps.tim.pomos.feature.ui.picker
 
+import android.app.Dialog
 import android.app.DialogFragment
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,8 +19,14 @@ class PickerFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         button.setOnClickListener{
-            TasksViewModel(TasksRepository()).addTask(inputText.text.toString())
+            TasksViewModel(TasksRepository()).addTask(editText.text.toString())
             dismiss()
         }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val d = super.onCreateDialog(savedInstanceState)
+        d.window.setBackgroundDrawableResource(R.drawable.picker_layout_background)
+        return d
     }
 }

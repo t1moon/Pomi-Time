@@ -13,6 +13,8 @@ import apps.tim.pomos.feature.ui.tasks.pager.TaskListFragment
 import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
 
 
+
+
 class TasksFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,6 +33,7 @@ class TasksFragment : BaseFragment() {
         addTaskButton.setOnClickListener {
             val picker = PickerFragment()
             picker.show(this@TasksFragment.activity?.fragmentManager, "Picker")
+
         }
     }
 

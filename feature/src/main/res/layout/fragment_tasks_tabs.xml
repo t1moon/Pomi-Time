@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/title_padding_left"
                 android:text="Pomos"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="40sp"
                 android:textStyle="bold" />
         </android.support.v7.widget.Toolbar>
 

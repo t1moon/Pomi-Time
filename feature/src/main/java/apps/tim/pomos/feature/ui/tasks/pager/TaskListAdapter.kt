@@ -1,6 +1,7 @@
 package apps.tim.pomos.feature.ui.tasks.pager
 
 import android.content.Context
+import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +32,9 @@ class TaskListAdapter(private val items : List<Task>, val context: Context): Rec
 
         init {
             itemView?.setOnClickListener {
-                it.findNavController().navigate(R.id.action_tasksFragment_to_timerFragment)}
+                val bundle = Bundle()
+                bundle.putString("Title", taskTitle?.text.toString())
+                it.findNavController().navigate(R.id.action_tasksFragment_to_timerFragment, bundle)}
         }
 
         fun bind(items: List<Task>) {
