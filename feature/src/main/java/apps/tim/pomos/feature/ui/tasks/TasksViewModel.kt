@@ -11,8 +11,8 @@ import io.reactivex.Flowable
 class TasksViewModel(private val tasksRepository: TasksRepository) : ViewModel() {
 
 
-    fun addTask() {
-        val task = Task(null, "Some task")
+    fun addTask(text: String) {
+        val task = Task(null,  text)
         tasksRepository.addTask(task)
     }
     fun getTasks(pos: Int?): Flowable<List<Task>>? {

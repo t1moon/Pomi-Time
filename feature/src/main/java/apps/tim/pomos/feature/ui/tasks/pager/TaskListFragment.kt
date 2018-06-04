@@ -21,7 +21,7 @@ class TaskListFragment : BaseFragment() {
     companion object {
         private const val position: String = "POSITION"
 
-        fun newInstance(pos: Int) : TaskListFragment {
+        fun newInstance(pos: Int): TaskListFragment {
             val fragment = TaskListFragment()
             val bundle = Bundle()
             bundle.putInt(position, pos)
@@ -40,9 +40,10 @@ class TaskListFragment : BaseFragment() {
                 .getTasks(this@TaskListFragment.arguments?.get(position) as Int)!!
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {  items: List<Task> -> this.setTasks(items) }
+                .subscribe { items: List<Task> -> this.setTasks(items) }
         )
     }
+
     private fun setTasks(items: List<Task>) {
         context?.let {
             taskList.layoutManager = LinearLayoutManager(context)

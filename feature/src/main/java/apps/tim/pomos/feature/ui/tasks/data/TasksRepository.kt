@@ -17,9 +17,9 @@ class TasksRepository {
 
     fun getTasks(pos: Int?): Flowable<List<Task>>? {
         return PomoApp.database?.taskDao()?.getTasksByDateRange()
-                ?.map { t ->
-                    t.map { it.title = "$pos" }
-                    t
-                }
+//                ?.map { t ->
+//                    t.map { it.title = "$pos" }
+//                    t
+//                }
     }
 }

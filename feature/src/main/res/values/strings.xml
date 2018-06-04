@@ -7,4 +7,5 @@
     <string name="task_tabs_2">Week</string>
     <string name="task_tabs_3">Month</string>
     <string name="task_tabs_4">Other</string>
+    <string name="add_task_title_hint" >Pomo title</string>
 </resources>

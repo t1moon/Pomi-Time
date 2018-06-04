@@ -2,20 +2,13 @@
 <navigation xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/timerFragment">
+    app:startDestination="@id/tasksFragment">
 
     <fragment
         android:id="@+id/timerFragment"
         android:name="apps.tim.pomos.feature.ui.timer.TimerFragment"
         android:label="Timer"
-        tools:layout="@layout/fragment_timer">
-        <action
-            android:id="@+id/action_timerFragment_to_tasksFragment"
-            app:destination="@id/tasksFragment" />
-        <action
-            android:id="@+id/action_timerFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_timer"></fragment>
 
     <fragment
         android:id="@+id/tasksFragment"
@@ -23,6 +16,12 @@
         android:label="Tasks"
         tools:layout="@layout/fragment_tasks_tabs">
 
+        <action
+            android:id="@+id/action_tasksFragment_to_timerFragment"
+            app:destination="@id/timerFragment" />
+        <action
+            android:id="@+id/action_tasksFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
