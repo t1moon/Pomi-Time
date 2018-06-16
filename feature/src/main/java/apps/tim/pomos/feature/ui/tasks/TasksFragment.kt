@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.ui.base.BaseFragment
-import apps.tim.pomos.feature.ui.picker.PickerFragment
+import apps.tim.pomos.feature.ui.picker.AddTaskFragment
 import apps.tim.pomos.feature.ui.tasks.pager.PagerAdapter
 import apps.tim.pomos.feature.ui.tasks.pager.TaskListFragment
 import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
@@ -31,9 +31,8 @@ class TasksFragment : BaseFragment() {
 
     private fun setupAddButton() {
         addTaskButton.setOnClickListener {
-            val picker = PickerFragment()
+            val picker = AddTaskFragment()
             picker.show(this@TasksFragment.activity?.fragmentManager, "Picker")
-
         }
     }
 

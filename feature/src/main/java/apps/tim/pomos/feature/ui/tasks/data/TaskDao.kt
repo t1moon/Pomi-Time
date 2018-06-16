@@ -1,6 +1,7 @@
 package apps.tim.pomos.feature.ui.tasks.data
 
 import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
 import android.arch.persistence.room.Query
@@ -14,4 +15,13 @@ interface TaskDao {
 
     @Insert(onConflict = REPLACE)
     fun insert(task: Task)
+
+    @Query("UPDATE task SET title = :title WHERE id =:id")
+    fun updateTitle(title: String?, id: Long)
+
+    @Delete
+    fun delete(task: Task)
+
+    @Query("UPDATE task SET complete = :complete WHERE id =:id")
+    fun compeleTaskById(complete: Boolean, id: Long)
 }

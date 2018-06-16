@@ -12,14 +12,32 @@ class TasksRepository {
     fun addTask(task: Task) {
         Single.fromCallable { PomoApp.database?.taskDao()?.insert(task) }
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+    }
+
+    fun updateTitle(title: String, id: Long) {
+        Single.fromCallable { PomoApp.database?.taskDao()?.updateTitle(title, id) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
     }
 
     fun getTasks(pos: Int?): Flowable<List<Task>>? {
         return PomoApp.database?.taskDao()?.getTasksByDateRange()
-//                ?.map { t ->
-//                    t.map { it.title = "$pos" }
-//                    t
-//                }
+    }
+
+    fun deleteTask(task: Task) {
+        Single.fromCallable { PomoApp.database?.taskDao()?.delete(task) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+    }
+
+    fun completeTaskById(complete: Boolean, id: Long) {
+        Single.fromCallable { PomoApp.database?.taskDao()?.compeleTaskById(complete, id) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
     }
 }

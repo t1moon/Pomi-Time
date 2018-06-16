@@ -12,6 +12,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        androidExtensions {
+            experimental = true
+        }
     }
     buildTypes {
         release {
@@ -42,8 +45,6 @@ dependencies {
     api "android.arch.persistence.room:runtime:$room_version"
     kapt "android.arch.persistence.room:compiler:$room_version"
     api "android.arch.persistence.room:rxjava2:$room_version"
-
-
 
 }
 
