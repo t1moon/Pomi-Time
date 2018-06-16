@@ -3,6 +3,7 @@
     <declare-styleable name="SectorProgressView">
         <attr name="bgColor" />
         <attr name="fgColor" />
+        <attr name="fgColorPause" />
         <attr name="percent" />
         <attr name="startAngle" />
     </declare-styleable>

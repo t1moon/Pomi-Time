@@ -5,6 +5,7 @@ import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.os.Build
@@ -13,16 +14,25 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.BounceInterpolator
 import apps.tim.pomos.feature.R
+import android.media.RingtoneManager
+
+
 
 
 class TimerView : View {
     private var bgColor: Int = 0
     private var fgColor: Int = 0
+    private var fgColorPause: Int = 0
+    private var pauseColor: Int = 0
     private var bgPaint: Paint? = null
     private var fgPaint: Paint? = null
+    private var pausePaint: Paint? = null
     private var fgPaint1: Paint? = null
+
     private var oval: RectF? = null
     private var outerOval: RectF? = null
+    private var pauseOvalLeft: RectF? = null
+    private var pauseOvalRight: RectF? = null
 
     private var animator: ObjectAnimator? = null
     private var sectors: Int = 0
@@ -50,13 +60,13 @@ class TimerView : View {
         try {
             bgColor = a.getColor(R.styleable.SectorProgressView_bgColor, -0x1a1a1b)
             fgColor = a.getColor(R.styleable.SectorProgressView_fgColor, -0x89a4)
+            fgColorPause = a.getColor(R.styleable.SectorProgressView_fgColorPause, -0x89a4)
             percent = a.getFloat(R.styleable.SectorProgressView_percent, 0f)
             startAngle = a.getFloat(R.styleable.SectorProgressView_startAngle, 0f) + 270
 
         } finally {
             a.recycle()
         }
-
         init()
     }
 
@@ -66,12 +76,17 @@ class TimerView : View {
         bgPaint!!.isAntiAlias = true
 
         fgPaint = Paint()
-        fgPaint!!.color = fgColor
+        fgPaint!!.color = fgColorPause
         fgPaint!!.isAntiAlias = true
 
         fgPaint1 = Paint()
-        fgPaint1!!.color = fgColor
+        fgPaint1!!.color = fgColorPause
         fgPaint1!!.isAntiAlias = true
+
+        pausePaint = Paint()
+        pauseColor = resources.getColor(R.color.timerPause)
+        pausePaint!!.color = pauseColor
+        pausePaint!!.isAntiAlias = true
 
         fgPaint1!!.style = Paint.Style.STROKE
         fgPaint1!!.strokeWidth = 7f
@@ -88,9 +103,28 @@ class TimerView : View {
         val hhd = h.toFloat() - ypad
 
         val ovalPadding = (w / 15).toFloat()
+        val centerX = (w / 2).toFloat()
+        val centerY = (h / 2).toFloat()
+        val pauseOvalPaddingCenter = (w / 15).toFloat()
+        val pauseHeight = (w / 4).toFloat()
+        val pauseWidth = (w / 6).toFloat()
+
         oval = RectF(paddingLeft + ovalPadding, paddingTop + ovalPadding,
                 paddingLeft + wwd - ovalPadding, paddingTop + hhd - ovalPadding)
         outerOval = RectF(paddingLeft.toFloat(), paddingTop.toFloat(), paddingLeft + wwd, paddingTop + hhd)
+
+        pauseOvalLeft = RectF(
+                paddingLeft + centerX - pauseOvalPaddingCenter - pauseWidth,
+                paddingTop + centerY - pauseHeight,
+                paddingLeft + centerX - pauseOvalPaddingCenter,
+                paddingTop + centerY + pauseHeight)
+
+        pauseOvalRight = RectF(
+                paddingLeft + centerX + pauseOvalPaddingCenter,
+                paddingTop + centerY - pauseHeight,
+                paddingLeft + centerX + pauseOvalPaddingCenter + pauseWidth,
+                paddingTop + centerY + pauseHeight)
+
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -103,32 +137,10 @@ class TimerView : View {
         super.onDraw(canvas)
         canvas.drawArc(oval!!, startAngle, percent * 3.6f, true, fgPaint!!)
         canvas.drawArc(outerOval!!, startAngle, 360f, true, fgPaint1!!)
+        canvas.drawRoundRect(pauseOvalLeft!!, 10f, 10f, pausePaint!!)
+        canvas.drawRoundRect(pauseOvalRight!!, 10f, 10f, pausePaint!!)
     }
 
-
-    fun getBgColor(): Int {
-        return bgColor
-    }
-
-    fun setBgColor(bgColor: Int) {
-        this.bgColor = bgColor
-        refreshTheLayout()
-    }
-
-    fun getFgColor(): Int {
-        return fgColor
-    }
-
-    fun setFgColor(fgColor: Int) {
-        this.fgColor = fgColor
-        refreshTheLayout()
-    }
-
-
-    private fun refreshTheLayout() {
-        invalidate()
-        requestLayout()
-    }
 
     fun getStartAngle(): Float {
         return startAngle
@@ -181,8 +193,45 @@ class TimerView : View {
                 addUpdateListener {
                     elevation = it.animatedValue as Float
                 }
+                if (pushed)
+                    interpolator = BounceInterpolator()
                 start()
             }
         }
+        var color: Int = if (!pushed)
+            fgColorPause
+        else
+            fgColor
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ValueAnimator.ofArgb(fgPaint!!.color, color).apply {
+                duration = 600
+                addUpdateListener {
+                    fgPaint!!.color = it.animatedValue as Int
+                    fgPaint1!!.color = it.animatedValue as Int
+                    invalidate()
+                }
+                start()
+            }
+        }
+
+        var pauseColor: Int = if (!pushed)
+            pauseColor
+        else
+            Color.TRANSPARENT
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ValueAnimator.ofArgb(pausePaint!!.color, pauseColor).apply {
+                duration = 600
+                addUpdateListener {
+                    pausePaint!!.color = it.animatedValue as Int
+                    invalidate()
+                }
+                start()
+            }
+        }
+
+        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        RingtoneManager.getRingtone(context, uri).play()
     }
 }

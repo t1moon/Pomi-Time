@@ -3,12 +3,16 @@
     <color name="colorPrimary">#FBFBFB</color>
     <color name="colorPrimaryDark">#DFE4E5</color>
     <color name="colorAccent">#AE4040</color>
+    <color name="colorAccentTransparent">#AAAE4040</color>
 
     <color name="primaryText">#000000</color>
     <color name="accentText">#303340</color>
     <color name="secondaryText">#989898</color>
-    <color name="appBackground">#FFFFFF</color>
+    <color name="appBackground">#FBFBFB</color>
     <color name="menuIcon">#000000</color>
     <color name="listSeparator">#e9e9e9</color>
+
+
+    <color name="timerPause">#B32E313F</color>
 
 </resources>
