@@ -6,17 +6,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import apps.tim.pomos.feature.PomoApp
 import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.ui.TASK_ARG
 import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Task
-import apps.tim.pomos.feature.ui.tasks.data.TasksRepository
 import kotlinx.android.synthetic.main.fragment_edit.*
+import javax.inject.Inject
 
 class EditTaskFragment : DialogFragment() {
     lateinit var task: Task
+
+    @Inject
+    lateinit var tasksViewModel: TasksViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        PomoApp.component.getFragmentComponent().inject(this)
         task = arguments.get(TASK_ARG) as Task
     }
 
@@ -28,15 +34,15 @@ class EditTaskFragment : DialogFragment() {
         taskTitle.setText(task.title)
         taskTitle.setSelection(taskTitle.text.toString().length)
         ok.setOnClickListener{
-            TasksViewModel(TasksRepository()).updateTask(taskTitle.text.toString(), task.id)
+            tasksViewModel.updateTask(taskTitle.text.toString(), task.id)
             dismiss()
         }
         delete.setOnClickListener {
-            TasksViewModel(TasksRepository()).deleteTask(task)
+            tasksViewModel.deleteTask(task)
             dismiss()
         }
         complete.setOnClickListener {
-            TasksViewModel(TasksRepository()).completeTaskById(true, task.id)
+            tasksViewModel.completeTaskById(true, task.id)
             dismiss()
         }
     }

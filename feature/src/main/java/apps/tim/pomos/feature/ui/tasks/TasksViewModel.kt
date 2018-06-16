@@ -1,12 +1,11 @@
 package apps.tim.pomos.feature.ui.tasks
 
-import android.arch.lifecycle.ViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import apps.tim.pomos.feature.ui.tasks.data.TasksRepository
 import io.reactivex.Flowable
 
 
-class TasksViewModel(private val tasksRepository: TasksRepository) : ViewModel() {
+class TasksViewModel(private val tasksRepository: TasksRepository) {
 
     fun addTask(text: String) {
         val task = Task(0, text)

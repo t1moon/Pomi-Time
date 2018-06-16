@@ -14,10 +14,10 @@ class PagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
 
     override fun getPageTitle(position: Int): CharSequence? {
         when(position) {
-            0 -> return PomoApp.applicationContext().getString(R.string.task_tabs_1)
-            1 -> return PomoApp.applicationContext().getString(R.string.task_tabs_2)
-            2 -> return PomoApp.applicationContext().getString(R.string.task_tabs_3)
-            3 -> return PomoApp.applicationContext().getString(R.string.task_tabs_4)
+            0 -> return PomoApp.string(R.string.task_tabs_1)
+            1 -> return PomoApp.string(R.string.task_tabs_2)
+            2 -> return PomoApp.string(R.string.task_tabs_3)
+            3 -> return PomoApp.string(R.string.task_tabs_4)
         }
         return null
     }

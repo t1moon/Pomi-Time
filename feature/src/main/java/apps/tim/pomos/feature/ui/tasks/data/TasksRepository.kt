@@ -1,41 +1,40 @@
 package apps.tim.pomos.feature.ui.tasks.data
 
-import apps.tim.pomos.feature.PomoApp
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class TasksRepository {
+class TasksRepository(private val taskDatabase: TaskDatabase) {
 
     fun addTask(task: Task) {
-        Single.fromCallable { PomoApp.database?.taskDao()?.insert(task) }
+        Single.fromCallable { taskDatabase.taskDao().insert(task) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
     }
 
     fun updateTitle(title: String, id: Long) {
-        Single.fromCallable { PomoApp.database?.taskDao()?.updateTitle(title, id) }
+        Single.fromCallable { taskDatabase.taskDao().updateTitle(title, id) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
     }
 
     fun getTasks(pos: Int?): Flowable<List<Task>>? {
-        return PomoApp.database?.taskDao()?.getTasksByDateRange()
+        return taskDatabase.taskDao().getTasksByDateRange()
     }
 
     fun deleteTask(task: Task) {
-        Single.fromCallable { PomoApp.database?.taskDao()?.delete(task) }
+        Single.fromCallable { taskDatabase.taskDao().delete(task) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
     }
 
     fun completeTaskById(complete: Boolean, id: Long) {
-        Single.fromCallable { PomoApp.database?.taskDao()?.compeleTaskById(complete, id) }
+        Single.fromCallable { taskDatabase.taskDao().compeleTaskById(complete, id) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()

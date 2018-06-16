@@ -15,8 +15,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.BounceInterpolator
 import apps.tim.pomos.feature.R
 import android.media.RingtoneManager
-
-
+import apps.tim.pomos.feature.PomoApp
 
 
 class TimerView : View {
@@ -84,7 +83,7 @@ class TimerView : View {
         fgPaint1!!.isAntiAlias = true
 
         pausePaint = Paint()
-        pauseColor = resources.getColor(R.color.timerPause)
+        pauseColor = PomoApp.color(R.color.timerPause)
         pausePaint!!.color = pauseColor
         pausePaint!!.isAntiAlias = true
 

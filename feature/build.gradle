@@ -46,6 +46,9 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$room_version"
     api "android.arch.persistence.room:rxjava2:$room_version"
 
+    api "com.google.dagger:dagger:2.15"
+    kapt "com.google.dagger:dagger-compiler:2.15"
+
 }
 
 repositories {
