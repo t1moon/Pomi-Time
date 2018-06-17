@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="SectorProgressView">
+    <declare-styleable name="TimerViewStyleable">
         <attr name="bgColor" />
         <attr name="fgColor" />
         <attr name="fgColorPause" />
         <attr name="percent" />
         <attr name="startAngle" />
+        <attr name="elevationPause" />
+        <attr name="elevationPlay" />
     </declare-styleable>
 </resources>

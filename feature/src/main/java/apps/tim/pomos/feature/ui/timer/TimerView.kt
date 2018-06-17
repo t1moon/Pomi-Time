@@ -3,47 +3,46 @@ package apps.tim.pomos.feature.ui.timer
 import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
+import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.media.RingtoneManager
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.BounceInterpolator
-import apps.tim.pomos.feature.R
-import android.media.RingtoneManager
 import apps.tim.pomos.feature.PomoApp
+import apps.tim.pomos.feature.R
+import apps.tim.pomos.feature.dipToPx
 
 
 class TimerView : View {
     private var bgColor: Int = 0
     private var fgColor: Int = 0
-    private var fgColorPause: Int = 0
-    private var pauseColor: Int = 0
-    private var bgPaint: Paint? = null
-    private var fgPaint: Paint? = null
-    private var pausePaint: Paint? = null
-    private var fgPaint1: Paint? = null
+    private var fgColorWhenPause: Int = 0
+    private var pauseIconColor: Int = 0
+    private lateinit var bgPaint: Paint
+    private lateinit var fgPaint: Paint
+    private lateinit var pauseIconPaint: Paint
+    private lateinit var fgPaint1: Paint
 
-    private var oval: RectF? = null
-    private var outerOval: RectF? = null
-    private var pauseOvalLeft: RectF? = null
-    private var pauseOvalRight: RectF? = null
+    private lateinit var oval: RectF
+    private lateinit var outerOval: RectF
+    private lateinit var pauseOvalLeft: RectF
+    private lateinit var pauseOvalRight: RectF
 
-    private var animator: ObjectAnimator? = null
-    private var sectors: Int = 0
+    private lateinit var animator: ObjectAnimator
 
     private var percent: Float = 0.toFloat()
 
     private var startAngle: Float = 0.toFloat()
 
-    private val elevationPushed: Float =
-            resources.getDimensionPixelSize(R.dimen.timer_elevation_pushed).toFloat()
-    private val elevationPulled: Float =
-            resources.getDimensionPixelSize(R.dimen.timer_elevation_pulled).toFloat()
+    private var elevationPlay: Float = 0.toFloat()
+    private var elevationPause: Float = 0.toFloat()
 
     private var pushed: Boolean = false
 
@@ -53,16 +52,17 @@ class TimerView : View {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         val a = context.theme.obtainStyledAttributes(attrs,
-                R.styleable.SectorProgressView,
+                R.styleable.TimerViewStyleable,
                 0, 0)
 
         try {
-            bgColor = a.getColor(R.styleable.SectorProgressView_bgColor, -0x1a1a1b)
-            fgColor = a.getColor(R.styleable.SectorProgressView_fgColor, -0x89a4)
-            fgColorPause = a.getColor(R.styleable.SectorProgressView_fgColorPause, -0x89a4)
-            percent = a.getFloat(R.styleable.SectorProgressView_percent, 0f)
-            startAngle = a.getFloat(R.styleable.SectorProgressView_startAngle, 0f) + 270
-
+            bgColor = a.getColor(R.styleable.TimerViewStyleable_bgColor, 0)
+            fgColor = a.getColor(R.styleable.TimerViewStyleable_fgColor, 0)
+            fgColorWhenPause = a.getColor(R.styleable.TimerViewStyleable_fgColorPause, 0)
+            percent = a.getFloat(R.styleable.TimerViewStyleable_percent, 0f)
+            startAngle = a.getFloat(R.styleable.TimerViewStyleable_startAngle, 0f) + 270
+            elevationPause = resources.dipToPx(a.getFloat(R.styleable.TimerViewStyleable_elevationPause, 0f))
+            elevationPlay = resources.dipToPx(a.getFloat(R.styleable.TimerViewStyleable_elevationPlay, 0f))
         } finally {
             a.recycle()
         }
@@ -71,25 +71,24 @@ class TimerView : View {
 
     private fun init() {
         bgPaint = Paint()
-        bgPaint!!.color = bgColor
-        bgPaint!!.isAntiAlias = true
+        bgPaint.color = bgColor
+        bgPaint.isAntiAlias = true
 
         fgPaint = Paint()
-        fgPaint!!.color = fgColorPause
-        fgPaint!!.isAntiAlias = true
+        fgPaint.color = fgColorWhenPause
+        fgPaint.isAntiAlias = true
 
         fgPaint1 = Paint()
-        fgPaint1!!.color = fgColorPause
-        fgPaint1!!.isAntiAlias = true
+        fgPaint1.color = fgColorWhenPause
+        fgPaint1.isAntiAlias = true
 
-        pausePaint = Paint()
-        pauseColor = PomoApp.color(R.color.timerPause)
-        pausePaint!!.color = pauseColor
-        pausePaint!!.isAntiAlias = true
+        pauseIconPaint = Paint()
+        pauseIconColor = PomoApp.color(R.color.timerPause)
+        pauseIconPaint.color = pauseIconColor
+        pauseIconPaint.isAntiAlias = true
 
-        fgPaint1!!.style = Paint.Style.STROKE
-        fgPaint1!!.strokeWidth = 7f
-        sectors = 1
+        fgPaint1.style = Paint.Style.STROKE
+        fgPaint1.strokeWidth = 7f
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -128,16 +127,16 @@ class TimerView : View {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.outlineProvider = OutlineProvider(resources = resources, padding = paddingStart)
-            this.elevation = elevationPulled
+            this.elevation = elevationPause
         }
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawArc(oval!!, startAngle, percent * 3.6f, true, fgPaint!!)
-        canvas.drawArc(outerOval!!, startAngle, 360f, true, fgPaint1!!)
-        canvas.drawRoundRect(pauseOvalLeft!!, 10f, 10f, pausePaint!!)
-        canvas.drawRoundRect(pauseOvalRight!!, 10f, 10f, pausePaint!!)
+        canvas.drawArc(oval, startAngle, percent * 3.6f, true, fgPaint)
+        canvas.drawArc(outerOval, startAngle, 360f, true, fgPaint1)
+        canvas.drawRoundRect(pauseOvalLeft, 10f, 10f, pauseIconPaint)
+        canvas.drawRoundRect(pauseOvalRight, 10f, 10f, pauseIconPaint)
     }
 
 
@@ -165,72 +164,83 @@ class TimerView : View {
     fun animateIndeterminate(durationOneCircle: Int = 800,
                              interpolator: TimeInterpolator? = AccelerateDecelerateInterpolator()) {
         animator = ObjectAnimator.ofFloat(this, "startAngle", getStartAngle(), getStartAngle() + 360)
-        if (interpolator != null) animator!!.interpolator = interpolator
-        animator!!.duration = durationOneCircle.toLong()
-        animator!!.repeatCount = ValueAnimator.INFINITE
-        animator!!.repeatMode = ValueAnimator.RESTART
-        animator!!.start()
+        if (interpolator != null) animator.interpolator = interpolator
+        animator.duration = durationOneCircle.toLong()
+        animator.repeatCount = ValueAnimator.INFINITE
+        animator.repeatMode = ValueAnimator.RESTART
+        animator.start()
     }
 
     fun stopAnimateIndeterminate() {
-        if (animator != null) {
-            animator!!.cancel()
-            animator = null
-        }
+            animator.cancel()
     }
 
     fun toggle() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            pushed = !pushed
-            var elevateTo: Float = if (pushed)
-                elevationPushed
-            else
-                elevationPulled
+        elevateTimer()
+        fadeTimer()
+        fadePause()
+        playSound()
+    }
 
-            ValueAnimator.ofFloat(elevation, elevateTo).apply {
-                duration = 600
-                addUpdateListener {
-                    elevation = it.animatedValue as Float
-                }
-                if (pushed)
-                    interpolator = BounceInterpolator()
-                start()
-            }
-        }
-        var color: Int = if (!pushed)
-            fgColorPause
-        else
-            fgColor
+    private fun playSound() {
+        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        RingtoneManager.getRingtone(context, uri).play()
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ValueAnimator.ofArgb(fgPaint!!.color, color).apply {
-                duration = 600
-                addUpdateListener {
-                    fgPaint!!.color = it.animatedValue as Int
-                    fgPaint1!!.color = it.animatedValue as Int
-                    invalidate()
-                }
-                start()
-            }
-        }
-
-        var pauseColor: Int = if (!pushed)
-            pauseColor
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun fadePause() {
+        val pauseColor: Int = if (!pushed)
+            pauseIconColor
         else
             Color.TRANSPARENT
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ValueAnimator.ofArgb(pausePaint!!.color, pauseColor).apply {
-                duration = 600
-                addUpdateListener {
-                    pausePaint!!.color = it.animatedValue as Int
-                    invalidate()
-                }
-                start()
+        ValueAnimator.ofArgb(pauseIconPaint.color, pauseColor).apply {
+            duration = 600
+            addUpdateListener {
+                pauseIconPaint.color = it.animatedValue as Int
+                invalidate()
             }
+            start()
         }
+    }
 
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        RingtoneManager.getRingtone(context, uri).play()
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun fadeTimer() {
+        val color: Int = if (!pushed)
+            fgColorWhenPause
+        else
+            fgColor
+        ValueAnimator.ofArgb(fgPaint.color, color).apply {
+            duration = 600
+            addUpdateListener {
+                fgPaint.color = it.animatedValue as Int
+                fgPaint1.color = it.animatedValue as Int
+                invalidate()
+            }
+            start()
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun elevateTimer() {
+        pushed = !pushed
+        val elevateTo: Float = if (pushed)
+            elevationPlay
+        else
+            elevationPause
+
+        ValueAnimator.ofFloat(elevation, elevateTo).apply {
+            duration = 600
+            addUpdateListener {
+                elevation = it.animatedValue as Float
+            }
+            if (pushed)
+                interpolator = BounceInterpolator()
+            start()
+        }
+    }
+
+    fun cancel() {
+        //TODO
     }
 }

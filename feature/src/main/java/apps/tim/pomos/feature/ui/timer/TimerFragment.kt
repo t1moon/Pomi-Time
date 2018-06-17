@@ -17,10 +17,19 @@ class TimerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupHeader()
+        setupTimer()
+    }
+
+    private fun setupHeader() {
         val task = arguments?.get(TASK_ARG) as Task
         taskTitle.text = task.title
         backButton.setOnClickListener { activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp() }
+    }
+
+    private fun setupTimer() {
         timer.setOnClickListener { timer.toggle() }
+        timer.setOnLongClickListener { timer.cancel(); true}
     }
 
 }
