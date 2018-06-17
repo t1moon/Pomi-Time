@@ -20,6 +20,8 @@ import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.dipToPx
 
 
+
+
 class TimerView : View {
     private var bgColor: Int = 0
     private var fgColor: Int = 0
@@ -43,8 +45,6 @@ class TimerView : View {
 
     private var elevationPlay: Float = 0.toFloat()
     private var elevationPause: Float = 0.toFloat()
-
-    private var pushed: Boolean = false
 
     constructor(context: Context) : super(context) {
         init()
@@ -175,21 +175,34 @@ class TimerView : View {
             animator.cancel()
     }
 
-    fun toggle() {
-        elevateTimer()
-        fadeTimer()
-        fadePause()
-        playSound()
+
+    fun play() {
+        toggle(true)
     }
 
-    private fun playSound() {
+    fun pause() {
+        toggle(false)
+    }
+
+    fun cancel() {
+        //TODO
+    }
+
+    private fun toggle(play: Boolean) {
+        elevateTimer(play)
+        fadeTimer(play)
+        fadePause(play)
+        playSound(play)
+    }
+
+    private fun playSound(play: Boolean) {
         val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         RingtoneManager.getRingtone(context, uri).play()
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun fadePause() {
-        val pauseColor: Int = if (!pushed)
+    private fun fadePause(play: Boolean) {
+        val pauseColor: Int = if (!play)
             pauseIconColor
         else
             Color.TRANSPARENT
@@ -205,8 +218,8 @@ class TimerView : View {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun fadeTimer() {
-        val color: Int = if (!pushed)
+    private fun fadeTimer(play: Boolean) {
+        val color: Int = if (!play)
             fgColorWhenPause
         else
             fgColor
@@ -222,9 +235,8 @@ class TimerView : View {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun elevateTimer() {
-        pushed = !pushed
-        val elevateTo: Float = if (pushed)
+    private fun elevateTimer(play: Boolean) {
+        val elevateTo: Float = if (play)
             elevationPlay
         else
             elevationPause
@@ -234,13 +246,10 @@ class TimerView : View {
             addUpdateListener {
                 elevation = it.animatedValue as Float
             }
-            if (pushed)
+            if (play)
                 interpolator = BounceInterpolator()
             start()
         }
     }
 
-    fun cancel() {
-        //TODO
-    }
 }

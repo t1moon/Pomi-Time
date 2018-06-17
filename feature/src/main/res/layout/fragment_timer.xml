@@ -12,16 +12,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginLeft="48dp"
-        android:layout_marginTop="54dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="48dp"
         android:layout_marginRight="48dp"
         android:gravity="center"
-        android:textSize="48sp"
         android:textColor="@color/accentText"
+        android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Finish Prototype" />
+        tools:text="Finish Proto" />
 
     <ImageView
         android:id="@+id/backButton"
@@ -36,21 +37,37 @@
         app:srcCompat="@drawable/ic_back_48dp" />
 
     <apps.tim.pomos.feature.ui.timer.TimerView
-        android:id="@+id/timer"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:padding="1dp"
+        android:id="@+id/timerView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginBottom="88dp"
         android:background="@drawable/shadow"
+        android:padding="1dp"
+        app:elevationPause="16"
+        app:elevationPlay="0"
         app:fgColor="@color/colorAccent"
         app:fgColorPause="@color/colorAccentTransparent"
-        app:layout_constraintTop_toBottomOf="@+id/taskTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:percent="60"
-        app:elevationPause="16"
-        app:elevationPlay="8"
-        app:startAngle="0"/>
+        app:startAngle="0" />
+
+    <TextView
+        android:id="@+id/timerTime"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:textSize="64sp"
+        app:layout_constraintBottom_toTopOf="@+id/timerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskTitle"
+        tools:text="17:23" />
 </androidx.constraintlayout.widget.ConstraintLayout>
