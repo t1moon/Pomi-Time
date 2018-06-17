@@ -53,7 +53,7 @@ class TimerFragment : BaseFragment() {
 
     private fun pause() {
         timerView.pause()
-        compositeDisposable.delete(timerDisposable)
+        compositeDisposable.remove(timerDisposable)
     }
 
     private fun play() {
