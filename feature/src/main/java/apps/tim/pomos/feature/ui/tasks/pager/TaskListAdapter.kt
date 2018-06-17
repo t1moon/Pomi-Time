@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.navigation.findNavController
 import apps.tim.pomos.feature.R
@@ -44,7 +43,7 @@ class TaskListAdapter(private val items : List<Task>, val context: Context): Rec
 
     class TaskHolder(itemView: View?): RecyclerView.ViewHolder(itemView) {
         val taskTitle = itemView?.findViewById<TextView>(R.id.taskTitle)
-        val pomosNumber = itemView?.findViewById<Button>(R.id.pomosNumber)
+//        val pomosNumber = itemView?.findViewById<Button>(R.id.pomosNumber)
 
         fun bind(items: List<Task>) {
             taskTitle?.text = items[position].title
