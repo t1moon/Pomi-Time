@@ -1,23 +1,19 @@
 package apps.tim.pomos.feature.ui.timer
 
 import android.animation.ObjectAnimator
-import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.annotation.TargetApi
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.BounceInterpolator
 import apps.tim.pomos.feature.PomoApp
 import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.dipToPx
+import apps.tim.pomos.feature.ui.START_ANGLE
 
 
 
@@ -34,14 +30,11 @@ class TimerView : View {
 
     private lateinit var oval: RectF
     private lateinit var outerOval: RectF
-    private lateinit var pauseOvalLeft: RectF
-    private lateinit var pauseOvalRight: RectF
+    private lateinit var centerIcon: Rect
 
     private lateinit var animator: ObjectAnimator
 
     private var percent: Float = 0.toFloat()
-
-    private var startAngle: Float = 0.toFloat()
 
     private var elevationPlay: Float = 0.toFloat()
     private var elevationPause: Float = 0.toFloat()
@@ -60,7 +53,6 @@ class TimerView : View {
             fgColor = a.getColor(R.styleable.TimerViewStyleable_fgColor, 0)
             fgColorWhenPause = a.getColor(R.styleable.TimerViewStyleable_fgColorPause, 0)
             percent = a.getFloat(R.styleable.TimerViewStyleable_percent, 0f)
-            startAngle = a.getFloat(R.styleable.TimerViewStyleable_startAngle, 0f) + 270
             elevationPause = resources.dipToPx(a.getFloat(R.styleable.TimerViewStyleable_elevationPause, 0f))
             elevationPlay = resources.dipToPx(a.getFloat(R.styleable.TimerViewStyleable_elevationPlay, 0f))
         } finally {
@@ -103,27 +95,18 @@ class TimerView : View {
         val ovalPadding = (w / 15).toFloat()
         val centerX = (w / 2).toFloat()
         val centerY = (h / 2).toFloat()
-        val pauseOvalPaddingCenter = (w / 15).toFloat()
-        val pauseHeight = (w / 4).toFloat()
-        val pauseWidth = (w / 6).toFloat()
+        val centerIconWidth = (w / 2)
 
         oval = RectF(paddingLeft + ovalPadding, paddingTop + ovalPadding,
                 paddingLeft + wwd - ovalPadding, paddingTop + hhd - ovalPadding)
         outerOval = RectF(paddingLeft.toFloat(), paddingTop.toFloat(), paddingLeft + wwd, paddingTop + hhd)
 
-        pauseOvalLeft = RectF(
-                paddingLeft + centerX - pauseOvalPaddingCenter - pauseWidth,
-                paddingTop + centerY - pauseHeight,
-                paddingLeft + centerX - pauseOvalPaddingCenter,
-                paddingTop + centerY + pauseHeight)
-
-        pauseOvalRight = RectF(
-                paddingLeft + centerX + pauseOvalPaddingCenter,
-                paddingTop + centerY - pauseHeight,
-                paddingLeft + centerX + pauseOvalPaddingCenter + pauseWidth,
-                paddingTop + centerY + pauseHeight)
-
-
+        centerIcon = Rect(
+                (paddingLeft + centerX - centerIconWidth / 2).toInt(),
+                (paddingTop + centerY - centerIconWidth / 2).toInt(),
+                (paddingLeft + centerX + centerIconWidth / 2).toInt(),
+                (paddingTop + centerY + centerIconWidth / 2).toInt()
+        )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.outlineProvider = OutlineProvider(resources = resources, padding = paddingStart)
@@ -133,48 +116,12 @@ class TimerView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawArc(oval, startAngle, percent * 3.6f, true, fgPaint)
-        canvas.drawArc(outerOval, startAngle, 360f, true, fgPaint1)
-        canvas.drawRoundRect(pauseOvalLeft, 10f, 10f, pauseIconPaint)
-        canvas.drawRoundRect(pauseOvalRight, 10f, 10f, pauseIconPaint)
+        canvas.drawArc(oval, START_ANGLE, percent * 3.6f, true, fgPaint)
+        canvas.drawArc(outerOval, START_ANGLE, 360f, true, fgPaint1)
+        val d = resources.getDrawable(R.drawable.ic_play)
+        d.bounds = centerIcon
+        d.draw(canvas)
     }
-
-
-    fun getStartAngle(): Float {
-        return startAngle
-    }
-
-    fun setStartAngle(startAngle: Float) {
-        this.startAngle = startAngle + 270
-        invalidate()
-        requestLayout()
-    }
-
-    fun getPercent(): Float {
-        return percent
-    }
-
-    fun setPercent(percent: Float) {
-        this.percent = percent
-        invalidate()
-        requestLayout()
-    }
-
-    @JvmOverloads
-    fun animateIndeterminate(durationOneCircle: Int = 800,
-                             interpolator: TimeInterpolator? = AccelerateDecelerateInterpolator()) {
-        animator = ObjectAnimator.ofFloat(this, "startAngle", getStartAngle(), getStartAngle() + 360)
-        if (interpolator != null) animator.interpolator = interpolator
-        animator.duration = durationOneCircle.toLong()
-        animator.repeatCount = ValueAnimator.INFINITE
-        animator.repeatMode = ValueAnimator.RESTART
-        animator.start()
-    }
-
-    fun stopAnimateIndeterminate() {
-            animator.cancel()
-    }
-
 
     fun play() {
         toggle(true)
@@ -189,10 +136,23 @@ class TimerView : View {
     }
 
     private fun toggle(play: Boolean) {
-        elevateTimer(play)
-        fadeTimer(play)
-        fadePause(play)
+        elevate(play)
+        fadeBackground(play)
+        fadePauseIcon(play)
         playSound(play)
+        if (play)
+            fillSector()
+    }
+
+    private fun fillSector() {
+        ValueAnimator.ofFloat(0f, 100f).apply {
+            duration = 600
+            addUpdateListener {
+                percent = it.animatedValue as Float
+                invalidate()
+            }
+            start()
+        }
     }
 
     private fun playSound(play: Boolean) {
@@ -201,7 +161,7 @@ class TimerView : View {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun fadePause(play: Boolean) {
+    private fun fadePauseIcon(play: Boolean) {
         val pauseColor: Int = if (!play)
             pauseIconColor
         else
@@ -218,7 +178,7 @@ class TimerView : View {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun fadeTimer(play: Boolean) {
+    private fun fadeBackground(play: Boolean) {
         val color: Int = if (!play)
             fgColorWhenPause
         else
@@ -235,7 +195,7 @@ class TimerView : View {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun elevateTimer(play: Boolean) {
+    private fun elevate(play: Boolean) {
         val elevateTo: Float = if (play)
             elevationPlay
         else

@@ -50,8 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:percent="60"
-        app:startAngle="0" />
+        app:percent="0" />
 
     <TextView
         android:id="@+id/timerTime"

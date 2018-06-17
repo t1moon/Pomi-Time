@@ -6,3 +6,5 @@ const val TASK_DB = "tasks_db"
 const val TASK_DURATION = 25
 const val SECONDS_IN_MINUTE = 60
 
+const val START_ANGLE = 270f
+

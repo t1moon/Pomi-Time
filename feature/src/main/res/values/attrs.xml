@@ -5,7 +5,6 @@
         <attr name="fgColor" />
         <attr name="fgColorPause" />
         <attr name="percent" />
-        <attr name="startAngle" />
         <attr name="elevationPause" />
         <attr name="elevationPlay" />
     </declare-styleable>
