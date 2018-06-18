@@ -2,5 +2,5 @@
 <resources>
     <color name="shadowColor">#000</color>
     <color name="listSeparator">#e9e9e9</color>
-    <color name="timerPause">#B32E313F</color>
+    <color name="timerStatusIcon">#B32E313F</color>
 </resources>

@@ -14,10 +14,10 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_timer.*
 
 class TimerFragment : BaseFragment() {
-    enum class TimerState { PLAYING, PAUSED }
+    enum class TimerState { PLAYING, PAUSED, STOPED }
 
     private val timer = Timer()
-    private var timerState: TimerState = TimerState.PAUSED
+    private var timerState: TimerState = TimerState.STOPED
     private lateinit var timerDisposable: Disposable
 
 
@@ -39,14 +39,21 @@ class TimerFragment : BaseFragment() {
     private fun setupTimer() {
         timerTime.text = "$TASK_DURATION:00"
         timerView.setOnClickListener {
-            timerState =
-                    if (timerState == TimerState.PAUSED) {
-                        play()
-                        TimerState.PLAYING
-                    } else {
-                        pause()
-                        TimerState.PAUSED
-                    }
+            timerState = when (timerState) {
+                TimerState.STOPED -> {
+                    play(true)
+                    TimerState.PLAYING
+                }
+                TimerState.PAUSED -> {
+                    play(false)
+                    TimerState.PLAYING
+                }
+                TimerState.PLAYING -> {
+                    pause()
+                    TimerState.PAUSED
+                }
+            }
+            timerView.state = timerState
         }
         timerView.setOnLongClickListener { timerView.cancel(); true }
     }
@@ -56,9 +63,13 @@ class TimerFragment : BaseFragment() {
         compositeDisposable.remove(timerDisposable)
     }
 
-    private fun play() {
+    private fun play(fromStop: Boolean) {
+        if (fromStop)
+            timerView.startAnimation()
+
         timerView.play()
         timerDisposable = timer.start().subscribe { timerTime.text = it }
         compositeDisposable.add(timerDisposable)
     }
+
 }

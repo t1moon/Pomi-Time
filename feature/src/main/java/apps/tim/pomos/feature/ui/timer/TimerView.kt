@@ -4,7 +4,11 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.TargetApi
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.AttributeSet
@@ -16,21 +20,19 @@ import apps.tim.pomos.feature.dipToPx
 import apps.tim.pomos.feature.ui.START_ANGLE
 
 
-
-
 class TimerView : View {
     private var bgColor: Int = 0
     private var fgColor: Int = 0
     private var fgColorWhenPause: Int = 0
-    private var pauseIconColor: Int = 0
+    private var statusIconColor: Int = 0
     private lateinit var bgPaint: Paint
     private lateinit var fgPaint: Paint
-    private lateinit var pauseIconPaint: Paint
+    private lateinit var statusIconPaint: Paint
     private lateinit var fgPaint1: Paint
 
     private lateinit var oval: RectF
     private lateinit var outerOval: RectF
-    private lateinit var centerIcon: Rect
+    private lateinit var statusIcon: Rect
 
     private lateinit var animator: ObjectAnimator
 
@@ -38,6 +40,12 @@ class TimerView : View {
 
     private var elevationPlay: Float = 0.toFloat()
     private var elevationPause: Float = 0.toFloat()
+
+    private lateinit var playIcon: Drawable
+    private lateinit var pauseIcon: Drawable
+
+    private var started: Boolean = false
+    var state: TimerFragment.TimerState = TimerFragment.TimerState.STOPED
 
     constructor(context: Context) : super(context) {
         init()
@@ -55,6 +63,8 @@ class TimerView : View {
             percent = a.getFloat(R.styleable.TimerViewStyleable_percent, 0f)
             elevationPause = resources.dipToPx(a.getFloat(R.styleable.TimerViewStyleable_elevationPause, 0f))
             elevationPlay = resources.dipToPx(a.getFloat(R.styleable.TimerViewStyleable_elevationPlay, 0f))
+            playIcon = resources.getDrawable(R.drawable.ic_play)
+            pauseIcon = resources.getDrawable(R.drawable.ic_pause)
         } finally {
             a.recycle()
         }
@@ -74,10 +84,10 @@ class TimerView : View {
         fgPaint1.color = fgColorWhenPause
         fgPaint1.isAntiAlias = true
 
-        pauseIconPaint = Paint()
-        pauseIconColor = PomoApp.color(R.color.timerPause)
-        pauseIconPaint.color = pauseIconColor
-        pauseIconPaint.isAntiAlias = true
+        statusIconPaint = Paint()
+        statusIconColor = PomoApp.color(R.color.timerStatusIcon)
+        statusIconPaint.color = statusIconColor
+        statusIconPaint.isAntiAlias = true
 
         fgPaint1.style = Paint.Style.STROKE
         fgPaint1.strokeWidth = 7f
@@ -101,7 +111,7 @@ class TimerView : View {
                 paddingLeft + wwd - ovalPadding, paddingTop + hhd - ovalPadding)
         outerOval = RectF(paddingLeft.toFloat(), paddingTop.toFloat(), paddingLeft + wwd, paddingTop + hhd)
 
-        centerIcon = Rect(
+        statusIcon = Rect(
                 (paddingLeft + centerX - centerIconWidth / 2).toInt(),
                 (paddingTop + centerY - centerIconWidth / 2).toInt(),
                 (paddingLeft + centerX + centerIconWidth / 2).toInt(),
@@ -116,11 +126,29 @@ class TimerView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        drawTimer(canvas)
+        when (state) {
+            TimerFragment.TimerState.STOPED -> drawPlay(canvas)
+
+            TimerFragment.TimerState.PAUSED -> drawPause(canvas)
+
+        }
+
+    }
+
+    private fun drawTimer(canvas: Canvas) {
         canvas.drawArc(oval, START_ANGLE, percent * 3.6f, true, fgPaint)
         canvas.drawArc(outerOval, START_ANGLE, 360f, true, fgPaint1)
-        val d = resources.getDrawable(R.drawable.ic_play)
-        d.bounds = centerIcon
-        d.draw(canvas)
+    }
+
+    private fun drawPlay(canvas: Canvas) {
+        playIcon.bounds = statusIcon
+        playIcon.draw(canvas)
+    }
+
+    private fun drawPause(canvas: Canvas) {
+        pauseIcon.bounds = statusIcon
+        pauseIcon.draw(canvas)
     }
 
     fun play() {
@@ -138,13 +166,13 @@ class TimerView : View {
     private fun toggle(play: Boolean) {
         elevate(play)
         fadeBackground(play)
-        fadePauseIcon(play)
+//        fadeStatusIcon(play)
         playSound(play)
-        if (play)
-            fillSector()
     }
 
-    private fun fillSector() {
+
+    fun startAnimation() {
+        started = true
         ValueAnimator.ofFloat(0f, 100f).apply {
             duration = 600
             addUpdateListener {
@@ -160,22 +188,27 @@ class TimerView : View {
         RingtoneManager.getRingtone(context, uri).play()
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun fadePauseIcon(play: Boolean) {
-        val pauseColor: Int = if (!play)
-            pauseIconColor
-        else
-            Color.TRANSPARENT
+    private fun fadeStatusIcon(play: Boolean) {
+        fadeDrawable(playIcon, play)
+        fadeDrawable(pauseIcon, play)
+    }
 
-        ValueAnimator.ofArgb(pauseIconPaint.color, pauseColor).apply {
-            duration = 600
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun fadeDrawable(drawable: Drawable, hide: Boolean) {
+        val alpha = if (hide)
+            0
+        else
+            255
+        ValueAnimator.ofInt(drawable.alpha, alpha).apply {
+            duration = 3000
             addUpdateListener {
-                pauseIconPaint.color = it.animatedValue as Int
+                playIcon.alpha = it.animatedValue as Int
                 invalidate()
             }
             start()
         }
     }
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun fadeBackground(play: Boolean) {
