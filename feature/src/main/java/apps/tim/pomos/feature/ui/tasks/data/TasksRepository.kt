@@ -9,8 +9,10 @@ import io.reactivex.schedulers.Schedulers
 class TasksRepository(private val taskDatabase: TaskDatabase) {
     private val taskDao = taskDatabase.taskDao()
 
-    fun addPomo(id: Long) {
-        addToDB({ taskDao.addPomodoro(id) })
+    fun addPomo(id: Long) : Single<Unit> {
+        return Single.fromCallable { taskDao.addPomodoro(id)  }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun addTask(task: Task) {

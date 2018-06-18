@@ -1,6 +1,8 @@
 package apps.tim.pomos.feature.ui.timer
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,7 @@ class TimerFragment : BaseFragment() {
     lateinit var timerViewModel: TimerViewModel
 
     lateinit var task: Task
+    lateinit var pomoAdapter: PomoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,14 @@ class TimerFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupHeader()
         setupTimer()
+        setupPomoList()
+    }
+
+    private fun setupPomoList() {
+        pomoList.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        pomoAdapter = PomoAdapter(task.pomodoros)
+        pomoList.adapter = pomoAdapter
+        pomoAdapter.notifyDataSetChanged()
     }
 
     private fun setupHeader() {
@@ -64,6 +75,10 @@ class TimerFragment : BaseFragment() {
                             timerView.finish()
                             setTimerString()
                             timerViewModel.addPomo(task.id)
+                                    .subscribe { _, _ ->
+                                        pomoAdapter.addPomo()
+                                        pomoAdapter.notifyDataSetChanged()
+                                    }
                         }
                     }
                 }

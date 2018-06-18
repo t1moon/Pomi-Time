@@ -8,18 +8,13 @@
 
     <TextView
         android:id="@+id/taskTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="40dp"
         android:gravity="center"
         android:textColor="@color/accentText"
         android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Finish Proto" />
@@ -40,7 +35,6 @@
         android:id="@+id/timerView"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_marginBottom="88dp"
         android:background="@drawable/shadow"
         android:padding="1dp"
         app:elevationPause="16"
@@ -50,6 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskTitle"
         app:percent="0" />
 
     <TextView
@@ -58,15 +53,35 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="12dp"
         android:gravity="center"
         android:textSize="64sp"
         app:layout_constraintBottom_toTopOf="@+id/timerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskTitle"
         tools:text="17:23" />
+
+    <RelativeLayout
+        android:id="@+id/pomoListWrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timerView">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/pomoList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
