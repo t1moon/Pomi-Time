@@ -7,36 +7,37 @@ import io.reactivex.schedulers.Schedulers
 
 
 class TasksRepository(private val taskDatabase: TaskDatabase) {
+    private val taskDao = taskDatabase.taskDao()
+
+    fun addPomo(id: Long) {
+        addToDB({ taskDao.addPomodoro(id) })
+    }
 
     fun addTask(task: Task) {
-        Single.fromCallable { taskDatabase.taskDao().insert(task) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+        addToDB({ taskDao.insert(task) })
     }
 
     fun updateTitle(title: String, id: Long) {
-        Single.fromCallable { taskDatabase.taskDao().updateTitle(title, id) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+        addToDB({ taskDao.updateTitle(title, id) })
     }
 
     fun getTasks(pos: Int?): Flowable<List<Task>>? {
-        return taskDatabase.taskDao().getTasksByDateRange()
+        return taskDao.getTasksByDateRange()
     }
 
     fun deleteTask(task: Task) {
-        Single.fromCallable { taskDatabase.taskDao().delete(task) }
+        addToDB({ taskDao.delete(task) })
+    }
+
+    fun completeTaskById(complete: Boolean, id: Long) {
+        addToDB({taskDao.completeTaskById(complete, id)})
+    }
+
+    private fun addToDB(callable: () -> Unit) {
+        Single.fromCallable(callable)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
     }
 
-    fun completeTaskById(complete: Boolean, id: Long) {
-        Single.fromCallable { taskDatabase.taskDao().compeleTaskById(complete, id) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-    }
 }

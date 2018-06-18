@@ -25,7 +25,7 @@ class ViewModelModule {
 
     @Provides
     @FragmentScope
-    fun providesTimerViewModel(timer: Timer): TimerViewModel {
-        return TimerViewModel(timer)
+    fun providesTimerViewModel(tasksRepository: TasksRepository, timer: Timer): TimerViewModel {
+        return TimerViewModel(tasksRepository, timer)
     }
 }

@@ -2,11 +2,12 @@ package apps.tim.pomos.feature.ui.timer
 
 import apps.tim.pomos.feature.ui.SECONDS_IN_MINUTE
 import apps.tim.pomos.feature.ui.TASK_DURATION_IN_MINUTE
+import apps.tim.pomos.feature.ui.tasks.data.TasksRepository
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 
-class TimerViewModel(val timer: Timer) {
+class TimerViewModel(val tasksRepository: TasksRepository, val timer: Timer) {
 
     fun getTimerString() : Observable<String> {
         return timer.timeObservable
@@ -44,6 +45,10 @@ class TimerViewModel(val timer: Timer) {
 
     fun getTimerState() : PublishSubject<Timer.TimerState> {
         return timer.stateObservable
+    }
+
+    fun addPomo(id: Long) {
+        tasksRepository.addPomo(id)
     }
 
     class Time(input: Long) {

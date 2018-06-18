@@ -11,5 +11,6 @@ import kotlinx.android.parcel.Parcelize
 data class Task(
         @PrimaryKey(autoGenerate = true) var id: Long,
         @ColumnInfo var title: String,
-        @ColumnInfo var complete: Boolean = false
+        @ColumnInfo var complete: Boolean = false,
+        @ColumnInfo var pomodoros: Int = 0
 ) : Parcelable

@@ -15,9 +15,10 @@ import kotlinx.android.synthetic.main.fragment_timer.*
 import javax.inject.Inject
 
 class TimerFragment : BaseFragment() {
-
     @Inject
     lateinit var timerViewModel: TimerViewModel
+
+    lateinit var task: Task
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,7 @@ class TimerFragment : BaseFragment() {
     }
 
     private fun setupHeader() {
-        val task = arguments?.get(TASK_ARG) as Task
+        task = arguments?.get(TASK_ARG) as Task
         taskTitle.text = task.title
         backButton.setOnClickListener { activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp() }
     }
@@ -62,6 +63,7 @@ class TimerFragment : BaseFragment() {
                         Timer.TimerState.FINISHED -> {
                             timerView.finish()
                             setTimerString()
+                            timerViewModel.addPomo(task.id)
                         }
                     }
                 }

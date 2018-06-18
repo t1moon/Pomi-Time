@@ -43,10 +43,10 @@ class TaskListAdapter(private val items : List<Task>, val context: Context): Rec
 
     class TaskHolder(itemView: View?): RecyclerView.ViewHolder(itemView) {
         val taskTitle = itemView?.findViewById<TextView>(R.id.taskTitle)
-//        val pomosNumber = itemView?.findViewById<Button>(R.id.pomosNumber)
-
+        val pomosNumber = itemView?.findViewById<TextView>(R.id.pomosNumber)
         fun bind(items: List<Task>) {
-            taskTitle?.text = items[position].title
+            taskTitle?.text = items[adapterPosition].title
+            pomosNumber?.text = items[adapterPosition].pomodoros.toString()
         }
     }
 }

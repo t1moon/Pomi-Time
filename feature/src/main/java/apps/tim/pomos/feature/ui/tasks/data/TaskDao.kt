@@ -19,9 +19,12 @@ interface TaskDao {
     @Query("UPDATE task SET title = :title WHERE id =:id")
     fun updateTitle(title: String?, id: Long)
 
+    @Query("UPDATE task SET pomodoros = pomodoros + 1 WHERE id =:id")
+    fun addPomodoro(id: Long)
+
     @Delete
     fun delete(task: Task)
 
     @Query("UPDATE task SET complete = :complete WHERE id =:id")
-    fun compeleTaskById(complete: Boolean, id: Long)
+    fun completeTaskById(complete: Boolean, id: Long)
 }
