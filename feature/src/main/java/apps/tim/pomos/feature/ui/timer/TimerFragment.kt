@@ -5,21 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import apps.tim.pomos.feature.PomoApp
 import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.ui.TASK_ARG
-import apps.tim.pomos.feature.ui.TASK_DURATION
 import apps.tim.pomos.feature.ui.base.BaseFragment
 import apps.tim.pomos.feature.ui.tasks.data.Task
-import io.reactivex.disposables.Disposable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_timer.*
+import javax.inject.Inject
 
 class TimerFragment : BaseFragment() {
-    enum class TimerState { PLAYING, PAUSED, STOPED }
 
-    private val timer = Timer()
-    private var timerState: TimerState = TimerState.STOPED
-    private lateinit var timerDisposable: Disposable
+    @Inject
+    lateinit var timerViewModel: TimerViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        PomoApp.component.getFragmentComponent().inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_timer, container, false)
@@ -37,39 +40,53 @@ class TimerFragment : BaseFragment() {
     }
 
     private fun setupTimer() {
-        timerTime.text = "$TASK_DURATION:00"
+        setTimerString()
+        setTimerView()
+    }
+
+    private fun setTimerView() {
         timerView.setOnClickListener {
-            timerState = when (timerState) {
-                TimerState.STOPED -> {
-                    play(true)
-                    TimerState.PLAYING
-                }
-                TimerState.PAUSED -> {
-                    play(false)
-                    TimerState.PLAYING
-                }
-                TimerState.PLAYING -> {
-                    pause()
-                    TimerState.PAUSED
-                }
-            }
-            timerView.state = timerState
+            timerViewModel.timerViewClicked()
         }
-        timerView.setOnLongClickListener { timerView.cancel(); true }
+        timerView.setOnLongClickListener {
+            timerViewModel.timerViewLongClicked()
+            true
+        }
+
+        add(timerViewModel.getTimerState()
+                .subscribe {
+                    when (it) {
+                        Timer.TimerState.STARTED -> timerView.start()
+                        Timer.TimerState.PAUSED -> timerView.pause()
+                        Timer.TimerState.PLAYED -> timerView.play()
+                        Timer.TimerState.FINISHED -> {
+                            timerView.finish()
+                            setTimerString()
+                        }
+                    }
+                }
+        )
+        add(timerViewModel.getTimerProgress()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    timerView.updateProgress(it)
+                })
     }
 
-    private fun pause() {
-        timerView.pause()
-        compositeDisposable.remove(timerDisposable)
+    private fun setTimerString() {
+        add(timerViewModel.defaultTime()
+                .subscribe {
+                    timerTime.text = it
+                })
+        add(timerViewModel.getTimerString().subscribe {
+            timerTime.text = it
+        })
+
     }
 
-    private fun play(fromStop: Boolean) {
-        if (fromStop)
-            timerView.startAnimation()
-
-        timerView.play()
-        timerDisposable = timer.start().subscribe { timerTime.text = it }
-        compositeDisposable.add(timerDisposable)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        timerViewModel.stopTimer()
     }
 
 }

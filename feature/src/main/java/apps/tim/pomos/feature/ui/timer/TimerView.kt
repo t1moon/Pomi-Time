@@ -1,6 +1,5 @@
 package apps.tim.pomos.feature.ui.timer
 
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.TargetApi
 import android.content.Context
@@ -18,6 +17,8 @@ import apps.tim.pomos.feature.PomoApp
 import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.dipToPx
 import apps.tim.pomos.feature.ui.START_ANGLE
+import apps.tim.pomos.feature.ui.START_TIMER_ANIMATION_DURATION
+import apps.tim.pomos.feature.ui.TASK_DURATION_IN_SECONDS
 
 
 class TimerView : View {
@@ -34,8 +35,6 @@ class TimerView : View {
     private lateinit var outerOval: RectF
     private lateinit var statusIcon: Rect
 
-    private lateinit var animator: ObjectAnimator
-
     private var percent: Float = 0.toFloat()
 
     private var elevationPlay: Float = 0.toFloat()
@@ -44,8 +43,8 @@ class TimerView : View {
     private lateinit var playIcon: Drawable
     private lateinit var pauseIcon: Drawable
 
-    private var started: Boolean = false
-    var state: TimerFragment.TimerState = TimerFragment.TimerState.STOPED
+    private var showPlayIcon: Boolean = true
+    private var showPauseIcon: Boolean = false
 
     constructor(context: Context) : super(context) {
         init()
@@ -127,13 +126,10 @@ class TimerView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawTimer(canvas)
-        when (state) {
-            TimerFragment.TimerState.STOPED -> drawPlay(canvas)
-
-            TimerFragment.TimerState.PAUSED -> drawPause(canvas)
-
-        }
-
+        if (showPlayIcon)
+            drawPlay(canvas)
+        if (showPauseIcon)
+            drawPause(canvas)
     }
 
     private fun drawTimer(canvas: Canvas) {
@@ -151,30 +147,15 @@ class TimerView : View {
         pauseIcon.draw(canvas)
     }
 
-    fun play() {
-        toggle(true)
-    }
-
-    fun pause() {
+    fun start() {
+        showPlayIcon = false
         toggle(false)
+        animateStarting()
     }
 
-    fun cancel() {
-        //TODO
-    }
-
-    private fun toggle(play: Boolean) {
-        elevate(play)
-        fadeBackground(play)
-//        fadeStatusIcon(play)
-        playSound(play)
-    }
-
-
-    fun startAnimation() {
-        started = true
+    private fun animateStarting() {
         ValueAnimator.ofFloat(0f, 100f).apply {
-            duration = 600
+            duration = START_TIMER_ANIMATION_DURATION
             addUpdateListener {
                 percent = it.animatedValue as Float
                 invalidate()
@@ -183,32 +164,44 @@ class TimerView : View {
         }
     }
 
-    private fun playSound(play: Boolean) {
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        RingtoneManager.getRingtone(context, uri).play()
+    fun finish() {
+        showPlayIcon = true
+        toggle(false)
+        playSound(false)
+        animateFinishing()
     }
 
-    private fun fadeStatusIcon(play: Boolean) {
-        fadeDrawable(playIcon, play)
-        fadeDrawable(pauseIcon, play)
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun fadeDrawable(drawable: Drawable, hide: Boolean) {
-        val alpha = if (hide)
-            0
-        else
-            255
-        ValueAnimator.ofInt(drawable.alpha, alpha).apply {
-            duration = 3000
+    private fun animateFinishing() {
+        ValueAnimator.ofFloat(percent, 0f).apply {
+            duration = 300
             addUpdateListener {
-                playIcon.alpha = it.animatedValue as Int
+                percent = it.animatedValue as Float
                 invalidate()
             }
             start()
         }
     }
 
+    fun play() {
+        showPauseIcon = false
+        toggle(true)
+    }
+
+    fun pause() {
+        showPauseIcon = true
+        toggle(false)
+    }
+
+    private fun toggle(push: Boolean) {
+        elevate(push)
+        fadeBackground(push)
+        playSound(push)
+    }
+
+    private fun playSound(push: Boolean) {
+        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        RingtoneManager.getRingtone(context, uri).play()
+    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun fadeBackground(play: Boolean) {
@@ -235,7 +228,11 @@ class TimerView : View {
             elevationPause
 
         ValueAnimator.ofFloat(elevation, elevateTo).apply {
-            duration = 600
+            duration = if (play)
+                600
+            else
+                300
+
             addUpdateListener {
                 elevation = it.animatedValue as Float
             }
@@ -245,4 +242,17 @@ class TimerView : View {
         }
     }
 
+    fun updateProgress(remainingTime: Int) {
+        val remain = remainingTime / (TASK_DURATION_IN_SECONDS).toFloat()
+        if (percent < 100 * remain)
+            return
+        ValueAnimator.ofFloat(percent, 100 * remain).apply {
+            duration = 300
+            addUpdateListener {
+                percent = it.animatedValue as Float
+                invalidate()
+            }
+            start()
+        }
+    }
 }

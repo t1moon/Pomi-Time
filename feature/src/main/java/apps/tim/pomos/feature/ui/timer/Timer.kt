@@ -1,34 +1,72 @@
 package apps.tim.pomos.feature.ui.timer
 
-import apps.tim.pomos.feature.ui.SECONDS_IN_MINUTE
-import apps.tim.pomos.feature.ui.TASK_DURATION
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
+import android.os.CountDownTimer
+import apps.tim.pomos.feature.ui.MILLIS_IN_SECOND
+import apps.tim.pomos.feature.ui.TASK_DURATION_IN_MILLIS
+import io.reactivex.subjects.PublishSubject
 
 class Timer {
-    private val taskDuration: Long = SECONDS_IN_MINUTE * TASK_DURATION.toLong()
-    private var remainingTime: Long = taskDuration
-    private lateinit var observable: Observable<String>
+    enum class TimerState { PLAYED, PAUSED, STARTED, FINISHED }
 
+    private var state: TimerState = TimerState.FINISHED
+    private var remainingTime = TASK_DURATION_IN_MILLIS.toLong()
+    private lateinit var timer: CountDownTimer
+    /* return timer remaining time in seconds */
+    var timeObservable: PublishSubject<Long> = PublishSubject.create()
+    /* return timer state */
+    var stateObservable: PublishSubject<TimerState> = PublishSubject.create()
 
-    fun start() : Observable<String> {
-        observable = Observable.interval(1, 1, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-
-                .observeOn(AndroidSchedulers.mainThread())
-                .takeUntil { it > taskDuration - remainingTime }
-                .doOnEach { remainingTime -= 1 }
-                .map {
-                    val t = Time(remainingTime)
-                    "${t.minutes}:${t.seconds}"
-                }
-        return observable
+    fun changeState() {
+        state = when (state) {
+            TimerState.FINISHED -> {
+                start()
+                TimerState.STARTED
+            }
+            TimerState.STARTED -> {
+                pause()
+                TimerState.PAUSED
+            }
+            TimerState.PAUSED -> {
+                play()
+                TimerState.PLAYED
+            }
+            TimerState.PLAYED -> {
+                pause()
+                TimerState.PAUSED
+            }
+        }
     }
 
-    class Time(input: Long) {
-        var minutes: Int = (input / SECONDS_IN_MINUTE).toInt()
-        var seconds: Int = (input % SECONDS_IN_MINUTE).toInt()
+    private fun play() {
+        startTimer()
+        stateObservable.onNext(TimerState.PLAYED)
+    }
+
+    private fun start() {
+        startTimer()
+        stateObservable.onNext(TimerState.STARTED)
+    }
+
+    private fun startTimer() {
+        timer = object : CountDownTimer(remainingTime, 1000) {
+            override fun onFinish() = stop()
+
+            override fun onTick(millisUntilFinished: Long) {
+                remainingTime = millisUntilFinished
+                timeObservable.onNext(millisUntilFinished / MILLIS_IN_SECOND)
+            }
+        }
+        timer.start()
+    }
+
+    private fun pause() {
+        timer.cancel()
+        stateObservable.onNext(TimerState.PAUSED)
+    }
+
+    fun stop() {
+        remainingTime = TASK_DURATION_IN_MILLIS.toLong()
+        stateObservable.onNext(TimerState.FINISHED)
+        state = TimerState.FINISHED
     }
 }

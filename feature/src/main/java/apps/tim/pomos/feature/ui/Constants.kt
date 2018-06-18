@@ -3,8 +3,14 @@ package apps.tim.pomos.feature.ui
 
 const val TASK_ARG = "task"
 const val TASK_DB = "tasks_db"
-const val TASK_DURATION = 25
+
 const val SECONDS_IN_MINUTE = 60
+const val MILLIS_IN_SECOND = 1000
 
 const val START_ANGLE = 270f
 
+const val START_TIMER_ANIMATION_DURATION = 600L
+
+const val TASK_DURATION_IN_MINUTE = 0.1
+const val TASK_DURATION_IN_MILLIS = MILLIS_IN_SECOND * SECONDS_IN_MINUTE * TASK_DURATION_IN_MINUTE
+const val TASK_DURATION_IN_SECONDS = SECONDS_IN_MINUTE * TASK_DURATION_IN_MINUTE

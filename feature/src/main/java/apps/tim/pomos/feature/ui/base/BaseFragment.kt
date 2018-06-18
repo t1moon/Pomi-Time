@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 open class BaseFragment: Fragment() {
     protected val compositeDisposable = CompositeDisposable()
@@ -17,5 +18,9 @@ open class BaseFragment: Fragment() {
 
     fun ViewGroup.inflate(layoutRes: Int): View {
         return LayoutInflater.from(context).inflate(layoutRes, this, false)
+    }
+
+    protected fun add(d: Disposable) {
+        compositeDisposable.add(d)
     }
 }
