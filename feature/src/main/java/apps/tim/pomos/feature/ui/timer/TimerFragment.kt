@@ -42,7 +42,6 @@ class TimerFragment : BaseFragment() {
         pomoList.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         pomoAdapter = PomoAdapter(task.pomodoros)
         pomoList.adapter = pomoAdapter
-        pomoAdapter.notifyDataSetChanged()
     }
 
     private fun setupHeader() {
@@ -71,13 +70,16 @@ class TimerFragment : BaseFragment() {
                         Timer.TimerState.STARTED -> timerView.start()
                         Timer.TimerState.PAUSED -> timerView.pause()
                         Timer.TimerState.PLAYED -> timerView.play()
+                        Timer.TimerState.CANCELLED -> {
+                            timerView.finish()
+                            setTimerString()
+                        }
                         Timer.TimerState.FINISHED -> {
                             timerView.finish()
                             setTimerString()
                             timerViewModel.addPomo(task.id)
                                     .subscribe { _, _ ->
                                         pomoAdapter.addPomo()
-                                        pomoAdapter.notifyDataSetChanged()
                                     }
                         }
                     }

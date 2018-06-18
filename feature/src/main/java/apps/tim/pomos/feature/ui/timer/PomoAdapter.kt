@@ -13,12 +13,12 @@ class PomoAdapter(var pomos: Int) :
         RecyclerView.Adapter<PomoAdapter.ViewHolder>() {
 
     fun addPomo() {
-        pomos++
+        pomos += 1
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pomo, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_pomo, parent, false))
     }
 
 
@@ -35,6 +35,8 @@ class PomoAdapter(var pomos: Int) :
         fun bind(pomos: Int, pos: Int) {
            if (pos > pomos)
                pomo.setImageResource(R.drawable.ic_timer_blue)
+            else
+               pomo.setImageResource(R.drawable.ic_timer)
         }
     }
 }

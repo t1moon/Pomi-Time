@@ -6,7 +6,7 @@ import apps.tim.pomos.feature.ui.TASK_DURATION_IN_MILLIS
 import io.reactivex.subjects.PublishSubject
 
 class Timer {
-    enum class TimerState { PLAYED, PAUSED, STARTED, FINISHED }
+    enum class TimerState { PLAYED, PAUSED, STARTED, FINISHED, CANCELLED }
 
     private var state: TimerState = TimerState.FINISHED
     private var remainingTime = TASK_DURATION_IN_MILLIS.toLong()
@@ -34,6 +34,10 @@ class Timer {
                 pause()
                 TimerState.PAUSED
             }
+            TimerState.CANCELLED -> {
+                start()
+                TimerState.STARTED
+            }
         }
     }
 
@@ -49,7 +53,7 @@ class Timer {
 
     private fun startTimer() {
         timer = object : CountDownTimer(remainingTime, 1000) {
-            override fun onFinish() = stop()
+            override fun onFinish() = finish()
 
             override fun onTick(millisUntilFinished: Long) {
                 remainingTime = millisUntilFinished
@@ -64,9 +68,16 @@ class Timer {
         stateObservable.onNext(TimerState.PAUSED)
     }
 
-    fun stop() {
+    private fun finish() {
         remainingTime = TASK_DURATION_IN_MILLIS.toLong()
         stateObservable.onNext(TimerState.FINISHED)
         state = TimerState.FINISHED
+    }
+
+    fun stop() {
+        timer.cancel()
+        remainingTime = TASK_DURATION_IN_MILLIS.toLong()
+        stateObservable.onNext(TimerState.CANCELLED)
+        state = TimerState.CANCELLED
     }
 }

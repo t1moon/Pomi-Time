@@ -149,7 +149,7 @@ class TimerView : View {
 
     fun start() {
         showPlayIcon = false
-        toggle(false)
+        toggle(true)
         animateStarting()
     }
 
@@ -166,6 +166,7 @@ class TimerView : View {
 
     fun finish() {
         showPlayIcon = true
+        showPauseIcon = false
         toggle(false)
         playSound(false)
         animateFinishing()
@@ -184,11 +185,13 @@ class TimerView : View {
 
     fun play() {
         showPauseIcon = false
+        showPlayIcon = false
         toggle(true)
     }
 
     fun pause() {
         showPauseIcon = true
+        showPlayIcon = false
         toggle(false)
     }
 
