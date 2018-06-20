@@ -23,7 +23,7 @@ class TasksRepository(private val taskDatabase: TaskDatabase) {
         addToDB({ taskDao.updateTitle(title, id) })
     }
 
-    fun getTasks(pos: Int?): Flowable<List<Task>>? {
+    fun getTasks(): Flowable<List<Task>> {
         return taskDao.getTasksByDateRange()
     }
 
@@ -40,6 +40,12 @@ class TasksRepository(private val taskDatabase: TaskDatabase) {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
+    }
+
+    fun activateTask(id: Long) {
+        addToDB {
+            taskDao.activateTask(id)
+        }
     }
 
 }

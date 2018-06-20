@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/title_padding_left"
-                android:text="Pomos"
+                android:text="@string/tasks_fragment_title"
                 android:textSize="40sp"
                 android:textStyle="bold" />
         </android.support.v7.widget.Toolbar>
@@ -43,12 +43,4 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addTaskButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:src="@drawable/ic_add_black_24dp" />
 </android.support.design.widget.CoordinatorLayout>

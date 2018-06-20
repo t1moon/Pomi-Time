@@ -8,7 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import apps.tim.pomos.feature.PomoApp
 import apps.tim.pomos.feature.R
+import apps.tim.pomos.feature.ui.FRAGMENT_PAGE_KEY
+import apps.tim.pomos.feature.ui.TODAY_FRAGMENT_PAGE
 import apps.tim.pomos.feature.ui.base.BaseFragment
+import apps.tim.pomos.feature.ui.picker.AddTaskFragment
 import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,18 +21,16 @@ import javax.inject.Inject
 
 
 class TaskListFragment : BaseFragment() {
+    private var fragmentPage: Int = 0
 
     @Inject
     lateinit var tasksViewModel: TasksViewModel
 
-
     companion object {
-        private const val position: String = "POSITION"
-
-        fun newInstance(pos: Int): TaskListFragment {
+        fun  newInstance(pos: Int): TaskListFragment {
             val fragment = TaskListFragment()
             val bundle = Bundle()
-            bundle.putInt(position, pos)
+            bundle.putInt(FRAGMENT_PAGE_KEY, pos)
             fragment.arguments = bundle
             return fragment
         }
@@ -38,6 +39,7 @@ class TaskListFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         PomoApp.component.getFragmentComponent().inject(this)
+        fragmentPage = arguments?.get(FRAGMENT_PAGE_KEY) as Int
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,19 +48,67 @@ class TaskListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        compositeDisposable.add(tasksViewModel
-                .getTasks(this@TaskListFragment.arguments?.get(position) as Int)!!
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { items: List<Task> -> this.setTasks(items) }
-        )
+        if (fragmentPage == TODAY_FRAGMENT_PAGE) {
+            compositeDisposable.add(tasksViewModel
+                    .getTodayTasks()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { items: List<Task> -> this.setTasks(items) }
+            )
+        } else {
+            compositeDisposable.add(tasksViewModel
+                    .getBacklogTasks()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { items: List<Task> -> this.setBacklog(items) }
+            )
+        }
+
     }
 
     private fun setTasks(items: List<Task>) {
         context?.let {
             taskList.layoutManager = LinearLayoutManager(context)
-            taskList.adapter = TaskListAdapter(items, context as Context)
+            val adapter = TodayTasksAdapter(items, context as Context)
+            setTodayAdapterClickListeners(adapter)
+            taskList.adapter = adapter
             taskList.adapter.notifyDataSetChanged()
         }
     }
+
+    private fun setBacklog(items: List<Task>) {
+        context?.let {
+            taskList.layoutManager = LinearLayoutManager(context)
+            val adapter = BacklogAdapter(items, context as Context)
+            taskList.adapter = adapter
+            setBacklogAdapterClickListeners(adapter)
+            taskList.adapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun setTodayAdapterClickListeners(adapter: TodayTasksAdapter) {
+        add(adapter.getAddClickEvent
+                .subscribe {
+                    println("$fragmentPage")
+                    val picker = AddTaskFragment.newInstance(fragmentPage)
+                    picker.show(activity?.fragmentManager, "Picker")
+                }
+        )
+    }
+
+    private fun setBacklogAdapterClickListeners(adapter: BacklogAdapter) {
+        add(adapter.activateTaskClickEvent
+                .subscribe {
+                    tasksViewModel.activateTask(it.id)
+                }
+        )
+        add(adapter.getAddClickEvent
+                .subscribe {
+                    println("$fragmentPage")
+                    val picker = AddTaskFragment.newInstance(fragmentPage)
+                    picker.show(activity?.fragmentManager, "Picker")
+                }
+        )
+    }
+
 }

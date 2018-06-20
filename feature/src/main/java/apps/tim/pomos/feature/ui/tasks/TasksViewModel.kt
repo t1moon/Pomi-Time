@@ -7,17 +7,30 @@ import io.reactivex.Flowable
 
 class TasksViewModel(private val tasksRepository: TasksRepository) {
 
-    fun addTask(text: String) {
-        val task = Task(0, text)
+    fun addTask(task: Task) {
         tasksRepository.addTask(task)
     }
 
-    fun getTasks(pos: Int?): Flowable<List<Task>>? {
-        return tasksRepository.getTasks(pos)
-                ?.flatMap {
+    fun getTodayTasks(): Flowable<List<Task>> {
+        return tasksRepository.getTasks()
+                .flatMap {
                     Flowable.fromIterable(it)
                             .filter {
                                 !it.complete
+                                it.isActive
+                            }
+                            .toList()
+                            .toFlowable()
+                }
+    }
+
+    fun getBacklogTasks(): Flowable<List<Task>> {
+        return tasksRepository.getTasks()
+                .flatMap {
+                    Flowable.fromIterable(it)
+                            .filter {
+                                !it.complete
+                                !it.isActive
                             }
                             .toList()
                             .toFlowable()
@@ -34,5 +47,9 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
 
     fun completeTaskById(complete: Boolean, id: Long) {
         tasksRepository.completeTaskById(complete, id)
+    }
+
+    fun activateTask(id: Long) {
+        tasksRepository.activateTask(id)
     }
 }

@@ -33,7 +33,7 @@ class ListSeparator
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val params = view.layoutParams as RecyclerView.LayoutParams
-        // we want to retrieve the position in the list
+        // we want to retrieve the getCorrectedPosition in the list
         val position = params.viewAdapterPosition
         // and add a separator to any view but the last one
         if (position < state.itemCount) {
@@ -53,7 +53,7 @@ class ListSeparator
             val view = parent.getChildAt(i)
             val params = view.layoutParams as RecyclerView.LayoutParams
 
-            // get the position
+            // get the getCorrectedPosition
             val position = params.viewAdapterPosition
 
             // and finally draw the separator

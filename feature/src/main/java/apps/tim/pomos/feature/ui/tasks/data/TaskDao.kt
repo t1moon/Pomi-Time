@@ -27,4 +27,7 @@ interface TaskDao {
 
     @Query("UPDATE task SET complete = :complete WHERE id =:id")
     fun completeTaskById(complete: Boolean, id: Long)
+
+    @Query("UPDATE task SET isActive = 1 WHERE id =:id")
+    fun activateTask(id: Long)
 }

@@ -7,7 +7,7 @@
 
 
     <TextView
-        android:id="@+id/taskTitle"
+        android:id="@+id/backlogTaskTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -19,14 +19,14 @@
         android:textColor="@color/accentText"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Title" />
 
 
     <TextView
-        android:id="@+id/pomosNumber"
+        android:id="@+id/backlogPomosNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -62,8 +62,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/view"
-        app:layout_constraintStart_toStartOf="@+id/taskTitle"
-        app:layout_constraintTop_toBottomOf="@+id/taskTitle"
+        app:layout_constraintStart_toStartOf="@+id/backlogTaskTitle"
+        app:layout_constraintTop_toBottomOf="@+id/backlogTaskTitle"
         app:srcCompat="@drawable/ic_timer_gray" />
 
     <View
@@ -85,21 +85,36 @@
         android:layout_height="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/pomosNumber"
-        app:layout_constraintStart_toEndOf="@+id/pomosNumber"
-        app:layout_constraintTop_toTopOf="@+id/pomosNumber"
+        app:layout_constraintBottom_toBottomOf="@+id/backlogPomosNumber"
+        app:layout_constraintStart_toEndOf="@+id/backlogPomosNumber"
+        app:layout_constraintTop_toTopOf="@+id/backlogPomosNumber"
         app:layout_constraintVertical_bias="0.428"
         app:srcCompat="@drawable/ic_calendar" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="14 May" />
+
+    <ImageView
+        android:id="@+id/transferButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/backlogTaskTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_backspace" />
 </androidx.constraintlayout.widget.ConstraintLayout>
