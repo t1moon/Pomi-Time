@@ -75,9 +75,12 @@ class Timer {
     }
 
     fun stop() {
-        timer.cancel()
-        remainingTime = TASK_DURATION_IN_MILLIS.toLong()
-        stateObservable.onNext(TimerState.CANCELLED)
-        state = TimerState.CANCELLED
+        if (this::timer.isInitialized) {
+            timer.cancel()
+            remainingTime = TASK_DURATION_IN_MILLIS.toLong()
+            stateObservable.onNext(TimerState.CANCELLED)
+            state = TimerState.CANCELLED
+        }
+
     }
 }
