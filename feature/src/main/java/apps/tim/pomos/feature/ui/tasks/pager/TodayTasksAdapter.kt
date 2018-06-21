@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import apps.tim.pomos.feature.R
+import apps.tim.pomos.feature.toDateString
+import apps.tim.pomos.feature.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.feature.ui.TASK_ARG
 import apps.tim.pomos.feature.ui.picker.EditTaskFragment
 import apps.tim.pomos.feature.ui.tasks.data.Task
@@ -48,7 +50,17 @@ class TodayTasksAdapter(private val items: List<Task>, context: Context) : Addab
 
         fun bind(items: List<Task>) {
             taskTitle.text = items[getCorrectedPosition()].title
-            pomoNumber.text = items[getCorrectedPosition()].pomodoros.toString()
+            taskPomos.text = items[getCorrectedPosition()].pomodoros.toString()
+            val deadlineVal = items[getCorrectedPosition()].deadline
+            if (deadlineVal != DEFAULT_DATE_LONG) {
+                showDeadline(deadlineVal)
+            }
+        }
+
+        private fun showDeadline(deadlineVal: Long) {
+            taskDeadline.visibility = View.VISIBLE
+            taskDeadlineIcon.visibility = View.VISIBLE
+            taskDeadline.text = deadlineVal.toDateString()
         }
     }
 

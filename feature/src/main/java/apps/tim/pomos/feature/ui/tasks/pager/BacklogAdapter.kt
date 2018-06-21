@@ -49,7 +49,6 @@ class BacklogAdapter(private val items: List<Task>, context: Context) : AddableA
 
         fun bind(items: List<Task>) {
             backlogTaskTitle.text = items[getCorrectedPosition()].title
-            backlogPomosNumber.text = items[getCorrectedPosition()].pomodoros.toString()
         }
     }
 }

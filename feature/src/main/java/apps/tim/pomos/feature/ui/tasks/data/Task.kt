@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcelable
+import apps.tim.pomos.feature.ui.DEFAULT_DATE_LONG
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -11,7 +12,8 @@ import kotlinx.android.parcel.Parcelize
 data class Task(
         @PrimaryKey(autoGenerate = true) var id: Long,
         @ColumnInfo var title: String,
-        @ColumnInfo var complete: Boolean = false,
         @ColumnInfo var pomodoros: Int = 0,
+        @ColumnInfo var deadline: Long = DEFAULT_DATE_LONG,
+        @ColumnInfo var complete: Boolean = false,
         @ColumnInfo var isActive: Boolean = false
 ) : Parcelable

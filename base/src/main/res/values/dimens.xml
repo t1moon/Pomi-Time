@@ -3,7 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="tabs_padding_left">24dp</dimen>
-    <dimen name="title_padding_left">24dp</dimen>
+    <dimen name="title_margin_left">24dp</dimen>
+    <dimen name="finish_btn_margin_right">24dp</dimen>
     <dimen name="timer_radius_corner">1000dp</dimen>
     <dimen name="timer_elevation_pushed">0dp</dimen>
     <dimen name="timer_elevation_pulled">16dp</dimen>
