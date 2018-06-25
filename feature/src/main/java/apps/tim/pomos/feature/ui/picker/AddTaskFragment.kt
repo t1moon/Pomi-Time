@@ -13,7 +13,6 @@ import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.toDateLong
 import apps.tim.pomos.feature.toDateString
 import apps.tim.pomos.feature.ui.FRAGMENT_PAGE_KEY
-import apps.tim.pomos.feature.ui.TODAY_FRAGMENT_PAGE
 import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import kotlinx.android.synthetic.main.fragment_add.*
@@ -47,18 +46,21 @@ class AddTaskFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         button.setOnClickListener {
-            val active = arguments?.get(FRAGMENT_PAGE_KEY) == TODAY_FRAGMENT_PAGE
             val task = Task(
                     id = 0,
                     title = taskTitle.text.toString(),
                     deadline = deadline.text.toString().toDateLong(),
-                    isActive = active
+                    isActive = active.isChecked
             )
             tasksViewModel.addTask(task)
             dismiss()
         }
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         setDatePicker()
+        removeDeadline.setOnClickListener {
+            deadline.setText("")
+            it.visibility = View.GONE
+        }
     }
 
     private fun setDatePicker() {
@@ -68,6 +70,7 @@ class AddTaskFragment : DialogFragment() {
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             deadline.setText(calendar.time.toDateString())
+            removeDeadline.visibility = View.VISIBLE
         }
         val calendar = Calendar.getInstance()
         deadline.setOnClickListener {
@@ -76,6 +79,7 @@ class AddTaskFragment : DialogFragment() {
                     calendar.get(Calendar.DAY_OF_MONTH))
             datePickerDialog.datePicker.minDate = calendar.timeInMillis
             datePickerDialog.show()
+
         }
     }
 
