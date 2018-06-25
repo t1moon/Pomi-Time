@@ -38,9 +38,9 @@ class PomoAdapter(var pomos: Int) :
         holder.bind(pomos, position + 1)
 
         if (position == pomos)
-            Handler().post({
+            Handler().post {
                 flickerPomo(holder.pomo)
-            })
+            }
     }
 
     override fun getItemCount() = 8

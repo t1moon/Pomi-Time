@@ -40,7 +40,7 @@ class TimerFragment : BaseFragment() {
 
     private fun setupPomoList() {
         pomoList.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        pomoAdapter = PomoAdapter(task.pomodoros)
+        pomoAdapter = PomoAdapter(task.pomo)
         pomoList.adapter = pomoAdapter
     }
 

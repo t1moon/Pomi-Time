@@ -49,7 +49,7 @@ class TodayTasksAdapter(private val items: List<Task>, val context: Context) : R
 
         fun bind(items: List<Task>) {
             taskTitle.text = items[position].title
-            taskPomos.text = items[position].pomodoros.toString()
+            taskPomos.text = items[position].currentPomo.toString()
             val deadlineVal = items[position].deadline
             if (deadlineVal != DEFAULT_DATE_LONG) {
                 showDeadline(deadlineVal)

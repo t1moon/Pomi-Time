@@ -8,19 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import apps.tim.pomos.feature.R
+import apps.tim.pomos.feature.toDateString
+import apps.tim.pomos.feature.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.feature.ui.TASK_ARG
 import apps.tim.pomos.feature.ui.picker.EditTaskFragment
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.backlog_item.*
-import kotlinx.android.synthetic.main.backlog_item.view.*
+import kotlinx.android.synthetic.main.backlog_list_item.*
+import kotlinx.android.synthetic.main.backlog_list_item.view.*
 
 
 class BacklogAdapter(private val items: List<Task>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return BacklogTaskHolder(LayoutInflater.from(context).inflate(R.layout.backlog_item, parent, false))
+        return BacklogTaskHolder(LayoutInflater.from(context).inflate(R.layout.backlog_list_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -49,7 +51,19 @@ class BacklogAdapter(private val items: List<Task>, val context: Context) : Recy
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         fun bind(items: List<Task>) {
-            backlogTaskTitle.text = items[position].title
+            taskTitle.text = items[adapterPosition].title
+            taskPomos.text = items[adapterPosition].pomo.toString()
+            val deadlineVal = items[position].deadline
+            if (deadlineVal != DEFAULT_DATE_LONG) {
+                showDeadline(deadlineVal)
+            }
         }
+
+        private fun showDeadline(deadlineVal: Long) {
+            taskDeadline.visibility = View.VISIBLE
+            taskDeadlineIcon.visibility = View.VISIBLE
+            taskDeadline.text = deadlineVal.toDateString()
+        }
+
     }
 }

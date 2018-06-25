@@ -8,7 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import apps.tim.pomos.feature.*
+import apps.tim.pomos.feature.PomoApp
+import apps.tim.pomos.feature.R
+import apps.tim.pomos.feature.toDateLong
+import apps.tim.pomos.feature.toDateString
 import apps.tim.pomos.feature.ui.FRAGMENT_PAGE_KEY
 import apps.tim.pomos.feature.ui.TODAY_FRAGMENT_PAGE
 import apps.tim.pomos.feature.ui.tasks.TasksViewModel
@@ -48,7 +51,6 @@ class AddTaskFragment : DialogFragment() {
             val task = Task(
                     id = 0,
                     title = taskTitle.text.toString(),
-                    pomodoros = pomoNumber.text.toString().toInt(),
                     deadline = deadline.text.toString().toDateLong(),
                     isActive = active
             )

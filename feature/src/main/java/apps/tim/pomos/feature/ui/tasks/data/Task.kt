@@ -12,7 +12,8 @@ import kotlinx.android.parcel.Parcelize
 data class Task(
         @PrimaryKey(autoGenerate = true) var id: Long,
         @ColumnInfo var title: String,
-        @ColumnInfo var pomodoros: Int = 0,
+        @ColumnInfo var pomo: Int = 0,
+        @ColumnInfo var currentPomo: Int = 0,
         @ColumnInfo var deadline: Long = DEFAULT_DATE_LONG,
         @ColumnInfo var complete: Boolean = false,
         @ColumnInfo var isActive: Boolean = false
