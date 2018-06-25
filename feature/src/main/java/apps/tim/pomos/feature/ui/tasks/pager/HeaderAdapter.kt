@@ -13,7 +13,7 @@ import kotlinx.android.extensions.LayoutContainer
 const val DEFAULT_ITEM = 0
 const val ADD_ITEM = 1
 
-abstract class AddableAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class HeaderAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val addClickEvent = PublishSubject.create<Unit>()
     val getAddClickEvent: Observable<Unit> = addClickEvent
     fun getCorrectedPosition(pos: Int) = pos - 1
@@ -23,7 +23,7 @@ abstract class AddableAdapter(val context: Context) : RecyclerView.Adapter<Recyc
         return if (viewType == DEFAULT_ITEM)
             onCreateViewHolderDelegated(parent)
         else
-            AddTaskHolder(LayoutInflater.from(context).inflate(R.layout.add_task_item, parent, false))
+            HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.add_task_item, parent, false))
     }
 
 
@@ -44,7 +44,7 @@ abstract class AddableAdapter(val context: Context) : RecyclerView.Adapter<Recyc
             DEFAULT_ITEM
     }
 
-    class AddTaskHolder(override val containerView: View)
+    class HeaderViewHolder(override val containerView: View)
         : RecyclerView.ViewHolder(containerView), LayoutContainer
 
     open class DefaultHolder(override val containerView: View)

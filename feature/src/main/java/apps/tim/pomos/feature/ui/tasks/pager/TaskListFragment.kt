@@ -11,7 +11,6 @@ import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.ui.FRAGMENT_PAGE_KEY
 import apps.tim.pomos.feature.ui.TODAY_FRAGMENT_PAGE
 import apps.tim.pomos.feature.ui.base.BaseFragment
-import apps.tim.pomos.feature.ui.picker.AddTaskFragment
 import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -70,9 +69,8 @@ class TaskListFragment : BaseFragment() {
         context?.let {
             taskList.layoutManager = LinearLayoutManager(context)
             val adapter = TodayTasksAdapter(items, context as Context)
-            setTodayAdapterClickListeners(adapter)
             taskList.adapter = adapter
-            taskList.adapter.notifyDataSetChanged()
+            (taskList.adapter as TodayTasksAdapter).notifyDataSetChanged()
         }
     }
 
@@ -80,33 +78,17 @@ class TaskListFragment : BaseFragment() {
         context?.let {
             taskList.layoutManager = LinearLayoutManager(context)
             val adapter = BacklogAdapter(items, context as Context)
-            taskList.adapter = adapter
             setBacklogAdapterClickListeners(adapter)
-            taskList.adapter.notifyDataSetChanged()
+            taskList.adapter = adapter
+            (taskList.adapter as BacklogAdapter).notifyDataSetChanged()
         }
     }
 
-    private fun setTodayAdapterClickListeners(adapter: TodayTasksAdapter) {
-        add(adapter.getAddClickEvent
-                .subscribe {
-                    println("$fragmentPage")
-                    val picker = AddTaskFragment.newInstance(fragmentPage)
-                    picker.show(activity?.fragmentManager, "Picker")
-                }
-        )
-    }
 
     private fun setBacklogAdapterClickListeners(adapter: BacklogAdapter) {
         add(adapter.activateTaskClickEvent
                 .subscribe {
                     tasksViewModel.activateTask(it.id)
-                }
-        )
-        add(adapter.getAddClickEvent
-                .subscribe {
-                    println("$fragmentPage")
-                    val picker = AddTaskFragment.newInstance(fragmentPage)
-                    picker.show(activity?.fragmentManager, "Picker")
                 }
         )
     }

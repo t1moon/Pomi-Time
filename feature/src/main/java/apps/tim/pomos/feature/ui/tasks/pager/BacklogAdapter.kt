@@ -13,42 +13,43 @@ import apps.tim.pomos.feature.ui.picker.EditTaskFragment
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.backlog_item.*
 import kotlinx.android.synthetic.main.backlog_item.view.*
 
 
-class BacklogAdapter(private val items: List<Task>, context: Context) : AddableAdapter(context) {
-    private val activateTaskClick = PublishSubject.create<Task>()
-    val activateTaskClickEvent: Observable<Task> = activateTaskClick
-
-    override fun onCreateViewHolderDelegated(parent: ViewGroup): RecyclerView.ViewHolder {
+class BacklogAdapter(private val items: List<Task>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return BacklogTaskHolder(LayoutInflater.from(context).inflate(R.layout.backlog_item, parent, false))
     }
 
-    override fun onBindViewHolderDelegated(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder as BacklogTaskHolder
         holder.bind(items)
 
-        holder.itemView?.setOnLongClickListener {
+        holder.itemView.setOnLongClickListener {
             val bundle = Bundle()
-            bundle.putParcelable(TASK_ARG, items[getCorrectedPosition(position)])
+            bundle.putParcelable(TASK_ARG, items[position])
             val picker = EditTaskFragment()
             picker.arguments = bundle
             picker.show((it.context as AppCompatActivity).fragmentManager, "Picker")
             true
         }
         holder.itemView.transferButton.setOnClickListener {
-            activateTaskClick.onNext(items[getCorrectedPosition(position)])
+            activateTaskClick.onNext(items[position])
         }
     }
 
-    override fun getItemCount() = getCorrectedItemSize(items.size)
+    private val activateTaskClick = PublishSubject.create<Task>()
+    val activateTaskClickEvent: Observable<Task> = activateTaskClick
 
-    class BacklogTaskHolder(containerView: View)
-        : DefaultHolder(containerView) {
+    override fun getItemCount() = items.size
+
+    class BacklogTaskHolder(override val containerView: View)
+        : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         fun bind(items: List<Task>) {
-            backlogTaskTitle.text = items[getCorrectedPosition()].title
+            backlogTaskTitle.text = items[position].title
         }
     }
 }

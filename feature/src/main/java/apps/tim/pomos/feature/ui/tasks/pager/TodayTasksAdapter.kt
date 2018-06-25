@@ -14,28 +14,27 @@ import apps.tim.pomos.feature.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.feature.ui.TASK_ARG
 import apps.tim.pomos.feature.ui.picker.EditTaskFragment
 import apps.tim.pomos.feature.ui.tasks.data.Task
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.today_list_item.*
 
 
-class TodayTasksAdapter(private val items: List<Task>, context: Context) : AddableAdapter(context) {
-
-    override fun onCreateViewHolderDelegated(parent: ViewGroup): RecyclerView.ViewHolder {
+class TodayTasksAdapter(private val items: List<Task>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return TodayTaskHolder(LayoutInflater.from(context).inflate(R.layout.today_list_item, parent, false))
-
     }
 
-    override fun onBindViewHolderDelegated(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder as TodayTaskHolder
         holder.bind(items)
-        holder.itemView?.setOnClickListener {
+        holder.itemView.setOnClickListener {
             val bundle = Bundle()
-            bundle.putParcelable(TASK_ARG, items[getCorrectedPosition(position)])
+            bundle.putParcelable(TASK_ARG, items[position])
             it.findNavController().navigate(R.id.action_tasksFragment_to_timerFragment, bundle)
         }
 
-        holder.itemView?.setOnLongClickListener {
+        holder.itemView.setOnLongClickListener {
             val bundle = Bundle()
-            bundle.putParcelable(TASK_ARG, items[getCorrectedPosition(position)])
+            bundle.putParcelable(TASK_ARG, items[position])
             val picker = EditTaskFragment()
             picker.arguments = bundle
             picker.show((it.context as AppCompatActivity).fragmentManager, "Picker")
@@ -43,15 +42,15 @@ class TodayTasksAdapter(private val items: List<Task>, context: Context) : Addab
         }
     }
 
-    override fun getItemCount() = getCorrectedItemSize(items.size)
+    override fun getItemCount() = items.size
 
-    class TodayTaskHolder(containerView: View)
-        : DefaultHolder(containerView) {
+    class TodayTaskHolder(override val containerView: View)
+        : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         fun bind(items: List<Task>) {
-            taskTitle.text = items[getCorrectedPosition()].title
-            taskPomos.text = items[getCorrectedPosition()].pomodoros.toString()
-            val deadlineVal = items[getCorrectedPosition()].deadline
+            taskTitle.text = items[position].title
+            taskPomos.text = items[position].pomodoros.toString()
+            val deadlineVal = items[position].deadline
             if (deadlineVal != DEFAULT_DATE_LONG) {
                 showDeadline(deadlineVal)
             }
