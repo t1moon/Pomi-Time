@@ -53,20 +53,8 @@
         android:layout_height="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        app:srcCompat="@drawable/ic_delete_black_24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/complete"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/complete" />
-
-    <ImageView
-        android:id="@+id/complete"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        app:srcCompat="@drawable/ic_done_black_24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ok"
-        app:layout_constraintStart_toEndOf="@+id/delete"
-        app:layout_constraintTop_toTopOf="@+id/ok" />
+        app:srcCompat="@drawable/ic_delete_black_24dp"
+        tools:layout_editor_absoluteY="120dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

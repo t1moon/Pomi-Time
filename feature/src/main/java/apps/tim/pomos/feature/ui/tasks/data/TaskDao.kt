@@ -25,9 +25,18 @@ interface TaskDao {
     @Delete
     fun delete(task: Task)
 
-    @Query("UPDATE task SET complete = :complete WHERE id =:id")
-    fun completeTaskById(complete: Boolean, id: Long)
+    @Query("UPDATE task SET isComplete = :isComplete WHERE id =:id")
+    fun completeTaskById(isComplete: Boolean, id: Long)
 
     @Query("UPDATE task SET isActive = 1 WHERE id =:id")
     fun activateTask(id: Long)
+
+    @Query("UPDATE task SET currentPomo = 0 WHERE id =:id")
+    fun resetCurrentPomo(id: Long)
+
+    @Query("UPDATE task set isActive = 0, currentPomo = 0 WHERE isActive = 1 AND isComplete = 0")
+    fun moveActiveTasksToBacklog()
+
+    @Query("DELETE FROM task WHERE isComplete = 1")
+    fun deleteCompletedTasks()
 }

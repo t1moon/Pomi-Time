@@ -20,8 +20,8 @@ class TimerFragment : BaseFragment() {
     @Inject
     lateinit var timerViewModel: TimerViewModel
 
-    lateinit var task: Task
-    lateinit var pomoAdapter: PomoAdapter
+    private lateinit var task: Task
+    private lateinit var pomoAdapter: PomoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +34,18 @@ class TimerFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupHeader()
-        setupTimer()
         setupPomoList()
+        setupTimer()
     }
 
     private fun setupPomoList() {
-        pomoList.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        pomoAdapter = PomoAdapter(task.pomo)
-        pomoList.adapter = pomoAdapter
+        add(timerViewModel.getCompleted()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    pomoList.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                    pomoAdapter = PomoAdapter(it)
+                    pomoList.adapter = pomoAdapter
+                })
     }
 
     private fun setupHeader() {

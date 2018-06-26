@@ -1,4 +1,4 @@
-package apps.tim.pomos.feature.ui.tasks.pager
+package apps.tim.pomos.feature.ui.tasks
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -6,8 +6,9 @@ import apps.tim.pomos.feature.PomoApp
 import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.ui.BACKLOG_FRAGMENT_PAGE
 import apps.tim.pomos.feature.ui.TODAY_FRAGMENT_PAGE
+import apps.tim.pomos.feature.ui.tasks.pager.TaskListFragment
 
-class PagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
+class ViewPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
     private val fragmentList = mutableListOf<TaskListFragment>()
 
     fun addFragment(fragment: TaskListFragment) = fragmentList.add(fragment)

@@ -2,6 +2,7 @@ package apps.tim.pomos.feature.ui
 
 
 const val TASK_ARG = "task"
+const val COMPLETED_ARG = "completed"
 const val TASK_DB = "tasks_db"
 
 const val SECONDS_IN_MINUTE = 60
@@ -11,7 +12,7 @@ const val START_ANGLE = 270f
 
 const val START_TIMER_ANIMATION_DURATION = 600L
 
-const val TASK_DURATION_IN_MINUTE = 1
+const val TASK_DURATION_IN_MINUTE = 0.1
 const val TASK_DURATION_IN_MILLIS = MILLIS_IN_SECOND * SECONDS_IN_MINUTE * TASK_DURATION_IN_MINUTE
 const val TASK_DURATION_IN_SECONDS = SECONDS_IN_MINUTE * TASK_DURATION_IN_MINUTE
 
@@ -22,3 +23,7 @@ const val FRAGMENT_PAGE_KEY = "POSITION"
 
 const val DATE_FORMAT = "MM/dd/yy"
 const val DEFAULT_DATE_LONG = 0L
+
+const val SHARED_PREF_SESSION = "WORK_SESSION"
+
+const val DAILY_GOAL = 8

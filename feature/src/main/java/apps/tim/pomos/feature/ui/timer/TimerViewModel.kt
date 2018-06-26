@@ -3,14 +3,15 @@ package apps.tim.pomos.feature.ui.timer
 import apps.tim.pomos.feature.ui.SECONDS_IN_MINUTE
 import apps.tim.pomos.feature.ui.TASK_DURATION_IN_MINUTE
 import apps.tim.pomos.feature.ui.tasks.data.TasksRepository
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 
 
-class TimerViewModel(val tasksRepository: TasksRepository, val timer: Timer) {
+class TimerViewModel(private val tasksRepository: TasksRepository, private val timer: Timer) {
 
-    fun getTimerString() : Observable<String> {
+    fun getTimerString(): Observable<String> {
         return timer.timeObservable
                 .map {
                     val t = Time(it)
@@ -18,7 +19,7 @@ class TimerViewModel(val tasksRepository: TasksRepository, val timer: Timer) {
                 }
     }
 
-    fun getTimerProgress() : Observable<Int> {
+    fun getTimerProgress(): Observable<Int> {
         return timer.timeObservable
                 .map {
                     it.toInt()
@@ -44,12 +45,29 @@ class TimerViewModel(val tasksRepository: TasksRepository, val timer: Timer) {
                 }
     }
 
-    fun getTimerState() : PublishSubject<Timer.TimerState> {
+    fun getTimerState(): PublishSubject<Timer.TimerState> {
         return timer.stateObservable
     }
 
-    fun addPomo(id: Long) : Single<Unit> {
+    fun addPomo(id: Long): Single<Unit> {
         return tasksRepository.addPomo(id)
+    }
+
+    fun getCompleted(): Flowable<Int> {
+        return tasksRepository.getTasks()
+                .flatMap {
+                    Observable.fromIterable(it)
+                            .filter {
+                                it.isActive
+                            }
+                            .map {
+                                it.currentPomo
+                            }
+                            .reduce { t1: Int, t2: Int ->
+                                t2 + t1
+                            }
+                            .toFlowable()
+                }
     }
 
     class Time(input: Long) {

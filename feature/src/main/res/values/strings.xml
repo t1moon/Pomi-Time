@@ -7,4 +7,8 @@
     <string name="task_tabs_2">Other tasks</string>
     <string name="add_task_title_hint" >Pomo title</string>
     <string name="tasks_fragment_title">Tasks</string>
+    <string name="stats_fragment_title">Daily report</string>
+    <string name="session_stats">Session started</string>
+    <string name="start">START</string>
+    <string name="finish">FINISH</string>
 </resources>

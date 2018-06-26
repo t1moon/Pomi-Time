@@ -45,6 +45,7 @@ class AddTaskFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         button.setOnClickListener {
             val task = Task(
                     id = 0,

@@ -1,0 +1,71 @@
+package apps.tim.pomos.feature.ui.stat
+
+import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import apps.tim.pomos.feature.PomoApp
+import apps.tim.pomos.feature.R
+import apps.tim.pomos.feature.ui.DAILY_GOAL
+import apps.tim.pomos.feature.ui.base.BaseFragment
+import apps.tim.pomos.feature.ui.tasks.TasksViewModel
+import apps.tim.pomos.feature.ui.tasks.data.Statistics
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_statistics.*
+import java.util.*
+import javax.inject.Inject
+
+class StatisticsFragment : BaseFragment() {
+    private var total = 0
+
+    @Inject
+    lateinit var tasksViewModel: TasksViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        PomoApp.component.getFragmentComponent().inject(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_statistics, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        compositeDisposable.add(tasksViewModel
+                .getStatistics()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    items: List<StatisticsItem> ->
+                    this.setStat(items) })
+
+        newSessionBtn.setOnClickListener {
+            context?.let {
+                tasksViewModel.finishSession(
+                        Statistics( id = 0,
+                                    date = Calendar.getInstance().timeInMillis,
+                                    completed = total)
+                )
+                activity?.onBackPressed()
+            }
+        }
+    }
+
+    private fun setStat(items: List<StatisticsItem>) {
+        context?.let {
+            total = (items.fold(0)
+            { total, next: StatisticsItem -> total + next.pomo } / DAILY_GOAL.toFloat() * 100).toInt()
+
+            taskList.layoutManager = LinearLayoutManager(context)
+            val adapter = StatisticsAdapter(items)
+            adapter.totalDonePercentage = total
+            taskList.adapter = adapter
+            (taskList.adapter as StatisticsAdapter).notifyDataSetChanged()
+        }
+    }
+
+
+}

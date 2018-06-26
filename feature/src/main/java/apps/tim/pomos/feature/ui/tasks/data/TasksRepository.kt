@@ -6,8 +6,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class TasksRepository(private val taskDatabase: TaskDatabase) {
+class TasksRepository(taskDatabase: TaskDatabase) {
     private val taskDao = taskDatabase.taskDao()
+    private val statDao = taskDatabase.statDao()
 
     fun addPomo(id: Long) : Single<Unit> {
         return Single.fromCallable { taskDao.addPomodoro(id)  }
@@ -32,7 +33,7 @@ class TasksRepository(private val taskDatabase: TaskDatabase) {
     }
 
     fun completeTaskById(complete: Boolean, id: Long) {
-        addToDB({taskDao.completeTaskById(complete, id)})
+        addToDB { taskDao.completeTaskById(complete, id) }
     }
 
     private fun addToDB(callable: () -> Unit) {
@@ -48,4 +49,28 @@ class TasksRepository(private val taskDatabase: TaskDatabase) {
         }
     }
 
+    fun deactivateTask(id: Long) {
+        addToDB {
+            taskDao.activateTask(id)
+            taskDao.resetCurrentPomo(id)
+        }
+    }
+
+    fun moveActiveTasksToBacklog() {
+        addToDB {
+            taskDao.moveActiveTasksToBacklog()
+        }
+    }
+
+    fun deleteCompletedTasks() {
+        addToDB {
+            taskDao.deleteCompletedTasks()
+        }
+    }
+
+    fun addStatistics(stat: Statistics) {
+        addToDB {
+            statDao.insert(stat)
+        }
+    }
 }

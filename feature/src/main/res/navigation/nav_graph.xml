@@ -8,7 +8,13 @@
         android:id="@+id/timerFragment"
         android:name="apps.tim.pomos.feature.ui.timer.TimerFragment"
         android:label="Timer"
-        tools:layout="@layout/fragment_timer"></fragment>
+        tools:layout="@layout/fragment_timer"/>
+
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="apps.tim.pomos.feature.ui.stat.StatisticsFragment"
+        android:label="Stats"
+        tools:layout="@layout/fragment_statistics"/>
 
     <fragment
         android:id="@+id/tasksFragment"
@@ -24,9 +30,17 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
+            android:id="@+id/action_tasksFragment_to_statsFragment"
+            app:destination="@id/statsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
             android:id="@+id/action_tasksFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
     </fragment>
+
 
     <fragment
         android:id="@+id/settingsFragment"

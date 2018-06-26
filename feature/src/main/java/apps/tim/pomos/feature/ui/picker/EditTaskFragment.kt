@@ -34,15 +34,11 @@ class EditTaskFragment : DialogFragment() {
         taskTitle.setText(task.title)
         taskTitle.setSelection(taskTitle.text.toString().length)
         ok.setOnClickListener{
-            tasksViewModel.updateTask(taskTitle.text.toString(), task.id)
+            tasksViewModel.updateTitleById(taskTitle.text.toString(), task.id)
             dismiss()
         }
         delete.setOnClickListener {
             tasksViewModel.deleteTask(task)
-            dismiss()
-        }
-        complete.setOnClickListener {
-            tasksViewModel.completeTaskById(true, task.id)
             dismiss()
         }
     }

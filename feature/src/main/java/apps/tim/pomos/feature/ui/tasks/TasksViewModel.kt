@@ -1,5 +1,8 @@
 package apps.tim.pomos.feature.ui.tasks
 
+import apps.tim.pomos.feature.ui.DAILY_GOAL
+import apps.tim.pomos.feature.ui.stat.StatisticsItem
+import apps.tim.pomos.feature.ui.tasks.data.Statistics
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import apps.tim.pomos.feature.ui.tasks.data.TasksRepository
 import io.reactivex.Flowable
@@ -16,12 +19,33 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
                 .flatMap {
                     Flowable.fromIterable(it)
                             .filter {
-                                !it.complete
                                 it.isActive
+                            }
+                            .sorted { task1, task2 ->
+                                task1.isComplete.compareTo(task2.isComplete)
                             }
                             .toList()
                             .toFlowable()
                 }
+    }
+
+    fun getStatistics(): Flowable<List<StatisticsItem>> {
+        return getTodayTasks()
+                .flatMap {
+                    Flowable.fromIterable(it)
+                            .map {
+                                StatisticsItem(
+                                        it.title,
+                                        it.currentPomo,
+                                        it.deadline,
+                                        it.isComplete,
+                                        (it.currentPomo / DAILY_GOAL.toFloat() * 100).toInt()
+                                )
+                            }
+                            .toList()
+                            .toFlowable()
+                }
+
     }
 
     fun getBacklogTasks(): Flowable<List<Task>> {
@@ -29,7 +53,7 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
                 .flatMap {
                     Flowable.fromIterable(it)
                             .filter {
-                                !it.complete
+                                !it.isComplete
                                 !it.isActive
                             }
                             .toList()
@@ -37,7 +61,7 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
                 }
     }
 
-    fun updateTask(title: String, id: Long) {
+    fun updateTitleById(title: String, id: Long) {
         tasksRepository.updateTitle(title, id)
     }
 
@@ -45,11 +69,18 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
         tasksRepository.deleteTask(task)
     }
 
-    fun completeTaskById(complete: Boolean, id: Long) {
+    fun markIsCompleteTaskById(complete: Boolean, id: Long) {
         tasksRepository.completeTaskById(complete, id)
     }
 
     fun activateTask(id: Long) {
         tasksRepository.activateTask(id)
     }
+
+    fun finishSession(stat: Statistics) {
+        tasksRepository.deleteCompletedTasks()
+        tasksRepository.moveActiveTasksToBacklog()
+        tasksRepository.addStatistics(stat)
+    }
+
 }

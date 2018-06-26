@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,7 +14,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/taskToolbar"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="104dp"
             android:layout_marginTop="32dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
@@ -41,34 +42,25 @@
                     android:layout_width="@dimen/ic_size"
                     android:layout_height="@dimen/ic_size"
                     android:layout_gravity="center_horizontal|right"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_settings_black_24dp" />
 
-                <ImageButton
-                    android:id="@+id/power"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="@dimen/ic_size"
-                    android:layout_height="@dimen/ic_size"
-                    android:layout_gravity="center_horizontal|right"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/settings"
-                    app:layout_constraintEnd_toStartOf="@+id/settings"
-                    app:layout_constraintTop_toTopOf="@+id/settings"
-                    app:srcCompat="@drawable/ic_power" />
-
-                <TextView
-                    android:id="@+id/textView2"
+                <Button
+                    android:id="@+id/finishBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Session started"
-                    app:layout_constraintEnd_toEndOf="@+id/power"
-                    app:layout_constraintStart_toStartOf="@+id/power"
-                    app:layout_constraintTop_toBottomOf="@+id/power" />
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Finish"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/settings" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
