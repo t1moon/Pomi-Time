@@ -11,4 +11,6 @@
     <string name="session_stats">Session started</string>
     <string name="start">START</string>
     <string name="finish">FINISH</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="chart_label">Last session productivity</string>
 </resources>

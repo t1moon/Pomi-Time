@@ -28,6 +28,10 @@ class TasksRepository(taskDatabase: TaskDatabase) {
         return taskDao.getTasksByDateRange()
     }
 
+    fun getStats(): Flowable<List<Statistics>> {
+        return statDao.getLastStats()
+    }
+
     fun deleteTask(task: Task) {
         addToDB({ taskDao.delete(task) })
     }

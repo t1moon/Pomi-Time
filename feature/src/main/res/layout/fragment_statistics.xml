@@ -46,7 +46,6 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="New Session"
-                    android:textAppearance="@style/TabsNoCaps"
                     android:textColor="@color/appBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

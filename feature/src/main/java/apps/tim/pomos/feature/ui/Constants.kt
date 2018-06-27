@@ -5,8 +5,10 @@ const val TASK_ARG = "task"
 const val COMPLETED_ARG = "completed"
 const val TASK_DB = "tasks_db"
 
+const val MINUTES_IN_HOUR = 60
 const val SECONDS_IN_MINUTE = 60
 const val MILLIS_IN_SECOND = 1000
+const val HOUR_IN_MILLIS = MINUTES_IN_HOUR * SECONDS_IN_MINUTE * MILLIS_IN_SECOND
 
 const val START_ANGLE = 270f
 
@@ -22,8 +24,12 @@ const val BACKLOG_FRAGMENT_PAGE = 1
 const val FRAGMENT_PAGE_KEY = "POSITION"
 
 const val DATE_FORMAT = "MM/dd/yy"
+const val TIME_FORMAT = "HH:mm"
+
 const val DEFAULT_DATE_LONG = 0L
 
 const val SHARED_PREF_SESSION = "WORK_SESSION"
 
 const val DAILY_GOAL = 8
+
+const val STATISTIC_COUNT = 4

@@ -5,16 +5,26 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import apps.tim.pomos.feature.PomoApp
 import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.toDateString
 import apps.tim.pomos.feature.ui.DEFAULT_DATE_LONG
+import apps.tim.pomos.feature.ui.tasks.data.Statistics
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.PercentFormatter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.statistics_graph_item.*
 import kotlinx.android.synthetic.main.statistics_header_item.*
 import kotlinx.android.synthetic.main.statistics_list_item.*
+import java.text.DecimalFormat
 
 
-class StatisticsAdapter(private val items: List<StatisticsItem>)
+class StatisticsAdapter(private val items: List<StatisticsItem>,
+                        private val stats: List<Statistics>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var totalDonePercentage = 0
 
@@ -46,7 +56,7 @@ class StatisticsAdapter(private val items: List<StatisticsItem>)
             }
             else -> {
                 holder as GraphViewHolder
-                holder.bind()
+                holder.bind(stats.asReversed())
             }
         }
     }
@@ -65,13 +75,6 @@ class StatisticsAdapter(private val items: List<StatisticsItem>)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(totalDonePercentage: Int) {
             result.text = "$totalDonePercentage%"
-        }
-    }
-
-    class GraphViewHolder(override val containerView: View)
-        : RecyclerView.ViewHolder(containerView), LayoutContainer {
-        fun bind() {
-            graph.text = "GRAPH"
         }
     }
 
@@ -98,6 +101,72 @@ class StatisticsAdapter(private val items: List<StatisticsItem>)
             taskDeadlineIcon.visibility = View.VISIBLE
             taskDeadline.text = deadlineVal.toDateString()
         }
+    }
+
+    class GraphViewHolder(override val containerView: View)
+        : RecyclerView.ViewHolder(containerView), LayoutContainer {
+        fun bind(stats: List<Statistics>) {
+            val entries = mutableListOf<Entry>()
+            for (i in 0 until stats.size) {
+                entries.add(Entry((i + 1).toFloat(), stats[i].completed.toFloat()))
+            }
+            chart.legend.isEnabled = false
+            chart.extraBottomOffset = 8f
+
+            val dataset = LineDataSet(entries, PomoApp.string(R.string.chart_label))
+            dataset.color = PomoApp.color(R.color.colorAccent)
+            dataset.lineWidth = 4f
+            dataset.setCircleColor(PomoApp.color(R.color.colorAccent))
+            dataset.circleRadius = 5f
+            dataset.circleHoleRadius = 4f
+            dataset.valueTextColor = PomoApp.color(R.color.accentText)
+            dataset.valueTextSize = 18f
+            dataset.axisDependency = YAxis.AxisDependency.LEFT
+            dataset.setDrawValues(false)
+            val lineData = LineData(dataset)
+            chart.data = lineData
+
+            chart.isDragEnabled = false
+            chart.setScaleEnabled(false)
+
+            chart.setBackgroundColor(PomoApp.color(R.color.appBackground))
+            chart.xAxis.setDrawGridLines(false)
+            chart.axisLeft.setDrawGridLines(false)
+            chart.axisRight.setDrawGridLines(false)
+            chart.axisRight.isEnabled = false
+            chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+            chart.axisLeft.valueFormatter = PercentFormatter(DecimalFormat("###"))
+            chart.xAxis.valueFormatter = AxisDateFormatter(stats)
+            chart.xAxis.granularity = 1f
+
+            chart.axisLeft.axisLineWidth = 3f
+            chart.xAxis.axisLineWidth = 3f
+
+            chart.axisLeft.axisLineColor = PomoApp.color(R.color.accentText)
+            chart.xAxis.axisLineColor = PomoApp.color(R.color.accentText)
+
+            chart.axisLeft.textSize = 14f
+            chart.xAxis.textSize = 14f
+
+            chart.axisLeft.textColor = PomoApp.color(R.color.accentText)
+            chart.xAxis.textColor = PomoApp.color(R.color.accentText)
+
+            chart.axisLeft.axisMaximum = 100f
+            chart.axisLeft.axisMinimum = 0f
+            chart.axisLeft.labelCount = 5
+
+            chart.xAxis.axisMinimum = 0.5f
+            chart.xAxis.axisMaximum = 4.5f
+
+            chart.description.isEnabled = false
+
+            chart.isHighlightPerDragEnabled = false
+            chart.isHighlightPerTapEnabled = false
+
+            chart.invalidate()
+        }
+
     }
 
 }
