@@ -12,9 +12,7 @@ import apps.tim.pomos.feature.ui.base.BaseFragment
 import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Statistics
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_statistics.*
 import java.util.*
 import javax.inject.Inject
@@ -41,18 +39,15 @@ class StatisticsFragment : BaseFragment() {
                         .getStatisticsForToday().toObservable(),
                 tasksViewModel.getStats().toObservable(), BiFunction { t1: List<StatisticsItem>, t2: List<Statistics> ->
             this.setStat(t1, t2)
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe())
+        }).subscribe())
 
         newSessionBtn.setOnClickListener {
             context?.let {
-                tasksViewModel.finishSession(
+                add(tasksViewModel.finishSession(
                         Statistics(id = 0,
                                 date = Calendar.getInstance().timeInMillis,
                                 completed = total)
-                )
+                ).subscribe())
                 activity?.onBackPressed()
             }
         }

@@ -11,70 +11,54 @@ class TasksRepository(taskDatabase: TaskDatabase) {
     private val statDao = taskDatabase.statDao()
 
     fun addPomo(id: Long) : Single<Unit> {
-        return Single.fromCallable { taskDao.addPomodoro(id)  }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        return async { taskDao.addPomodoro(id)  }
     }
 
-    fun addTask(task: Task) {
-        addToDB({ taskDao.insert(task) })
-    }
-
-    fun updateTitle(title: String, id: Long) {
-        addToDB({ taskDao.updateTitle(title, id) })
+    fun addTask(task: Task): Single<Unit> {
+        return async { taskDao.insert(task) }
     }
 
     fun getTasks(): Flowable<List<Task>> {
         return taskDao.getTasksByDateRange()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun getStats(): Flowable<List<Statistics>> {
         return statDao.getLastStats()
-    }
-
-    fun deleteTask(task: Task) {
-        addToDB({ taskDao.delete(task) })
-    }
-
-    fun completeTaskById(complete: Boolean, id: Long) {
-        addToDB { taskDao.completeTaskById(complete, id) }
-    }
-
-    private fun addToDB(callable: () -> Unit) {
-        Single.fromCallable(callable)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
     }
 
-    fun activateTask(id: Long) {
-        addToDB {
-            taskDao.activateTask(id)
-        }
+    fun deleteTask(task: Task): Single<Unit> {
+        return async { taskDao.delete(task) }
     }
 
-    fun deactivateTask(id: Long) {
-        addToDB {
-            taskDao.activateTask(id)
-            taskDao.resetCurrentPomo(id)
-        }
+    fun completeTaskById(complete: Boolean, id: Long): Single<Unit> {
+        return async { taskDao.completeTaskById(complete, id) }
     }
 
-    fun moveActiveTasksToBacklog() {
-        addToDB {
-            taskDao.moveActiveTasksToBacklog()
-        }
+
+
+    fun activateTask(id: Long): Single<Unit> {
+        return async { taskDao.activateTask(id) }
     }
 
-    fun deleteCompletedTasks() {
-        addToDB {
-            taskDao.deleteCompletedTasks()
-        }
+    fun moveActiveTasksToBacklog(): Single<Unit> {
+        return async { taskDao.moveActiveTasksToBacklog() }
     }
 
-    fun addStatistics(stat: Statistics) {
-        addToDB {
-            statDao.insert(stat)
-        }
+    fun deleteCompletedTasks(): Single<Unit> {
+        return async { taskDao.deleteCompletedTasks() }
+    }
+
+    fun addStatistics(stat: Statistics): Single<Unit> {
+        return async { statDao.insert(stat) }
+    }
+
+    private fun async(callable: () -> Unit) : Single<Unit> {
+        return Single.fromCallable(callable)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 }

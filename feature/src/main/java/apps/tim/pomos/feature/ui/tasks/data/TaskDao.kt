@@ -16,9 +16,6 @@ interface TaskDao {
     @Insert(onConflict = REPLACE)
     fun insert(task: Task)
 
-    @Query("UPDATE task SET title = :title WHERE id =:id")
-    fun updateTitle(title: String?, id: Long)
-
     @Query("UPDATE task SET pomo = pomo + 1, currentPomo = currentPomo + 1 WHERE id =:id")
     fun addPomodoro(id: Long)
 

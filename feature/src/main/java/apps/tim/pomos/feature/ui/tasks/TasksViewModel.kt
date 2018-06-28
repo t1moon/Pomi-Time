@@ -7,13 +7,14 @@ import apps.tim.pomos.feature.ui.tasks.data.Statistics
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import apps.tim.pomos.feature.ui.tasks.data.TasksRepository
 import io.reactivex.Flowable
+import io.reactivex.Single
+import io.reactivex.functions.Function3
 
 
 class TasksViewModel(private val tasksRepository: TasksRepository) {
 
-    fun addTask(task: Task) {
-        tasksRepository.addTask(task)
-    }
+    fun addTask(task: Task) =
+            tasksRepository.addTask(task)
 
     fun getTodayTasks(): Flowable<List<Task>> {
         return tasksRepository.getTasks()
@@ -62,26 +63,27 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
                 }
     }
 
-    fun updateTitleById(title: String, id: Long) {
-        tasksRepository.updateTitle(title, id)
-    }
 
-    fun deleteTask(task: Task) {
+    fun deleteTask(task: Task) =
         tasksRepository.deleteTask(task)
-    }
 
-    fun markIsCompleteTaskById(complete: Boolean, id: Long) {
+    fun markIsCompleteTaskById(complete: Boolean, id: Long) =
         tasksRepository.completeTaskById(complete, id)
-    }
 
-    fun activateTask(id: Long) {
+
+    fun activateTask(id: Long) =
         tasksRepository.activateTask(id)
-    }
 
-    fun finishSession(stat: Statistics) {
-        tasksRepository.deleteCompletedTasks()
-        tasksRepository.moveActiveTasksToBacklog()
-        tasksRepository.addStatistics(stat)
+
+    fun finishSession(stat: Statistics) : Single<Unit> {
+        return Single.zip(
+                tasksRepository.deleteCompletedTasks(),
+        tasksRepository.moveActiveTasksToBacklog(),
+        tasksRepository.addStatistics(stat),
+                Function3<Unit, Unit, Unit, Unit> {
+                    _, _, _ ->
+                    Single.just(Unit)
+                })
     }
 
     fun getStats() : Flowable<List<Statistics>>{

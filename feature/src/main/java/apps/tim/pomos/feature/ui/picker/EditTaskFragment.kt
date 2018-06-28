@@ -38,7 +38,7 @@ class EditTaskFragment : AddTaskFragment() {
         }
 
         delete.setOnClickListener {
-            tasksViewModel.deleteTask(task)
+            add(tasksViewModel.deleteTask(task).subscribe())
             dismiss()
         }
     }
@@ -54,7 +54,7 @@ class EditTaskFragment : AddTaskFragment() {
                     pomo = this.task.pomo,
                     isActive = active.isChecked
             )
-            tasksViewModel.addTask(task)
+            add(tasksViewModel.addTask(task).subscribe())
             dismiss()
         }
     }

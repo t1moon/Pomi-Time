@@ -14,12 +14,15 @@ import apps.tim.pomos.feature.toDateLong
 import apps.tim.pomos.feature.toDateString
 import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Task
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_add.*
 import java.util.*
 import javax.inject.Inject
 
 
 open class AddTaskFragment : DialogFragment() {
+    protected val compositeDisposable = CompositeDisposable()
 
     @Inject
     lateinit var tasksViewModel: TasksViewModel
@@ -54,7 +57,7 @@ open class AddTaskFragment : DialogFragment() {
                     deadline = deadline.text.toString().toDateLong(),
                     isActive = active.isChecked
             )
-            tasksViewModel.addTask(task)
+            add(tasksViewModel.addTask(task).subscribe())
             dismiss()
         }
     }
@@ -85,4 +88,13 @@ open class AddTaskFragment : DialogFragment() {
         return d
     }
 
+
+    override fun onDestroyView() {
+        compositeDisposable.clear()
+        super.onDestroyView()
+    }
+
+    protected fun add(d: Disposable) {
+        compositeDisposable.add(d)
+    }
 }
