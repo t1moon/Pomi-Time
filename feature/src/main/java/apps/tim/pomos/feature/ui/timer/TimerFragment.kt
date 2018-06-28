@@ -17,6 +17,11 @@ import kotlinx.android.synthetic.main.fragment_timer.*
 import javax.inject.Inject
 
 class TimerFragment : BaseFragment() {
+
+    companion object {
+        private val WORK_MODE = PomoApp.string(R.string.work)
+        private val REST_MODE = PomoApp.string(R.string.rest)
+    }
     @Inject
     lateinit var timerViewModel: TimerViewModel
 
@@ -55,8 +60,24 @@ class TimerFragment : BaseFragment() {
     }
 
     private fun setupTimer() {
-        setTimerString()
+        resetTimer(true)
         setTimerView()
+        setControlButtons()
+    }
+
+    private fun setControlButtons() {
+        leftControl.setOnClickListener {
+            timerViewModel.timerViewModeChanged()
+            changeTimerMode()
+        }
+        rightControl.setOnClickListener {
+            timerViewModel.timerViewModeChanged()
+            changeTimerMode()
+        }
+    }
+
+    private fun changeTimerMode() {
+        resetTimer(timerMode.text == REST_MODE)
     }
 
     private fun setTimerView() {
@@ -70,17 +91,18 @@ class TimerFragment : BaseFragment() {
 
         add(timerViewModel.getTimerState()
                 .subscribe {
+                    disableControls()
                     when (it) {
                         Timer.TimerState.STARTED -> timerView.start()
                         Timer.TimerState.PAUSED -> timerView.pause()
                         Timer.TimerState.PLAYED -> timerView.play()
                         Timer.TimerState.CANCELLED -> {
                             timerView.finish()
-                            setTimerString()
+                            resetTimer()
                         }
                         Timer.TimerState.FINISHED -> {
                             timerView.finish()
-                            setTimerString()
+                            resetTimer(false)
                             timerViewModel.addPomo(task.id)
                                     .subscribe { _, _ ->
                                         pomoAdapter.addPomo()
@@ -96,15 +118,27 @@ class TimerFragment : BaseFragment() {
                 })
     }
 
-    private fun setTimerString() {
-        add(timerViewModel.defaultTime()
+    private fun resetTimer(isWork: Boolean = true) {
+        add(timerViewModel.defaultTime(isWork)
                 .subscribe {
                     timerTime.text = it
                 })
         add(timerViewModel.getTimerString().subscribe {
             timerTime.text = it
         })
+        timerMode.text = if (isWork) WORK_MODE else REST_MODE
 
+        enableControls()
+    }
+
+    private fun disableControls() {
+        leftControl.visibility = View.GONE
+        rightControl.visibility = View.GONE
+    }
+
+    private fun enableControls() {
+        leftControl.visibility = View.VISIBLE
+        rightControl.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

@@ -48,16 +48,17 @@
         android:id="@+id/timerView"
         android:layout_width="250dp"
         android:layout_height="250dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/shadow"
         android:padding="1dp"
         app:elevationPause="16"
         app:elevationPlay="0"
         app:fgColor="@color/colorAccent"
         app:fgColorPause="@color/colorAccentTransparent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/pomoListWrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskTitleWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/timerMode"
         app:percent="0" />
 
     <TextView
@@ -66,14 +67,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="12dp"
         android:gravity="center"
         android:textSize="64sp"
-        app:layout_constraintBottom_toTopOf="@+id/timerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskTitleWrapper"
         tools:text="17:23" />
 
     <RelativeLayout
@@ -82,19 +83,49 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="32dp"
         android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timerView">
+        app:layout_constraintStart_toStartOf="parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/pomoList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/timerMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Work"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/timerTime"
+        app:layout_constraintStart_toStartOf="@+id/timerTime"
+        app:layout_constraintTop_toBottomOf="@+id/timerTime" />
+
+    <ImageButton
+        android:id="@+id/leftControl"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/ic_left"
+        app:layout_constraintBottom_toBottomOf="@+id/timerTime"
+        app:layout_constraintEnd_toStartOf="@+id/timerTime"
+        app:layout_constraintTop_toTopOf="@+id/timerTime" />
+
+    <ImageButton
+        android:id="@+id/rightControl"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/ic_right"
+        app:layout_constraintBottom_toBottomOf="@+id/timerTime"
+        app:layout_constraintStart_toEndOf="@+id/timerTime"
+        app:layout_constraintTop_toTopOf="@+id/timerTime" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

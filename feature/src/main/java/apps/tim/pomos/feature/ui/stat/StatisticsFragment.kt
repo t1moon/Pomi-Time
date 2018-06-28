@@ -38,12 +38,13 @@ class StatisticsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         add(Observable.zip(
                 tasksViewModel
-                        .getStatisticsForToday()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()).toObservable(),
+                        .getStatisticsForToday().toObservable(),
                 tasksViewModel.getStats().toObservable(), BiFunction { t1: List<StatisticsItem>, t2: List<Statistics> ->
             this.setStat(t1, t2)
-        }).subscribe())
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe())
 
         newSessionBtn.setOnClickListener {
             context?.let {

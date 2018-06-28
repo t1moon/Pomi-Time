@@ -18,7 +18,6 @@ import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.dipToPx
 import apps.tim.pomos.feature.ui.START_ANGLE
 import apps.tim.pomos.feature.ui.START_TIMER_ANIMATION_DURATION
-import apps.tim.pomos.feature.ui.TASK_DURATION_IN_SECONDS
 
 
 class TimerView : View {
@@ -245,11 +244,10 @@ class TimerView : View {
         }
     }
 
-    fun updateProgress(remainingTime: Int) {
-        val remain = remainingTime / (TASK_DURATION_IN_SECONDS).toFloat()
-        if (percent < 100 * remain)
+    fun updateProgress(currentProgress: Int) {
+        if (percent < currentProgress)
             return
-        ValueAnimator.ofFloat(percent, 100 * remain).apply {
+        ValueAnimator.ofFloat(percent, currentProgress.toFloat()).apply {
             duration = 300
             addUpdateListener {
                 percent = it.animatedValue as Float
