@@ -119,7 +119,7 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
             dataset.setCircleColor(PomoApp.color(R.color.colorAccent))
             dataset.circleRadius = 5f
             dataset.circleHoleRadius = 4f
-            dataset.valueTextColor = PomoApp.color(R.color.accentText)
+            dataset.valueTextColor = PomoApp.color(R.color.textColor)
             dataset.valueTextSize = 18f
             dataset.axisDependency = YAxis.AxisDependency.LEFT
             dataset.setDrawValues(false)
@@ -129,7 +129,7 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
             chart.isDragEnabled = false
             chart.setScaleEnabled(false)
 
-            chart.setBackgroundColor(PomoApp.color(R.color.appBackground))
+            chart.setBackgroundColor(PomoApp.color(R.color.colorPrimary))
             chart.xAxis.setDrawGridLines(false)
             chart.axisLeft.setDrawGridLines(false)
             chart.axisRight.setDrawGridLines(false)
@@ -143,14 +143,14 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
             chart.axisLeft.axisLineWidth = 3f
             chart.xAxis.axisLineWidth = 3f
 
-            chart.axisLeft.axisLineColor = PomoApp.color(R.color.accentText)
-            chart.xAxis.axisLineColor = PomoApp.color(R.color.accentText)
+            chart.axisLeft.axisLineColor = PomoApp.color(R.color.textColor)
+            chart.xAxis.axisLineColor = PomoApp.color(R.color.textColor)
 
             chart.axisLeft.textSize = 14f
             chart.xAxis.textSize = 14f
 
-            chart.axisLeft.textColor = PomoApp.color(R.color.accentText)
-            chart.xAxis.textColor = PomoApp.color(R.color.accentText)
+            chart.axisLeft.textColor = PomoApp.color(R.color.textColor)
+            chart.xAxis.textColor = PomoApp.color(R.color.textColor)
 
             chart.axisLeft.axisMaximum = 100f
             chart.axisLeft.axisMinimum = 0f

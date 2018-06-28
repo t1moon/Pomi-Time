@@ -23,7 +23,7 @@
             android:layout_width="250dp"
             android:layout_height="130dp"
             android:gravity="center"
-            android:textColor="@color/accentText"
+            android:textColor="@color/textColor"
             android:textSize="48sp"
             app:autoSizeMaxTextSize="48sp"
             app:autoSizeTextType="uniform"
@@ -41,7 +41,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:tint="@color/accentText"
+        android:tint="@color/textColor"
         app:srcCompat="@drawable/ic_back_48dp" />
 
     <apps.tim.pomos.feature.ui.timer.TimerView

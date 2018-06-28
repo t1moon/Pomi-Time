@@ -6,10 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/colorPrimary</item>
+
         <item name="windowActionBar">false</item>
         <item name="android:fontFamily">@font/googlesans_regular</item>
-        <item name="android:colorBackground">@color/appBackground</item>
-        <item name="android:textColor">@color/accentText</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="TabsNoCaps" parent="TextAppearance.Design.Tab">

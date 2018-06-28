@@ -63,8 +63,8 @@ class PomoAdapter(var pomos: Int) :
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun flickerPomo(pomo: ImageView) {
-        val red = PomoApp.color(R.color.timerIcon)
-        val blue = PomoApp.color(R.color.timerIconFaded)
+        val red = PomoApp.color(R.color.colorAccent)
+        val blue = PomoApp.color(R.color.iconColor)
         ValueAnimator.ofArgb(blue, red).apply {
             duration = 1000
             addUpdateListener {

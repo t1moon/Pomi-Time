@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="shadowColor">#000</color>
-    <color name="listSeparator">#e9e9e9</color>
-    <color name="timerStatusIcon">#B32E313F</color>
-</resources>

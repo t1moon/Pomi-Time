@@ -83,7 +83,7 @@ class TimerView : View {
         fgPaint1.isAntiAlias = true
 
         statusIconPaint = Paint()
-        statusIconColor = PomoApp.color(R.color.timerStatusIcon)
+        statusIconColor = PomoApp.color(R.color.iconColor)
         statusIconPaint.color = statusIconColor
         statusIconPaint.isAntiAlias = true
 

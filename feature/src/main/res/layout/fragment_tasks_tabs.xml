@@ -6,7 +6,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
-        android:background="@color/appBackground"
+        android:background="@color/colorPrimary"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
@@ -46,7 +46,7 @@
                     android:layout_marginRight="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_settings_black_24dp" />
+                    app:srcCompat="@drawable/ic_settings" />
 
                 <Button
                     android:id="@+id/finishBtn"
@@ -58,7 +58,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="Finish"
-                    android:textColor="@color/appBackground"
+                    android:textColor="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/settings" />
@@ -89,6 +89,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:clickable="true"
-        app:srcCompat="@drawable/ic_add_black_24dp" />
+        app:srcCompat="@drawable/ic_add" />
 
 </android.support.design.widget.CoordinatorLayout>
