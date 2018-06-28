@@ -1,24 +1,20 @@
 package apps.tim.pomos.feature.ui.picker
 
-import android.app.Dialog
-import android.app.DialogFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import apps.tim.pomos.feature.PomoApp
 import apps.tim.pomos.feature.R
+import apps.tim.pomos.feature.toDateLong
+import apps.tim.pomos.feature.toDateString
+import apps.tim.pomos.feature.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.feature.ui.TASK_ARG
-import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import kotlinx.android.synthetic.main.fragment_edit.*
-import javax.inject.Inject
 
-class EditTaskFragment : DialogFragment() {
+class EditTaskFragment : AddTaskFragment() {
     lateinit var task: Task
-
-    @Inject
-    lateinit var tasksViewModel: TasksViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,21 +27,36 @@ class EditTaskFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         taskTitle.setText(task.title)
-        taskTitle.setSelection(taskTitle.text.toString().length)
-        ok.setOnClickListener{
-            tasksViewModel.updateTitleById(taskTitle.text.toString(), task.id)
-            dismiss()
+        taskTitle.setSelection(taskTitle.text.length)
+        active.isChecked = task.isActive
+
+        if (task.deadline != DEFAULT_DATE_LONG) {
+            deadline.setText(task.deadline.toDateString())
+            removeDeadline.visibility = View.VISIBLE
         }
+
         delete.setOnClickListener {
             tasksViewModel.deleteTask(task)
             dismiss()
         }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val d = super.onCreateDialog(savedInstanceState)
-        d.window.setBackgroundDrawableResource(R.drawable.picker_layout_background)
-        return d
+    override fun setOkButtonClicked() {
+        ok.setOnClickListener {
+            val task = Task(
+                    id = this.task.id,
+                    title = taskTitle.text.toString(),
+                    deadline = deadline.text.toString().toDateLong(),
+                    isComplete = this.task.isComplete,
+                    currentPomo = this.task.currentPomo,
+                    pomo = this.task.pomo,
+                    isActive = active.isChecked
+            )
+            tasksViewModel.addTask(task)
+            dismiss()
+        }
     }
+
 }

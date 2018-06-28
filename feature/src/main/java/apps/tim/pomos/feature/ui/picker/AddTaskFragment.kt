@@ -12,7 +12,6 @@ import apps.tim.pomos.feature.PomoApp
 import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.toDateLong
 import apps.tim.pomos.feature.toDateString
-import apps.tim.pomos.feature.ui.FRAGMENT_PAGE_KEY
 import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Task
 import kotlinx.android.synthetic.main.fragment_add.*
@@ -20,20 +19,10 @@ import java.util.*
 import javax.inject.Inject
 
 
-class AddTaskFragment : DialogFragment() {
+open class AddTaskFragment : DialogFragment() {
 
     @Inject
     lateinit var tasksViewModel: TasksViewModel
-
-    companion object {
-        fun newInstance(pos: Int): AddTaskFragment {
-            val fragment = AddTaskFragment()
-            val bundle = Bundle()
-            bundle.putInt(FRAGMENT_PAGE_KEY, pos)
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +34,20 @@ class AddTaskFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setOkButtonClicked()
+        cancel.setOnClickListener {
+            dismiss()
+        }
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        setDatePicker()
+        removeDeadline.setOnClickListener {
+            deadline.setText("")
+            it.visibility = View.GONE
+        }
+    }
 
-        button.setOnClickListener {
+    protected open fun setOkButtonClicked() {
+        ok.setOnClickListener {
             val task = Task(
                     id = 0,
                     title = taskTitle.text.toString(),
@@ -55,12 +56,6 @@ class AddTaskFragment : DialogFragment() {
             )
             tasksViewModel.addTask(task)
             dismiss()
-        }
-        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        setDatePicker()
-        removeDeadline.setOnClickListener {
-            deadline.setText("")
-            it.visibility = View.GONE
         }
     }
 
