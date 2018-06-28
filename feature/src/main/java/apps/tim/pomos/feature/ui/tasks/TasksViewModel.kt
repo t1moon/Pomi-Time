@@ -1,6 +1,7 @@
 package apps.tim.pomos.feature.ui.tasks
 
-import apps.tim.pomos.feature.ui.DAILY_GOAL
+import apps.tim.pomos.feature.PomoApp
+import apps.tim.pomos.feature.PreferenceHelper
 import apps.tim.pomos.feature.ui.STATISTIC_COUNT
 import apps.tim.pomos.feature.ui.stat.StatisticsItem
 import apps.tim.pomos.feature.ui.tasks.data.Statistics
@@ -32,6 +33,7 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
     }
 
     fun getStatisticsForToday(): Flowable<List<StatisticsItem>> {
+        val daily = PreferenceHelper.getDaily(PomoApp.instance)
         return getTodayTasks()
                 .flatMap {
                     Flowable.fromIterable(it)
@@ -41,7 +43,7 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
                                         it.currentPomo,
                                         it.deadline,
                                         it.isComplete,
-                                        (it.currentPomo / DAILY_GOAL.toFloat() * 100).toInt()
+                                        (it.currentPomo / daily.toFloat() * 100).toInt()
                                 )
                             }
                             .toList()

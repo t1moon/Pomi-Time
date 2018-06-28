@@ -13,8 +13,10 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.ImageView
 import apps.tim.pomos.feature.PomoApp
+import apps.tim.pomos.feature.PreferenceHelper
+import apps.tim.pomos.feature.PreferenceHelper.get
 import apps.tim.pomos.feature.R
-import apps.tim.pomos.feature.ui.DAILY_GOAL
+import apps.tim.pomos.feature.ui.PREF_DAILY_KEY
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_pomo.*
 
@@ -44,7 +46,7 @@ class PomoAdapter(var pomos: Int) :
             }
     }
 
-    override fun getItemCount() = DAILY_GOAL
+    override fun getItemCount() = PreferenceHelper.defaultPrefs(PomoApp.instance)[PREF_DAILY_KEY, 0] ?: 0
 
 
     class ViewHolder(override val containerView: View)

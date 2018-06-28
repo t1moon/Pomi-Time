@@ -1,9 +1,9 @@
 package apps.tim.pomos.feature.ui.timer
 
+import apps.tim.pomos.feature.PomoApp
+import apps.tim.pomos.feature.PreferenceHelper
 import apps.tim.pomos.feature.ui.MILLIS_IN_SECOND
-import apps.tim.pomos.feature.ui.REST_DURATION_IN_MINUTE
 import apps.tim.pomos.feature.ui.SECONDS_IN_MINUTE
-import apps.tim.pomos.feature.ui.WORK_DURATION_IN_MINUTE
 import apps.tim.pomos.feature.ui.tasks.data.TasksRepository
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -41,7 +41,10 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
     }
 
     fun defaultTime(work: Boolean): Observable<String> {
-        val duration = (if (work) WORK_DURATION_IN_MINUTE else REST_DURATION_IN_MINUTE)
+        val workDuration = PreferenceHelper.getWorkDuration(PomoApp.instance)
+        val restDuration = PreferenceHelper.getRestDuration(PomoApp.instance)
+
+        val duration = (if (work) workDuration else restDuration)
         return Observable.just(Time((duration * SECONDS_IN_MINUTE)))
                 .map {
                     "${it.minutes}:${it.seconds}${if (it.seconds == 0) "0" else ""}"
@@ -77,6 +80,9 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
         timer.onModeChanged()
     }
 
+    /**
+     * @input in minutes
+     */
     class Time(input: Int) {
         var minutes: Int = (input / SECONDS_IN_MINUTE)
         var seconds: Int = (input % SECONDS_IN_MINUTE)

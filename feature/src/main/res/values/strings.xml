@@ -15,4 +15,8 @@
     <string name="chart_label">Last session productivity</string>
     <string name="rest">rest</string>
     <string name="work">work</string>
+    <string name="min">m</string>
+    <string name="work_duration">Work Duration</string>
+    <string name="rest_duration">Rest Duration</string>
+    <string name="daily_goal">Daily Goal</string>
 </resources>

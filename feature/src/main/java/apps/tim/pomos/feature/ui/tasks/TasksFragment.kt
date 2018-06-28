@@ -25,20 +25,15 @@ class TasksFragment : BaseFragment() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
 
         setupViewPager()
-        setupAddButton()
-        setupFinishButton()
-    }
-
-    private fun setupFinishButton() {
-        finishBtn.setOnClickListener {
-            it.findNavController().navigate(R.id.action_tasksFragment_to_statsFragment)
-        }
-    }
-
-    private fun setupAddButton() {
         addTaskButton.setOnClickListener {
             val picker = AddTaskFragment()
             picker.show(this@TasksFragment.activity?.fragmentManager, "Picker")
+        }
+        finishBtn.setOnClickListener {
+            it.findNavController().navigate(R.id.action_tasksFragment_to_statsFragment)
+        }
+        settings.setOnClickListener {
+            it.findNavController().navigate(R.id.action_tasksFragment_to_settingsFragment)
         }
     }
 

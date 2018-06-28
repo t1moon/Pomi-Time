@@ -56,7 +56,9 @@ class TimerFragment : BaseFragment() {
     private fun setupHeader() {
         task = arguments?.get(TASK_ARG) as Task
         taskTitle.text = task.title
-        backButton.setOnClickListener { activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp() }
+        backButton.setOnClickListener {
+            activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp()
+        }
     }
 
     private fun setupTimer() {

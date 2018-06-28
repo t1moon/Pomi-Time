@@ -1,21 +1,26 @@
 package apps.tim.pomos.feature.ui.timer
 
 import android.os.CountDownTimer
-import apps.tim.pomos.feature.ui.REST_DURATION_IN_MILLIS
-import apps.tim.pomos.feature.ui.WORK_DURATION_IN_MILLIS
+import apps.tim.pomos.feature.PomoApp
+import apps.tim.pomos.feature.PreferenceHelper
+import apps.tim.pomos.feature.ui.MILLIS_IN_MINUTE
 import io.reactivex.subjects.PublishSubject
 
 class Timer {
-    enum class TimerState { PLAYED, PAUSED, STARTED, FINISHED, CANCELLED }
 
+    companion object {
+        var WORK_DURATION
+                = PreferenceHelper.getWorkDuration(PomoApp.instance) * MILLIS_IN_MINUTE
+        var REST_DURATION
+                = PreferenceHelper.getRestDuration(PomoApp.instance) * MILLIS_IN_MINUTE
+    }
+    enum class TimerState { PLAYED, PAUSED, STARTED, FINISHED, CANCELLED }
     private var state: State = StoppedState(this)
     private var mode: Mode = WorkMode(this)
 
-    private var remainingTime = WORK_DURATION_IN_MILLIS.toLong()
+    private var remainingTime = WORK_DURATION.toLong()
     private lateinit var timer: CountDownTimer
-    /* return timer remaining time in seconds */
     var timeObservable: PublishSubject<Pair<Int, Int>> = PublishSubject.create()
-    /* return timer state */
     var stateObservable: PublishSubject<TimerState> = PublishSubject.create()
 
     private fun start() {
@@ -30,7 +35,7 @@ class Timer {
 
     private fun startTimer() {
         timer = object : CountDownTimer(remainingTime, 1000) {
-            val totalDuration = if (mode is WorkMode) WORK_DURATION_IN_MILLIS else REST_DURATION_IN_MILLIS
+            val totalDuration = (if (mode is WorkMode) WORK_DURATION else REST_DURATION)
             override fun onFinish() = finish()
 
             override fun onTick(millisUntilFinished: Long) {
@@ -57,11 +62,11 @@ class Timer {
     }
 
     private fun setWorkDuration() {
-        remainingTime = WORK_DURATION_IN_MILLIS.toLong()
+        remainingTime = WORK_DURATION.toLong()
     }
 
     private fun setRestDuration() {
-        remainingTime = REST_DURATION_IN_MILLIS.toLong()
+        remainingTime = REST_DURATION.toLong()
     }
 
 

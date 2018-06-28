@@ -48,6 +48,8 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:2.15"
 
     api 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
+    api 'com.android.support:preference-v7:27.1.1'
 }
 
 repositories {

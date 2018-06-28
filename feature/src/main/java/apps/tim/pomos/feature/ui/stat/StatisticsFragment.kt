@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import apps.tim.pomos.feature.PomoApp
+import apps.tim.pomos.feature.PreferenceHelper
 import apps.tim.pomos.feature.R
-import apps.tim.pomos.feature.ui.DAILY_GOAL
 import apps.tim.pomos.feature.ui.base.BaseFragment
 import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.Statistics
@@ -55,8 +55,9 @@ class StatisticsFragment : BaseFragment() {
 
     private fun setStat(items: List<StatisticsItem>, stats: List<Statistics>) {
         context?.let {
+            val daily = PreferenceHelper.getDaily(PomoApp.instance)
             total = (items.fold(0)
-            { total, next: StatisticsItem -> total + next.pomo } / DAILY_GOAL.toFloat() * 100).toInt()
+            { total, next: StatisticsItem -> total + next.pomo } / daily.toFloat() * 100).toInt()
 
             taskList.layoutManager = LinearLayoutManager(context)
             val adapter = StatisticsAdapter(items, stats)
