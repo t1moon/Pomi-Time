@@ -109,11 +109,12 @@
         app:layout_constraintEnd_toStartOf="@+id/ok"
         app:layout_constraintTop_toTopOf="@+id/ok" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_delete"
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:srcCompat="@drawable/ic_delete"
         app:layout_constraintBottom_toBottomOf="@+id/cancel"
         app:layout_constraintStart_toStartOf="@+id/calendarIcon"
         app:layout_constraintTop_toTopOf="@+id/cancel" />

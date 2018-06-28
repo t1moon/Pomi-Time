@@ -32,9 +32,6 @@ class TasksFragment : BaseFragment() {
         finishBtn.setOnClickListener {
             it.findNavController().navigate(R.id.action_tasksFragment_to_statsFragment)
         }
-        settings.setOnClickListener {
-            it.findNavController().navigate(R.id.action_tasksFragment_to_settingsFragment)
-        }
     }
 
     private fun setupViewPager() {

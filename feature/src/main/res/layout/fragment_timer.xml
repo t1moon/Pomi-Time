@@ -7,6 +7,17 @@
     tools:context=".ui.timer.TimerFragment">
 
 
+    <ImageView
+        android:id="@+id/settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_settings" />
+
     <LinearLayout
         android:id="@+id/taskTitleWrapper"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,7 +33,7 @@
             android:id="@+id/taskTitle"
             android:layout_width="250dp"
             android:layout_height="130dp"
-            android:gravity="center"
+            android:gravity="center|top"
             android:textColor="@color/textColor"
             android:textSize="48sp"
             app:autoSizeMaxTextSize="48sp"
@@ -41,8 +52,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:tint="@color/textColor"
-        app:srcCompat="@drawable/ic_back_48dp" />
+        app:srcCompat="@drawable/ic_back" />
 
     <apps.tim.pomos.feature.ui.timer.TimerView
         android:id="@+id/timerView"

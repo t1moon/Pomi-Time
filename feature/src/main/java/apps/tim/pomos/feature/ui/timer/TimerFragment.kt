@@ -41,6 +41,9 @@ class TimerFragment : BaseFragment() {
         setupHeader()
         setupPomoList()
         setupTimer()
+        settings.setOnClickListener {
+            it.findNavController().navigate(R.id.action_timerFragment_to_settingsFragment)
+        }
     }
 
     private fun setupPomoList() {
