@@ -89,7 +89,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/taskPomos"
         app:layout_constraintStart_toEndOf="@+id/taskPomos"
         app:layout_constraintTop_toTopOf="@+id/taskPomos"
-        app:layout_constraintVertical_bias="0.428"
         app:srcCompat="@drawable/ic_calendar" />
 
     <CheckBox

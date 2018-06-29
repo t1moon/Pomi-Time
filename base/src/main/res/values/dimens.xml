@@ -9,4 +9,5 @@
     <dimen name="timer_elevation_pushed">0dp</dimen>
     <dimen name="timer_elevation_pulled">16dp</dimen>
     <dimen name="settings_textsize">24sp</dimen>
+    <dimen name="settings_numbersize">30sp</dimen>
 </resources>

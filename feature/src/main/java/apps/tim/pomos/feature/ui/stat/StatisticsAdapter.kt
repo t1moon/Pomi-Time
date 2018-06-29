@@ -18,7 +18,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.PercentFormatter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.statistics_graph_item.*
-import kotlinx.android.synthetic.main.statistics_header_item.*
+import kotlinx.android.synthetic.main.statistics_overall_item.*
 import kotlinx.android.synthetic.main.statistics_list_item.*
 import java.text.DecimalFormat
 
@@ -36,7 +36,7 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            HEADER -> DoneViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.statistics_header_item, parent, false))
+            HEADER -> DoneViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.statistics_overall_item, parent, false))
             GRAPH -> GraphViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.statistics_graph_item, parent, false))
             else -> StatisticsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.statistics_list_item, parent, false))
         }

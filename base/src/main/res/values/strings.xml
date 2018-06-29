@@ -1,3 +1,35 @@
 <resources>
-    <string name="app_name">Pomos</string>
+    <string name="app_name">PomoTime</string>
+
+    <!-- Tab names -->
+    <string name="task_tabs_1">Today tasks</string>
+    <string name="task_tabs_2">Other tasks</string>
+
+    <!-- Fragment headers-->
+    <string name="tasks_fragment_title">Tasks</string>
+    <string name="stats_fragment_title">Daily report</string>
+
+    <!-- Session buttons -->
+    <string name="finish_session">Finish Session</string>
+    <string name="new_session">New Session</string>
+
+    <!-- Timer mode -->
+    <string name="rest">rest</string>
+    <string name="work">work</string>
+
+    <!-- Settings -->
+    <string name="work_duration">Work Duration</string>
+    <string name="rest_duration">Rest Duration</string>
+    <string name="daily_goal">Daily Goal</string>
+    <string name="min">m</string>
+
+    <!-- Task Add/Edit -->
+    <string name="enter_task_hint">Enter title</string>
+    <string name="enter_deadline_hint">Enter deadline (optional)</string>
+    <string name="is_today_hint">Today</string>
+
+    <!-- Statistics-->
+    <string name="statistics_graph_header">Statistics</string>
+    <string name="statistics_overall_header">Done</string>
+
 </resources>
