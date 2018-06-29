@@ -11,7 +11,6 @@ import apps.tim.pomos.feature.toDateString
 import apps.tim.pomos.feature.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.feature.ui.tasks.data.Statistics
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -35,7 +34,7 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType) {
+        return when (viewType) {
             HEADER -> DoneViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.statistics_header_item, parent, false))
             GRAPH -> GraphViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.statistics_graph_item, parent, false))
             else -> StatisticsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.statistics_list_item, parent, false))
@@ -45,7 +44,7 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
     override fun getItemCount() = items.size + 2
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder.itemViewType) {
+        when (holder.itemViewType) {
             HEADER -> {
                 holder as DoneViewHolder
                 holder.bind(totalDonePercentage)
@@ -63,8 +62,8 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            0 ->  HEADER
-            itemCount - 1 ->  GRAPH
+            0 -> HEADER
+            itemCount - 1 -> GRAPH
             else -> {
                 DEFAULT
             }
@@ -108,61 +107,67 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
         fun bind(stats: List<Statistics>) {
             val entries = mutableListOf<Entry>()
             for (i in 0 until stats.size) {
-                entries.add(Entry((i + 1).toFloat(), stats[i].completed.toFloat()))
+                entries.add(Entry((i).toFloat(), stats[i].completed.toFloat()))
             }
+//            entries.add(Entry(1f, 50f))
+//            entries.add(Entry(2f, 60f))
+//            entries.add(Entry(3f, 30f))
+//            entries.add(Entry(4f, 40f))
             chart.legend.isEnabled = false
             chart.extraBottomOffset = 8f
+            chart.isDragEnabled = false
+            chart.setScaleEnabled(false)
+            chart.setBackgroundColor(PomoApp.color(R.color.colorPrimary))
+            chart.description.isEnabled = false
+            chart.isHighlightPerDragEnabled = false
+            chart.isHighlightPerTapEnabled = false
+//            chart.animateX(300, Easing.EasingOption.EaseInCubic)
 
-            val dataset = LineDataSet(entries, PomoApp.string(R.string.chart_label))
-            dataset.color = PomoApp.color(R.color.colorAccent)
-            dataset.lineWidth = 4f
-            dataset.setCircleColor(PomoApp.color(R.color.colorAccent))
-            dataset.circleRadius = 5f
-            dataset.circleHoleRadius = 4f
-            dataset.valueTextColor = PomoApp.color(R.color.textColor)
-            dataset.valueTextSize = 18f
-            dataset.axisDependency = YAxis.AxisDependency.LEFT
-            dataset.setDrawValues(false)
+            val dataset = LineDataSet(entries, "")
+            dataset.apply {
+                color = PomoApp.color(R.color.colorAccent)
+                lineWidth = 4f
+                setCircleColor(PomoApp.color(R.color.colorAccent))
+                circleRadius = 5f
+                circleHoleRadius = 4f
+                valueTextColor = PomoApp.color(R.color.textColor)
+                valueTextSize = 18f
+                setDrawValues(false)
+                mode = LineDataSet.Mode.CUBIC_BEZIER
+            }
             val lineData = LineData(dataset)
             chart.data = lineData
 
-            chart.isDragEnabled = false
-            chart.setScaleEnabled(false)
-
-            chart.setBackgroundColor(PomoApp.color(R.color.colorPrimary))
-            chart.xAxis.setDrawGridLines(false)
-            chart.axisLeft.setDrawGridLines(false)
             chart.axisRight.setDrawGridLines(false)
             chart.axisRight.isEnabled = false
-            chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-            chart.axisLeft.valueFormatter = PercentFormatter(DecimalFormat("###"))
-            chart.xAxis.valueFormatter = AxisDateFormatter(stats)
-            chart.xAxis.granularity = 1f
+            chart.xAxis.apply {
+                setDrawGridLines(false)
+                position = XAxis.XAxisPosition.BOTTOM
+                valueFormatter = AxisDateFormatter(stats)
+//                valueFormatter = IAxisValueFormatter {
+//                    value, axis ->
+//                    value.toString()
+//                }
+                granularity = 1f
+                axisLineWidth = 3f
+                axisLineColor = PomoApp.color(R.color.textColor)
+                textSize = 14f
+                textColor = PomoApp.color(R.color.textColor)
+                axisMinimum = -0.5f
+                axisMaximum = entries.size.toFloat() - 0.5f
+            }
 
-            chart.axisLeft.axisLineWidth = 3f
-            chart.xAxis.axisLineWidth = 3f
-
-            chart.axisLeft.axisLineColor = PomoApp.color(R.color.textColor)
-            chart.xAxis.axisLineColor = PomoApp.color(R.color.textColor)
-
-            chart.axisLeft.textSize = 14f
-            chart.xAxis.textSize = 14f
-
-            chart.axisLeft.textColor = PomoApp.color(R.color.textColor)
-            chart.xAxis.textColor = PomoApp.color(R.color.textColor)
-
-            chart.axisLeft.axisMaximum = 100f
-            chart.axisLeft.axisMinimum = 0f
-            chart.axisLeft.labelCount = 5
-
-            chart.xAxis.axisMinimum = 0.5f
-            chart.xAxis.axisMaximum = 4.5f
-
-            chart.description.isEnabled = false
-
-            chart.isHighlightPerDragEnabled = false
-            chart.isHighlightPerTapEnabled = false
+            chart.axisLeft.apply {
+                setDrawGridLines(false)
+                valueFormatter = PercentFormatter(DecimalFormat("###"))
+                axisLineWidth = 3f
+                axisLineColor = PomoApp.color(R.color.textColor)
+                textSize = 14f
+                textColor = PomoApp.color(R.color.textColor)
+                axisMaximum = 100f
+                axisMinimum = 0f
+            }
 
             chart.invalidate()
         }

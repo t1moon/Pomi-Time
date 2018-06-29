@@ -12,7 +12,6 @@
     <string name="start">START</string>
     <string name="finish">FINISH</string>
     <string name="yesterday">Yesterday</string>
-    <string name="chart_label">Last session productivity</string>
     <string name="rest">rest</string>
     <string name="work">work</string>
     <string name="min">m</string>

@@ -78,6 +78,7 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
 
 
     fun finishSession(stat: Statistics) : Single<Unit> {
+        println(stat.date)
         return Single.zip(
                 tasksRepository.deleteCompletedTasks(),
         tasksRepository.moveActiveTasksToBacklog(),

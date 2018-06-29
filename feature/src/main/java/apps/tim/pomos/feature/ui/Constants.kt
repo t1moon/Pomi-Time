@@ -30,7 +30,7 @@ const val BACKLOG_FRAGMENT_PAGE = 1
 
 
 const val DATE_FORMAT = "MM/dd/yy"
-const val TIME_FORMAT = "HH:mm"
+const val TIME_FORMAT = "mm:ss"
 
 const val DEFAULT_DATE_LONG = 0L
 const val DEFAULT_INT = -1
@@ -40,4 +40,4 @@ const val DEFAULT_INT = -1
 const val FRAGMENT_PAGE_KEY = "POSITION"
 
 
-const val STATISTIC_COUNT = 4
+const val STATISTIC_COUNT = 3

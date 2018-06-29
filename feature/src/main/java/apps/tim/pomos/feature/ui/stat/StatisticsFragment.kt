@@ -19,6 +19,7 @@ import javax.inject.Inject
 
 class StatisticsFragment : BaseFragment() {
     private var total = 0
+    private lateinit var currentStat: Statistics
 
     @Inject
     lateinit var tasksViewModel: TasksViewModel
@@ -43,28 +44,40 @@ class StatisticsFragment : BaseFragment() {
 
         newSessionBtn.setOnClickListener {
             context?.let {
-                add(tasksViewModel.finishSession(
-                        Statistics(id = 0,
-                                date = Calendar.getInstance().timeInMillis,
-                                completed = total)
-                ).subscribe())
-                activity?.onBackPressed()
+                add(tasksViewModel.finishSession(currentStat).subscribe {
+                    _ ->
+                    activity?.onBackPressed()
+                })
             }
         }
     }
 
     private fun setStat(items: List<StatisticsItem>, stats: List<Statistics>) {
         context?.let {
-            val daily = PreferenceHelper.getDaily(PomoApp.instance)
-            total = (items.fold(0)
-            { total, next: StatisticsItem -> total + next.pomo } / daily.toFloat() * 100).toInt()
+            for (i in stats)
+                println(i)
+
+            calculateCurrentStat(items)
+            val currentStats = stats.toMutableList()
+            currentStats.add(0, currentStat)
 
             taskList.layoutManager = LinearLayoutManager(context)
-            val adapter = StatisticsAdapter(items, stats)
+            val adapter = StatisticsAdapter(items, currentStats)
             adapter.totalDonePercentage = total
             taskList.adapter = adapter
             (taskList.adapter as StatisticsAdapter).notifyDataSetChanged()
         }
+    }
+
+    private fun calculateCurrentStat(items: List<StatisticsItem>) {
+        val daily = PreferenceHelper.getDaily(PomoApp.instance)
+        total = (items.fold(0)
+        { total, next: StatisticsItem -> total + next.pomo } / daily.toFloat() * 100).toInt()
+        currentStat = Statistics(
+                id = 0,
+                date = Calendar.getInstance().timeInMillis,
+                completed = total
+        )
     }
 
 

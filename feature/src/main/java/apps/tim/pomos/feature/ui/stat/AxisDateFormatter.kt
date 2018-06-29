@@ -12,8 +12,14 @@ class AxisDateFormatter(private val stats: List<Statistics>) : IAxisValueFormatt
 
 
     override fun getFormattedValue(value: Float, axis: AxisBase?): String {
+        var index = value.toInt()
+        if (index < 0)
+            index = 0
+        if (index > stats.size - 1)
+            index = stats.size - 1
+
         val valueCal = Calendar.getInstance()
-        valueCal.timeInMillis = stats[value.toInt() - 1].date
+        valueCal.timeInMillis = stats[index].date
         return valueCal.printDate(PomoApp.string(R.string.yesterday))
     }
 
