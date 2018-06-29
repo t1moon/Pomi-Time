@@ -8,13 +8,11 @@ import io.reactivex.subjects.PublishSubject
 
 class Timer {
 
-    companion object {
-        var WORK_DURATION
-                = PreferenceHelper.getWorkDuration(PomoApp.instance) * MILLIS_IN_MINUTE
-        var REST_DURATION
-                = PreferenceHelper.getRestDuration(PomoApp.instance) * MILLIS_IN_MINUTE
-    }
+    private var WORK_DURATION = PreferenceHelper.getWorkDuration(PomoApp.instance) * MILLIS_IN_MINUTE
+    private var REST_DURATION = PreferenceHelper.getRestDuration(PomoApp.instance) * MILLIS_IN_MINUTE
+
     enum class TimerState { PLAYED, PAUSED, STARTED, FINISHED, CANCELLED }
+
     private var state: State = StoppedState(this)
     private var mode: Mode = WorkMode(this)
 
@@ -123,6 +121,7 @@ class Timer {
             timer.play()
             timer.changeState(PlayingState(timer))
         }
+
         override fun onLongClick() {
             timer.stop()
             timer.changeState(StoppedState(timer))
@@ -134,6 +133,7 @@ class Timer {
             timer.start()
             timer.changeState(PlayingState(timer))
         }
+
         override fun onLongClick() {}
     }
 

@@ -40,11 +40,35 @@ class SettingsFragment : BaseFragment() {
             val work = workNumber.text.toString().toInt()
             val rest = restNumber.text.toString().toInt()
             val daily = dailyNumber.text.toString().toInt()
-            sp[PREF_WORK_KEY] = if (work > 120) 120 else work
-            sp[PREF_REST_KEY] = if (rest > 60) 60 else rest
-            sp[PREF_DAILY_KEY] = if (daily > 24) 24 else daily
+            sp[PREF_WORK_KEY] = getValidatedWork(work)
+            sp[PREF_REST_KEY] = getValidatedRest(rest)
+            sp[PREF_DAILY_KEY] = getValidatedDaily(daily)
             hideSoftKeyboard()
             activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp()
+        }
+    }
+
+    fun getValidatedWork(work: Int) : Int {
+        return when {
+            work > 120 -> 120
+            work <= 0 -> 1
+            else -> work
+        }
+    }
+
+    fun getValidatedRest(rest: Int) : Int {
+        return when {
+            rest > 60 -> 60
+            rest <= 0 -> 1
+            else -> rest
+        }
+    }
+
+    fun getValidatedDaily(daily: Int) : Int {
+        return when {
+            daily > 24 -> 24
+            daily <= 0 -> 1
+            else -> daily
         }
     }
 }
