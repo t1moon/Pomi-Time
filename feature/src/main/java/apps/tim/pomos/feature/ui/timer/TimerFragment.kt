@@ -30,10 +30,11 @@ class TimerFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PomoApp.component.getFragmentComponent().inject(this)
+        PomoApp.component.getFragmentComponent().getTimerScreenComponent().inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        timerViewModel.refreshTimer()
         return inflater.inflate(R.layout.fragment_timer, container, false)
     }
 

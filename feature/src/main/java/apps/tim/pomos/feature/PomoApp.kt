@@ -7,7 +7,6 @@ import apps.tim.pomos.feature.di.app.AppComponent
 import apps.tim.pomos.feature.di.app.AppModule
 import apps.tim.pomos.feature.di.app.DaggerAppComponent
 import apps.tim.pomos.feature.di.data.DataModule
-import apps.tim.pomos.feature.di.data.RoomModule
 import apps.tim.pomos.feature.ui.*
 
 class PomoApp: Application() {
@@ -25,10 +24,8 @@ class PomoApp: Application() {
         instance = this
         component = DaggerAppComponent.builder()
                 .appModule(AppModule(this))
-                .roomModule(RoomModule())
                 .dataModule(DataModule())
                 .build()
-        component.inject(this)
         setPrefs()
     }
 

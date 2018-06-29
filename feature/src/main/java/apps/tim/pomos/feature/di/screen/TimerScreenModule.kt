@@ -1,6 +1,5 @@
-package apps.tim.pomos.feature.di.fragment
+package apps.tim.pomos.feature.di.screen
 
-import apps.tim.pomos.feature.ui.tasks.TasksViewModel
 import apps.tim.pomos.feature.ui.tasks.data.TasksRepository
 import apps.tim.pomos.feature.ui.timer.Timer
 import apps.tim.pomos.feature.ui.timer.TimerViewModel
@@ -9,22 +8,16 @@ import dagger.Provides
 
 
 @Module
-class ViewModelModule {
+class TimerScreenModule {
 
     @Provides
-    @FragmentScope
-    fun providesTasksViewModel(tasksRepository: TasksRepository): TasksViewModel {
-        return TasksViewModel(tasksRepository)
-    }
-
-    @Provides
-    @FragmentScope
+    @TimerScope
     fun providesTimer() : Timer {
         return Timer()
     }
 
     @Provides
-    @FragmentScope
+    @TimerScope
     fun providesTimerViewModel(tasksRepository: TasksRepository, timer: Timer): TimerViewModel {
         return TimerViewModel(tasksRepository, timer)
     }

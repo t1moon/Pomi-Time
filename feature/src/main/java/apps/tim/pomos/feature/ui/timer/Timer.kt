@@ -98,6 +98,14 @@ class Timer {
         mode.onModeChanged()
     }
 
+    fun refresh() {
+        WORK_DURATION = PreferenceHelper.getWorkDuration(PomoApp.instance) * MILLIS_IN_MINUTE
+        REST_DURATION = PreferenceHelper.getRestDuration(PomoApp.instance) * MILLIS_IN_MINUTE
+        remainingTime = WORK_DURATION.toLong()
+        state = StoppedState(this)
+        mode = WorkMode(this)
+    }
+
     abstract class State(val timer: Timer) {
         abstract fun onClick()
         abstract fun onLongClick()

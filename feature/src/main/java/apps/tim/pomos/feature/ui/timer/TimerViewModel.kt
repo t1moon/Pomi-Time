@@ -80,6 +80,10 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
         timer.onModeChanged()
     }
 
+    fun refreshTimer() {
+        timer.refresh()
+    }
+
     /**
      * @input in minutes
      */
