@@ -1,7 +1,6 @@
 package apps.tim.pomos.feature.ui.settings
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,10 @@ import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.ui.PREF_DAILY_KEY
 import apps.tim.pomos.feature.ui.PREF_REST_KEY
 import apps.tim.pomos.feature.ui.PREF_WORK_KEY
+import apps.tim.pomos.feature.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -33,6 +33,7 @@ class SettingsFragment : Fragment() {
         dailyNumber.setText(daily.toString())
 
         backButton2.setOnClickListener {
+            hideSoftKeyboard()
             activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp()
         }
         save.setOnClickListener {
@@ -42,6 +43,7 @@ class SettingsFragment : Fragment() {
             sp[PREF_WORK_KEY] = if (work > 120) 120 else work
             sp[PREF_REST_KEY] = if (rest > 60) 60 else rest
             sp[PREF_DAILY_KEY] = if (daily > 24) 24 else daily
+            hideSoftKeyboard()
             activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp()
         }
     }

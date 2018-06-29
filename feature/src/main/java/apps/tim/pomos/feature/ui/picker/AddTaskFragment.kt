@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 
 open class AddTaskFragment : DialogFragment() {
-    protected val compositeDisposable = CompositeDisposable()
+    private val compositeDisposable = CompositeDisposable()
 
     @Inject
     lateinit var tasksViewModel: TasksViewModel
@@ -37,11 +37,11 @@ open class AddTaskFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setOkButtonClicked()
-        cancel.setOnClickListener {
-            dismiss()
-        }
+        taskTitle.requestFocus()
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+
+        setOkButtonClicked()
+        cancel.setOnClickListener { dismiss() }
         setDatePicker()
         removeDeadline.setOnClickListener {
             deadline.setText("")
