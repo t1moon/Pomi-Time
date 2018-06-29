@@ -45,6 +45,9 @@ class TimerView : View {
     private var showPlayIcon: Boolean = true
     private var showPauseIcon: Boolean = false
 
+    val rington = RingtoneManager.getRingtone(context,
+            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+
     constructor(context: Context) : super(context) {
         init()
     }
@@ -150,6 +153,7 @@ class TimerView : View {
         showPlayIcon = false
         toggle(true)
         animateStarting()
+        playSound()
     }
 
     private fun animateStarting() {
@@ -167,7 +171,7 @@ class TimerView : View {
         showPlayIcon = true
         showPauseIcon = false
         toggle(false)
-        playSound(false)
+        playSound()
         animateFinishing()
     }
 
@@ -186,6 +190,7 @@ class TimerView : View {
         showPauseIcon = false
         showPlayIcon = false
         toggle(true)
+        playSound()
     }
 
     fun pause() {
@@ -197,12 +202,11 @@ class TimerView : View {
     private fun toggle(push: Boolean) {
         elevate(push)
         fadeBackground(push)
-        playSound(push)
     }
 
-    private fun playSound(push: Boolean) {
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        RingtoneManager.getRingtone(context, uri).play()
+    private fun playSound() {
+        rington.stop()
+        rington.play()
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
