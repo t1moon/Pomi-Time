@@ -29,8 +29,8 @@ const val BACKLOG_FRAGMENT_PAGE = 1
 
 
 
-const val DATE_FORMAT = "MM/dd/yy"
-const val TIME_FORMAT = "mm:ss"
+const val DATE_FORMAT = "d MMM"
+const val TIME_FORMAT = "HH:ss"
 
 const val DEFAULT_DATE_LONG = 0L
 const val DEFAULT_INT = -1

@@ -10,6 +10,7 @@ import apps.tim.pomos.feature.R
 import apps.tim.pomos.feature.toDateString
 import apps.tim.pomos.feature.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.feature.ui.tasks.data.Statistics
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -109,10 +110,6 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
             for (i in 0 until stats.size) {
                 entries.add(Entry((i).toFloat(), stats[i].completed.toFloat()))
             }
-//            entries.add(Entry(1f, 50f))
-//            entries.add(Entry(2f, 60f))
-//            entries.add(Entry(3f, 30f))
-//            entries.add(Entry(4f, 40f))
             chart.legend.isEnabled = false
             chart.extraBottomOffset = 8f
             chart.isDragEnabled = false
@@ -121,7 +118,7 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
             chart.description.isEnabled = false
             chart.isHighlightPerDragEnabled = false
             chart.isHighlightPerTapEnabled = false
-//            chart.animateX(300, Easing.EasingOption.EaseInCubic)
+            chart.animateX(300, Easing.EasingOption.EaseInCubic)
 
             val dataset = LineDataSet(entries, "")
             dataset.apply {
@@ -145,14 +142,10 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
                 valueFormatter = AxisDateFormatter(stats)
-//                valueFormatter = IAxisValueFormatter {
-//                    value, axis ->
-//                    value.toString()
-//                }
                 granularity = 1f
                 axisLineWidth = 3f
                 axisLineColor = PomoApp.color(R.color.textColor)
-                textSize = 14f
+                textSize = 16f
                 textColor = PomoApp.color(R.color.textColor)
                 axisMinimum = -0.5f
                 axisMaximum = entries.size.toFloat() - 0.5f
@@ -163,7 +156,7 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
                 valueFormatter = PercentFormatter(DecimalFormat("###"))
                 axisLineWidth = 3f
                 axisLineColor = PomoApp.color(R.color.textColor)
-                textSize = 14f
+                textSize = 16f
                 textColor = PomoApp.color(R.color.textColor)
                 axisMaximum = 100f
                 axisMinimum = 0f

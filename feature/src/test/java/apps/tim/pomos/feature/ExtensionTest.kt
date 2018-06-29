@@ -9,8 +9,7 @@ class ExtensionTest {
     @Test
     fun calendarPrintableTest() {
         val cal1 = Calendar.getInstance()
-        cal1.add(Calendar.DATE, -1)
-        assertTrue(cal1.printDate() == "Yesterday")
+        assertTrue(cal1.printDate() == cal1.time.toTimeString())
 
         cal1.add(Calendar.DATE, -1)
         assertTrue(cal1.printDate() == cal1.time.toDateString())

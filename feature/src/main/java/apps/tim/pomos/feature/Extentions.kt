@@ -37,13 +37,12 @@ fun Date.toTimeString(timeFormat: String = TIME_FORMAT) : String {
     return sdf.format(this)
 }
 
-fun Calendar.printDate(yesterday: String = "Yesterday", dateFormat: String = DATE_FORMAT): String {
+fun Calendar.printDate(dateFormat: String = DATE_FORMAT): String {
     val now = Calendar.getInstance()
     val isToday = now.get(Calendar.DATE) == this.get(Calendar.DATE)
-    val isYesterday = now.get(Calendar.DATE) - this.get(Calendar.DATE) == 1
+
     return when {
         isToday -> this.time.toTimeString()
-        isYesterday-> yesterday
         else -> this.time.toDateString(dateFormat)
     }
 }
