@@ -15,6 +15,7 @@ data class Task(
         @ColumnInfo var pomo: Int = 0,
         @ColumnInfo var currentPomo: Int = 0,
         @ColumnInfo var deadline: Long = DEFAULT_DATE_LONG,
+        @ColumnInfo var created: Long = DEFAULT_DATE_LONG,
         @ColumnInfo var isComplete: Boolean = false,
         @ColumnInfo var isActive: Boolean = false
 ) : Parcelable

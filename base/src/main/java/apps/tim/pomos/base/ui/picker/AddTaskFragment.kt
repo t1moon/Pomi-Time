@@ -55,6 +55,7 @@ open class AddTaskFragment : DialogFragment() {
                     id = 0,
                     title = taskTitle.text.toString(),
                     deadline = deadline.text.toString().toDateLong(),
+                    created = Calendar.getInstance().timeInMillis,
                     isActive = active.isChecked
             )
             add(tasksViewModel.addTask(task).subscribe())

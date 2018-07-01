@@ -34,9 +34,10 @@ class BacklogAdapter(private val transferButtonClick: (Task) -> Unit,
                  transferButtonClick: (Task) -> Unit,
                  longItemClick: (Task) -> Boolean) {
             with(task) {
-                taskTitle.text = task.title
-                taskPomos.text = task.pomo.toString()
-                val deadlineVal = task.deadline
+                taskTitle.text = title
+                taskPomos.text = pomo.toString()
+                taskCreated.text = created.toDateString()
+                val deadlineVal = deadline
                 if (deadlineVal != DEFAULT_DATE_LONG) {
                     showDeadline(deadlineVal)
                 }

@@ -60,6 +60,9 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
                                 !it.isComplete
                                 !it.isActive
                             }
+                            .sorted { o1, o2 ->
+                                o2.created.compareTo(o1.created)
+                            }
                             .toList()
                             .toFlowable()
                 }
