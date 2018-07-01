@@ -9,6 +9,7 @@ import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.Parcelable
 import android.support.annotation.RequiresApi
 import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
@@ -19,6 +20,7 @@ import apps.tim.pomos.base.R
 import apps.tim.pomos.base.dipToPx
 import apps.tim.pomos.base.ui.START_ANGLE
 import apps.tim.pomos.base.ui.START_TIMER_ANIMATION_DURATION
+import kotlinx.android.parcel.Parcelize
 
 
 class TimerView : View {
@@ -101,15 +103,15 @@ class TimerView : View {
         val centerIconWidth = (w / 2)
 
         fgOval = RectF(strokeWidth + ovalPadding, strokeWidth + ovalPadding,
-                w - strokeWidth - ovalPadding,  h - strokeWidth - ovalPadding)
+                w - strokeWidth - ovalPadding, h - strokeWidth - ovalPadding)
         bgOval = RectF(strokeWidth, strokeWidth,
-                w - strokeWidth,  h - strokeWidth)
+                w - strokeWidth, h - strokeWidth)
 
         statusIcon = Rect(
-                (strokeWidth + centerX - centerIconWidth / 2).toInt(),
-                (strokeWidth + centerY - centerIconWidth / 2).toInt(),
-                (strokeWidth + centerX + centerIconWidth / 2).toInt(),
-                (strokeWidth + centerY + centerIconWidth / 2).toInt()
+                (centerX - centerIconWidth / 2).toInt(),
+                (centerY - centerIconWidth / 2).toInt(),
+                (centerX + centerIconWidth / 2).toInt(),
+                (centerY + centerIconWidth / 2).toInt()
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -254,4 +256,26 @@ class TimerView : View {
             start()
         }
     }
+
+    fun getViewState(): TimerViewState {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TimerViewState(percent, showPauseIcon, showPlayIcon, elevation, fgPaint.color)
+        } else {
+            TimerViewState(percent, showPauseIcon, showPlayIcon, fgColor = fgPaint.color)
+        }
+    }
+
+    fun setViewState(timerViewState: TimerViewState) {
+        percent = timerViewState.percent
+        showPauseIcon = timerViewState.showPause
+        showPlayIcon = timerViewState.showPlay
+        fgPaint.color = timerViewState.fgColor
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            elevation = timerViewState.elevation
+        }
+    }
+
+    @Parcelize
+    data class TimerViewState(val percent: Float, val showPause: Boolean, val showPlay: Boolean,
+                              val elevation: Float = 0f, val fgColor: Int) : Parcelable
 }

@@ -17,7 +17,7 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
         return timer.timeObservable
                 .map {
                     val t = Time(it.first / MILLIS_IN_SECOND)
-                    "${t.minutes}:${t.seconds}${if (t.seconds == 0) "0" else ""}"
+                    "${t.minutes}:${if (t.seconds < 10) "0" else ""}${t.seconds}"
                 }
     }
 
@@ -26,10 +26,6 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
                 .map {
                     ((it.first / it.second.toFloat()) * 100).toInt()
                 }
-    }
-
-    fun stopTimer() {
-        timer.stop()
     }
 
     fun timerViewClicked() {
@@ -47,7 +43,7 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
         val duration = (if (work) workDuration else restDuration)
         return Observable.just(Time((duration * SECONDS_IN_MINUTE)))
                 .map {
-                    "${it.minutes}:${it.seconds}${if (it.seconds == 0) "0" else ""}"
+                    "${it.minutes}:${if (it.seconds < 10) "0" else ""}${it.seconds}"
                 }
     }
 

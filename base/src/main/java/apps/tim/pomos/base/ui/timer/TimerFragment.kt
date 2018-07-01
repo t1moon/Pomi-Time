@@ -20,6 +20,9 @@ class TimerFragment : BaseFragment() {
     companion object {
         private val WORK_MODE = PomoApp.string(R.string.work)
         private val REST_MODE = PomoApp.string(R.string.rest)
+        private val TIMERVIEW_STATE_KEY = "TIMERVIEW_STATE"
+        private val TIMERCLOCK_STATE_KEY = "TIMERCLOCK_STATE"
+        private val TIMERMODE_STATE_KEY = "TIMERMODE_STATE"
     }
 
     @Inject
@@ -30,15 +33,25 @@ class TimerFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        retainInstance = true
         PomoApp.component.getFragmentComponent().getTimerScreenComponent().inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        timerViewModel.refreshTimer()
         return inflater.inflate(R.layout.fragment_timer, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            timerViewModel.refreshTimer()
+            resetTimer(true)
+        } else {
+            timerView.setViewState(savedInstanceState.get(TIMERVIEW_STATE_KEY) as TimerView.TimerViewState)
+            timerTime.text = savedInstanceState.get(TIMERCLOCK_STATE_KEY) as String
+            if (savedInstanceState.get(TIMERMODE_STATE_KEY) as Boolean) {
+                disableControls()
+            }
+        }
         setupHeader()
         setupPomoList()
         setupTimer()
@@ -46,6 +59,13 @@ class TimerFragment : BaseFragment() {
             it.findNavController().navigate(R.id.action_timerFragment_to_settingsFragment)
         }
         checkForShowcase()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(TIMERVIEW_STATE_KEY, timerView.getViewState())
+        outState.putString(TIMERCLOCK_STATE_KEY, timerTime.text.toString())
+        outState.putBoolean(TIMERMODE_STATE_KEY, leftControl.visibility == View.GONE)
     }
 
     private fun checkForShowcase() {
@@ -75,7 +95,6 @@ class TimerFragment : BaseFragment() {
     }
 
     private fun setupTimer() {
-        resetTimer(true)
         setTimerView()
         setControlButtons()
     }
@@ -107,23 +126,7 @@ class TimerFragment : BaseFragment() {
         add(timerViewModel.getTimerState()
                 .subscribe {
                     disableControls()
-                    when (it) {
-                        Timer.TimerState.STARTED -> timerView.start()
-                        Timer.TimerState.PAUSED -> timerView.pause()
-                        Timer.TimerState.PLAYED -> timerView.play()
-                        Timer.TimerState.CANCELLED -> {
-                            timerView.finish()
-                            resetTimer()
-                        }
-                        Timer.TimerState.FINISHED -> {
-                            timerView.finish()
-                            resetTimer(false)
-                            timerViewModel.addPomo(task.id)
-                                    .subscribe { _, _ ->
-                                        pomoAdapter.addPomo()
-                                    }
-                        }
-                    }
+                    responseToTimeStateChanged(it)
                 }
         )
         add(timerViewModel.getTimerProgress()
@@ -131,6 +134,29 @@ class TimerFragment : BaseFragment() {
                 .subscribe {
                     timerView.updateProgress(it)
                 })
+        add(timerViewModel.getTimerString().subscribe {
+            timerTime.text = it
+        })
+    }
+
+    private fun responseToTimeStateChanged(state: Timer.TimerState?) {
+        when (state) {
+            Timer.TimerState.STARTED -> timerView.start()
+            Timer.TimerState.PAUSED -> timerView.pause()
+            Timer.TimerState.PLAYED -> timerView.play()
+            Timer.TimerState.CANCELLED -> {
+                timerView.finish()
+                resetTimer()
+            }
+            Timer.TimerState.FINISHED -> {
+                timerView.finish()
+                resetTimer(false)
+                timerViewModel.addPomo(task.id)
+                        .subscribe { _, _ ->
+                            pomoAdapter.addPomo()
+                        }
+            }
+        }
     }
 
     private fun resetTimer(isWork: Boolean = true) {
@@ -138,11 +164,7 @@ class TimerFragment : BaseFragment() {
                 .subscribe {
                     timerTime.text = it
                 })
-        add(timerViewModel.getTimerString().subscribe {
-            timerTime.text = it
-        })
         timerMode.text = if (isWork) WORK_MODE else REST_MODE
-
         enableControls()
     }
 
@@ -154,11 +176,6 @@ class TimerFragment : BaseFragment() {
     private fun enableControls() {
         leftControl.visibility = View.VISIBLE
         rightControl.visibility = View.VISIBLE
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        timerViewModel.stopTimer()
     }
 
 }

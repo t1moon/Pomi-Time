@@ -99,6 +99,7 @@ class Timer {
     }
 
     fun refresh() {
+        stop()
         WORK_DURATION = PreferenceHelper.getWorkDuration(PomoApp.instance) * MILLIS_IN_MINUTE
         REST_DURATION = PreferenceHelper.getRestDuration(PomoApp.instance) * MILLIS_IN_MINUTE
         remainingTime = WORK_DURATION.toLong()

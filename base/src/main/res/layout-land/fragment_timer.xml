@@ -21,7 +21,7 @@
     <TextView
         android:id="@+id/taskTitle"
         android:layout_width="0dp"
-        android:layout_height="130dp"
+        android:layout_height="70dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
@@ -52,32 +52,36 @@
         android:id="@+id/timerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/shadow"
-        app:strokeWidth="4"
+        app:bgColor="@color/colorPrimary"
         app:circlePadding="0.06"
         app:elevationPause="16"
         app:elevationPlay="0"
-        app:bgColor="@color/colorPrimary"
         app:fgColor="@color/colorAccent"
         app:fgColorPause="@color/colorAccentTransparent"
         app:layout_constraintBottom_toTopOf="@+id/pomoListWrapper"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/timerMode"
-        app:percent="0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/taskTitle"
+        app:percent="0"
+        app:strokeWidth="4" />
 
     <TextView
         android:id="@+id/timerTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:gravity="center"
         android:textSize="48sp"
+        app:layout_constraintBottom_toTopOf="@+id/pomoListWrapper"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskTitle"
         tools:text="17:23" />
 
@@ -138,17 +142,10 @@
         app:srcCompat="@drawable/ic_right" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.20" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.80" />
+        app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
