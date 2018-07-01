@@ -1,8 +1,7 @@
 package apps.tim.pomos.base.ui.timer
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +50,7 @@ class TimerFragment : BaseFragment() {
         add(timerViewModel.getCompleted()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    pomoList.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                    pomoList.layoutManager = GridLayoutManager(context, 8)
                     pomoAdapter = PomoAdapter(it)
                     pomoList.adapter = pomoAdapter
                 })
