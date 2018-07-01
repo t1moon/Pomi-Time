@@ -1,13 +1,13 @@
 package apps.tim.pomos.base.ui.timer
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import apps.tim.pomos.base.PomoApp
-import apps.tim.pomos.base.R
+import apps.tim.pomos.base.*
 import apps.tim.pomos.base.ui.TASK_ARG
 import apps.tim.pomos.base.ui.base.BaseFragment
 import apps.tim.pomos.base.ui.tasks.data.Task
@@ -21,6 +21,7 @@ class TimerFragment : BaseFragment() {
         private val WORK_MODE = PomoApp.string(R.string.work)
         private val REST_MODE = PomoApp.string(R.string.rest)
     }
+
     @Inject
     lateinit var timerViewModel: TimerViewModel
 
@@ -44,6 +45,15 @@ class TimerFragment : BaseFragment() {
         settings.setOnClickListener {
             it.findNavController().navigate(R.id.action_timerFragment_to_settingsFragment)
         }
+        checkForShowcase()
+    }
+
+    private fun checkForShowcase() {
+        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
+        if (showcasePreference.timerShowcaseShown)
+            return
+        ShowCase.getTargetView(activity as Activity, pomoList, ShowCase.Type.DAILY, 150)
+        showcasePreference.timerShowcaseShown = true
     }
 
     private fun setupPomoList() {

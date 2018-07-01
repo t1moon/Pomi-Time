@@ -7,6 +7,8 @@ import apps.tim.pomos.base.ui.DEFAULT_INT
 import apps.tim.pomos.base.ui.PREF_DAILY_KEY
 import apps.tim.pomos.base.ui.PREF_REST_KEY
 import apps.tim.pomos.base.ui.PREF_WORK_KEY
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 
 object PreferenceHelper {
@@ -66,4 +68,31 @@ object PreferenceHelper {
         return defaultPrefs(context)[PREF_REST_KEY, DEFAULT_INT]
     }
 
+    fun SharedPreferences.int(def: Int = 0, key: String? = null) =
+            delegate(def, key, SharedPreferences::getInt, SharedPreferences.Editor::putInt)
+
+    fun SharedPreferences.long(def: Long = 0, key: String? = null) =
+            delegate(def, key, SharedPreferences::getLong, SharedPreferences.Editor::putLong)
+
+
+    fun SharedPreferences.boolean(def: Boolean = false, key: String? = null) =
+            delegate(def, key, SharedPreferences::getBoolean, SharedPreferences.Editor::putBoolean)
+
+
+
+    private inline fun <T> SharedPreferences.delegate(
+            defaultValue: T,
+            key: String?,
+            crossinline getter: SharedPreferences.(String, T) -> T,
+            crossinline setter: SharedPreferences.Editor.(String, T) -> SharedPreferences.Editor
+    ): ReadWriteProperty<Any, T> {
+        return object : ReadWriteProperty<Any, T> {
+            override fun getValue(thisRef: Any, property: KProperty<*>) =
+                    getter(key ?: property.name, defaultValue)
+
+            override fun setValue(thisRef: Any, property: KProperty<*>,
+                                  value: T) =
+                    edit().setter(key ?: property.name, value).apply()
+        }
+    }
 }

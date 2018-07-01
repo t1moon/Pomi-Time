@@ -50,6 +50,7 @@ class EditTaskFragment : AddTaskFragment() {
                     title = taskTitle.text.toString(),
                     deadline = deadline.text.toString().toDateLong(),
                     isComplete = this.task.isComplete,
+                    created = this.task.created,
                     currentPomo = this.task.currentPomo,
                     pomo = this.task.pomo,
                     isActive = active.isChecked

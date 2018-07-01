@@ -32,4 +32,33 @@
     <string name="statistics_graph_header">Statistics</string>
     <string name="statistics_overall_header">Done</string>
 
+    <!-- Show case-->
+    <string name="today_tasks_title">Your today\'s focus</string>
+    <string name="today_tasks_description">Put here tasks, that you want to be done today!</string>
+
+    <string name="backlog_tasks_title">Your backlog</string>
+    <string name="backlog_tasks_description">Here are the tasks that haven\'t been done during last daily session or just simply other tasks</string>
+
+    <string name="finish_session_title">Finish daily session</string>
+    <string name="finish_session_description">It gets statistics for the current daily session.
+        It is recommended to finish the session at the end of your working day</string>
+
+    <string name="new_session_title">Start new session</string>
+    <string name="new_session_description">It record your result for today and start new session.
+        Also all completed tasks are deleted and uncompleted are moved to backlog</string>
+
+    <string name="task_title">Sample task</string>
+    <string name="task_description">Current completed pomodoros and deadline for the task</string>
+
+    <string name="task_transfer_title">Transfer</string>
+    <string name="task_transfer_description">This button make the task appear in today\'s tasks</string>
+
+    <string name="daily_title">Daily goal</string>
+    <string name="daily_description">It will be filled as you complete pomodoros</string>
+
+    <string name="done_title">Statistics for today</string>
+    <string name="done_description">It shows how many tasks you have done for this session relative to daily goal</string>
+
+    <string name="today_exampletask_title">Task for today</string>
+    <string name="backlog_exampletask_title">Backlog task</string>
 </resources>

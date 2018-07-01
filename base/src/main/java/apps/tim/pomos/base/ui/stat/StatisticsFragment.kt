@@ -1,19 +1,21 @@
 package apps.tim.pomos.base.ui.stat
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import apps.tim.pomos.base.PomoApp
-import apps.tim.pomos.base.PreferenceHelper
-import apps.tim.pomos.base.R
+import apps.tim.pomos.base.*
 import apps.tim.pomos.base.ui.base.BaseFragment
 import apps.tim.pomos.base.ui.tasks.TasksViewModel
 import apps.tim.pomos.base.ui.tasks.data.Statistics
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.fragment_statistics.*
+import kotlinx.android.synthetic.main.statistics_overall_item.*
 import java.util.*
 import javax.inject.Inject
 
@@ -50,6 +52,27 @@ class StatisticsFragment : BaseFragment() {
                 })
             }
         }
+        checkForInitialShowCase()
+    }
+
+    private fun checkForInitialShowCase() {
+        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
+        if (showcasePreference.statisticsShowcaseShown)
+            return
+
+        TapTargetSequence(activity)
+                .targets(ShowCase.getTarget(newSessionBtn, ShowCase.Type.NEWSESSION))
+                .continueOnCancel(true)
+                .listener(object : TapTargetSequence.Listener {
+                    override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+                    override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+
+                    override fun onSequenceFinish() {
+                        ShowCase.getTargetView(activity as Activity, result, ShowCase.Type.POMOS)
+                        showcasePreference.statisticsShowcaseShown = true
+                    }
+                })
+                .start()
     }
 
     private fun setStat(items: List<StatisticsItem>, stats: List<Statistics>) {

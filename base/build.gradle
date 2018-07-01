@@ -34,6 +34,7 @@ ext {
     room = '1.1.1'
     dagger = '2.15'
     chart = 'v3.0.3'
+    showcase = '1.11.0'
 }
 
 dependencies {
@@ -66,6 +67,6 @@ dependencies {
 
     implementation "com.github.PhilJay:MPAndroidChart:$chart"
 
-
+    implementation "com.getkeepsafe.taptargetview:taptargetview:$showcase"
     application project(':app')
 }
