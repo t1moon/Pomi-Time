@@ -5,6 +5,8 @@
         <attr name="fgColor" />
         <attr name="fgColorPause" />
         <attr name="percent" />
+        <attr name="strokeWidth" />
+        <attr name="circlePadding" />
         <attr name="elevationPause" />
         <attr name="elevationPlay" />
     </declare-styleable>

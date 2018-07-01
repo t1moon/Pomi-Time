@@ -28,10 +28,9 @@ class TimerView : View {
     private lateinit var bgPaint: Paint
     private lateinit var fgPaint: Paint
     private lateinit var statusIconPaint: Paint
-    private lateinit var fgPaint1: Paint
 
-    private lateinit var oval: RectF
-    private lateinit var outerOval: RectF
+    private lateinit var fgOval: RectF
+    private lateinit var bgOval: RectF
     private lateinit var statusIcon: Rect
 
     private var percent: Float = 0.toFloat()
@@ -44,6 +43,9 @@ class TimerView : View {
 
     private var showPlayIcon: Boolean = true
     private var showPauseIcon: Boolean = false
+
+    private var strokeWidth: Float = 0.toFloat()
+    private var circlePadding: Float = 0.toFloat()
 
     val rington = RingtoneManager.getRingtone(context,
             RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
@@ -66,6 +68,8 @@ class TimerView : View {
             elevationPlay = resources.dipToPx(a.getFloat(R.styleable.TimerViewStyleable_elevationPlay, 0f))
             playIcon = resources.getDrawable(R.drawable.ic_play)
             pauseIcon = resources.getDrawable(R.drawable.ic_pause)
+            strokeWidth = a.getFloat(R.styleable.TimerViewStyleable_strokeWidth, 0f)
+            circlePadding = a.getFloat(R.styleable.TimerViewStyleable_circlePadding, 0f)
         } finally {
             a.recycle()
         }
@@ -81,46 +85,34 @@ class TimerView : View {
         fgPaint.color = fgColorWhenPause
         fgPaint.isAntiAlias = true
 
-        fgPaint1 = Paint()
-        fgPaint1.color = fgColorWhenPause
-        fgPaint1.isAntiAlias = true
-
         statusIconPaint = Paint()
         statusIconColor = PomoApp.color(R.color.iconColor)
         statusIconPaint.color = statusIconColor
         statusIconPaint.isAntiAlias = true
-
-        fgPaint1.style = Paint.Style.STROKE
-        fgPaint1.strokeWidth = 7f
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
-        val xpad = (paddingLeft + paddingRight).toFloat()
-        val ypad = (paddingBottom + paddingTop).toFloat()
-
-        val wwd = w.toFloat() - xpad
-        val hhd = h.toFloat() - ypad
-
-        val ovalPadding = (w / 15).toFloat()
+        val ovalPadding = (w * circlePadding)
         val centerX = (w / 2).toFloat()
         val centerY = (h / 2).toFloat()
         val centerIconWidth = (w / 2)
 
-        oval = RectF(paddingLeft + ovalPadding, paddingTop + ovalPadding,
-                paddingLeft + wwd - ovalPadding, paddingTop + hhd - ovalPadding)
-        outerOval = RectF(paddingLeft.toFloat(), paddingTop.toFloat(), paddingLeft + wwd, paddingTop + hhd)
+        fgOval = RectF(strokeWidth + ovalPadding, strokeWidth + ovalPadding,
+                w - strokeWidth - ovalPadding,  h - strokeWidth - ovalPadding)
+        bgOval = RectF(strokeWidth, strokeWidth,
+                w - strokeWidth,  h - strokeWidth)
 
         statusIcon = Rect(
-                (paddingLeft + centerX - centerIconWidth / 2).toInt(),
-                (paddingTop + centerY - centerIconWidth / 2).toInt(),
-                (paddingLeft + centerX + centerIconWidth / 2).toInt(),
-                (paddingTop + centerY + centerIconWidth / 2).toInt()
+                (strokeWidth + centerX - centerIconWidth / 2).toInt(),
+                (strokeWidth + centerY - centerIconWidth / 2).toInt(),
+                (strokeWidth + centerX + centerIconWidth / 2).toInt(),
+                (strokeWidth + centerY + centerIconWidth / 2).toInt()
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.outlineProvider = OutlineProvider(resources = resources, padding = paddingStart)
+            this.outlineProvider = OutlineProvider(resources = resources)
             this.elevation = elevationPause
         }
     }
@@ -135,8 +127,8 @@ class TimerView : View {
     }
 
     private fun drawTimer(canvas: Canvas) {
-        canvas.drawArc(oval, START_ANGLE, percent * 3.6f, true, fgPaint)
-        canvas.drawArc(outerOval, START_ANGLE, 360f, true, fgPaint1)
+        canvas.drawArc(bgOval, START_ANGLE, 360f, true, bgPaint)
+        canvas.drawArc(fgOval, START_ANGLE, percent * 3.6f, true, fgPaint)
     }
 
     private fun drawPlay(canvas: Canvas) {
@@ -219,7 +211,6 @@ class TimerView : View {
             duration = 600
             addUpdateListener {
                 fgPaint.color = it.animatedValue as Int
-                fgPaint1.color = it.animatedValue as Int
                 invalidate()
             }
             start()
