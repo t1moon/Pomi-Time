@@ -1,7 +1,6 @@
 package apps.tim.pomos.base.ui.timer
 
 import android.animation.ValueAnimator
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -10,6 +9,8 @@ import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
 import android.os.Build
+import android.support.annotation.RequiresApi
+import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.BounceInterpolator
@@ -38,8 +39,8 @@ class TimerView : View {
     private var elevationPlay: Float = 0.toFloat()
     private var elevationPause: Float = 0.toFloat()
 
-    private lateinit var playIcon: Drawable
-    private lateinit var pauseIcon: Drawable
+    private var playIcon: Drawable? = null
+    private var pauseIcon: Drawable? = null
 
     private var showPlayIcon: Boolean = true
     private var showPauseIcon: Boolean = false
@@ -66,8 +67,8 @@ class TimerView : View {
             percent = a.getFloat(R.styleable.TimerViewStyleable_percent, 0f)
             elevationPause = resources.dipToPx(a.getFloat(R.styleable.TimerViewStyleable_elevationPause, 0f))
             elevationPlay = resources.dipToPx(a.getFloat(R.styleable.TimerViewStyleable_elevationPlay, 0f))
-            playIcon = resources.getDrawable(R.drawable.ic_play)
-            pauseIcon = resources.getDrawable(R.drawable.ic_pause)
+            playIcon = AppCompatResources.getDrawable(context, R.drawable.ic_play)
+            pauseIcon = AppCompatResources.getDrawable(context, R.drawable.ic_pause)
             strokeWidth = a.getFloat(R.styleable.TimerViewStyleable_strokeWidth, 0f)
             circlePadding = a.getFloat(R.styleable.TimerViewStyleable_circlePadding, 0f)
         } finally {
@@ -132,13 +133,13 @@ class TimerView : View {
     }
 
     private fun drawPlay(canvas: Canvas) {
-        playIcon.bounds = statusIcon
-        playIcon.draw(canvas)
+        playIcon?.bounds = statusIcon
+        playIcon?.draw(canvas)
     }
 
     private fun drawPause(canvas: Canvas) {
-        pauseIcon.bounds = statusIcon
-        pauseIcon.draw(canvas)
+        pauseIcon?.bounds = statusIcon
+        pauseIcon?.draw(canvas)
     }
 
     fun start() {
@@ -192,8 +193,10 @@ class TimerView : View {
     }
 
     private fun toggle(push: Boolean) {
-        elevate(push)
-        fadeBackground(push)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            elevate(push)
+            fadeBackground(push)
+        }
     }
 
     private fun playSound() {
@@ -201,7 +204,7 @@ class TimerView : View {
         rington.play()
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun fadeBackground(play: Boolean) {
         val color: Int = if (!play)
             fgColorWhenPause
@@ -217,7 +220,7 @@ class TimerView : View {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun elevate(play: Boolean) {
         val elevateTo: Float = if (play)
             elevationPlay

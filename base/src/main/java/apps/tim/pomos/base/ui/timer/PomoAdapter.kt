@@ -1,11 +1,11 @@
 package apps.tim.pomos.base.ui.timer
 
 import android.animation.ValueAnimator
-import android.annotation.TargetApi
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Build
 import android.os.Handler
+import android.support.annotation.RequiresApi
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +42,9 @@ class PomoAdapter(var pomos: Int) :
 
         if (position == pomos)
             Handler().post {
-                flickerPomo(holder.pomo)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    flickerPomo(holder.pomo)
+                }
             }
     }
 
@@ -61,7 +63,7 @@ class PomoAdapter(var pomos: Int) :
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun flickerPomo(pomo: ImageView) {
         val red = PomoApp.color(R.color.colorAccent)
         val blue = PomoApp.color(R.color.iconColor)
