@@ -18,30 +18,45 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_settings" />
 
-    <LinearLayout
-        android:id="@+id/taskTitleWrapper"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+    <!--<LinearLayout-->
+    <!--android:id="@+id/taskTitleWrapper"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="48dp"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/taskTitle"-->
+    <!--android:layout_width="250dp"-->
+    <!--android:layout_height="130dp"-->
+    <!--android:gravity="center|top"-->
+    <!--android:textColor="@color/textColor"-->
+    <!--android:textSize="48sp"-->
+    <!--app:autoSizeMaxTextSize="48sp"-->
+    <!--app:autoSizeTextType="uniform"-->
+    <!--tools:text="Finish Proto" />-->
+    <!--</LinearLayout>-->
+
+    <TextView
+        android:id="@+id/taskTitle"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="72dp"
+        android:layout_marginRight="72dp"
+        android:gravity="center|top"
+        android:textColor="@color/textColor"
+        android:textSize="48sp"
+        app:autoSizeMaxTextSize="48sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/taskTitle"
-            android:layout_width="250dp"
-            android:layout_height="130dp"
-            android:gravity="center|top"
-            android:textColor="@color/textColor"
-            android:textSize="48sp"
-            app:autoSizeMaxTextSize="48sp"
-            app:autoSizeTextType="uniform"
-            tools:text="Finish Proto" />
-    </LinearLayout>
-
-
+        app:layout_constraintStart_toEndOf="@+id/backButton"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Finish Proto" />
 
     <ImageView
         android:id="@+id/backButton"
@@ -56,8 +71,9 @@
 
     <apps.tim.pomos.base.ui.timer.TimerView
         android:id="@+id/timerView"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/shadow"
         android:padding="1dp"
@@ -66,25 +82,22 @@
         app:fgColor="@color/colorAccent"
         app:fgColorPause="@color/colorAccentTransparent"
         app:layout_constraintBottom_toTopOf="@+id/pomoListWrapper"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/timerMode"
         app:percent="0" />
 
     <TextView
         android:id="@+id/timerTime"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:textSize="64sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskTitleWrapper"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/taskTitle"
         tools:text="17:23" />
 
     <RelativeLayout
@@ -111,6 +124,7 @@
         android:id="@+id/timerMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/work"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -123,19 +137,37 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        app:srcCompat="@drawable/ic_left"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/timerTime"
         app:layout_constraintEnd_toStartOf="@+id/timerTime"
-        app:layout_constraintTop_toTopOf="@+id/timerTime" />
+        app:layout_constraintTop_toTopOf="@+id/timerTime"
+        app:srcCompat="@drawable/ic_left" />
 
     <ImageButton
         android:id="@+id/rightControl"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        app:srcCompat="@drawable/ic_right"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/timerTime"
         app:layout_constraintStart_toEndOf="@+id/timerTime"
-        app:layout_constraintTop_toTopOf="@+id/timerTime" />
+        app:layout_constraintTop_toTopOf="@+id/timerTime"
+        app:srcCompat="@drawable/ic_right" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.20" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.80" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

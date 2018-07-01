@@ -12,14 +12,14 @@
         android:id="@+id/taskTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:background="@android:color/transparent"
         android:hint="@string/enter_task_hint"
-        android:inputType="textCapSentences|textImeMultiLine"
+        android:inputType="textCapSentences|textMultiLine"
         android:textColor="@color/textColor"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -114,9 +114,11 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        app:srcCompat="@drawable/ic_delete"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         app:layout_constraintBottom_toBottomOf="@+id/cancel"
-        app:layout_constraintStart_toStartOf="@+id/calendarIcon"
-        app:layout_constraintTop_toTopOf="@+id/cancel" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cancel"
+        app:srcCompat="@drawable/ic_delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
