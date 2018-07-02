@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PomoTime</string>
+    <string name="app_name">PomTime</string>
 
     <!-- Tab names -->
     <string name="task_tabs_1">Today tasks</string>
