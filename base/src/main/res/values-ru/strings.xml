@@ -13,7 +13,7 @@
     <string name="rest_duration">Длительность отдыха</string>
     <string name="daily_goal">Ежедневная цель</string>
     <string name="min">м</string>
-    <string name="enter_task_hint">Введите название</string>
+    <string name="enter_task_hint">Название</string>
     <string name="enter_deadline_hint">Введите дедлайн</string>
     <string name="is_today_hint">Сегодня</string>
     <string name="statistics_graph_header">Статистика</string>
@@ -36,4 +36,5 @@
     <string name="today_exampletask_title">Задача на сегодня</string>
     <string name="backlog_exampletask_title">Другая задача</string>
     <string name="daily_description">Она будет наполняться по мере выполнения помидорок</string>
+    <string name="lang">ru</string>
 </resources>

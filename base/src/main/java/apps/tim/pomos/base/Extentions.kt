@@ -23,12 +23,14 @@ fun String.toInt() : Int {
 fun String.toDateLong() : Long {
     if (this.isEmpty())
         return DEFAULT_DATE_LONG
-    val sdf = SimpleDateFormat(DATE_FORMAT, Locale.US)
+    val locale = Locale(PomoApp.string(R.string.lang))
+    val sdf = SimpleDateFormat(DATE_FORMAT, locale)
     return sdf.parse(this).time
 }
 
 fun Date.toDateString(dateFormat: String = DATE_FORMAT) : String {
-    val sdf = SimpleDateFormat(dateFormat, Locale.US)
+    val locale = Locale(PomoApp.string(R.string.lang))
+    val sdf = SimpleDateFormat(dateFormat, locale)
     return sdf.format(this)
 }
 
@@ -49,6 +51,7 @@ fun Calendar.printDate(dateFormat: String = DATE_FORMAT): String {
 
 
 fun Long.toDateString() : String {
-    val sdf = SimpleDateFormat(DATE_FORMAT, Locale.US)
+    val locale = Locale(PomoApp.string(R.string.lang))
+    val sdf = SimpleDateFormat(DATE_FORMAT, locale)
     return sdf.format(Date(this))
 }
