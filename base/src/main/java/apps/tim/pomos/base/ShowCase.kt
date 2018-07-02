@@ -1,6 +1,7 @@
 package apps.tim.pomos.base
 
 import android.app.Activity
+import android.support.v4.content.res.ResourcesCompat
 import android.view.View
 import apps.tim.pomos.base.ShowCase.Type.*
 import com.getkeepsafe.taptargetview.TapTarget
@@ -14,11 +15,12 @@ object ShowCase {
         val (title, description) = getTextForPos(type)
         return TapTarget.forView(view, title, description)
                 .outerCircleColor(R.color.colorAccent)
-                .outerCircleAlpha(0.80f)
-                .titleTextSize(40)
-                .descriptionTextSize(20)
+                .outerCircleAlpha(0.85f)
+                .textTypeface(ResourcesCompat.getFont(view.context, R.font.googlesans_regular))
+                .titleTextSize(24)
+                .descriptionTextSize(16)
                 .textColor(R.color.colorPrimary)
-                .descriptionTextAlpha(0.8f)
+                .descriptionTextAlpha(0.75f)
                 .drawShadow(true)
                 .cancelable(true)
                 .transparentTarget(true)
