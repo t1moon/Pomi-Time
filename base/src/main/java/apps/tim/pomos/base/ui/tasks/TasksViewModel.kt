@@ -2,6 +2,7 @@ package apps.tim.pomos.base.ui.tasks
 
 import apps.tim.pomos.base.PomoApp
 import apps.tim.pomos.base.PreferenceHelper
+import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.base.ui.STATISTIC_COUNT
 import apps.tim.pomos.base.ui.stat.StatisticsItem
 import apps.tim.pomos.base.ui.tasks.data.Statistics
@@ -61,7 +62,14 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
                                 !it.isActive
                             }
                             .sorted { o1, o2 ->
-                                o2.created.compareTo(o1.created)
+                                if (o1.deadline != DEFAULT_DATE_LONG && o2.deadline == DEFAULT_DATE_LONG)
+                                    return@sorted -1
+                                if (o1.deadline == DEFAULT_DATE_LONG && o2.deadline != DEFAULT_DATE_LONG)
+                                    return@sorted 1
+                                if (o1.deadline == DEFAULT_DATE_LONG && o2.deadline == DEFAULT_DATE_LONG)
+                                    return@sorted o2.created.compareTo(o1.created)
+
+                                o1.deadline.compareTo(o2.deadline)
                             }
                             .toList()
                             .toFlowable()
