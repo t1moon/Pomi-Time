@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tomato Time</string>
+    <string name="task_tabs_1">Сегодняшние задачи</string>
+    <string name="task_tabs_2">Другие задачи</string>
+    <string name="tasks_fragment_title">Задачи</string>
+    <string name="stats_fragment_title">Ежедневный отчет</string>
+    <string name="finish_session">Завершить сессию</string>
+    <string name="new_session">Новая сессия</string>
+    <string name="rest">отдых</string>
+    <string name="work">работа</string>
+    <string name="work_duration">Длительность работы</string>
+    <string name="rest_duration">Длительность отдыха</string>
+    <string name="daily_goal">Ежедневная цель</string>
+    <string name="min">м</string>
+    <string name="enter_task_hint">Введите название</string>
+    <string name="enter_deadline_hint">Введите дедлайн</string>
+    <string name="is_today_hint">Сегодня</string>
+    <string name="statistics_graph_header">Статистика</string>
+    <string name="statistics_overall_header">Выполнено</string>
+    <string name="today_tasks_title">Задачи на сегодня</string>
+    <string name="today_tasks_description">Здесь находятся задачи, которые вы намереваетесь делать сегодня</string>
+    <string name="backlog_tasks_title">Другие задачи</string>
+    <string name="backlog_tasks_description">Здесь находятся задачи, которые были не выполнены на предыдущей сессии, а также все остальные добавленные задачи</string>
+    <string name="finish_session_title">Завершить текущую сессию</string>
+    <string name="finish_session_description">Вы получите статистику для текущей ежедневной сессии. Рекомендуется завершить сессию в конце рабочего дня</string>
+    <string name="new_session_title">Начать новую сессию</string>
+    <string name="new_session_description">Ваш результат на сегодняшний день зафиксируется и начнется новая сессия. Кроме того, все завершенные задачи удалятся и незавершенные перенесутся в другие задачи</string>
+    <string name="task_title">Пример задачи</string>
+    <string name="task_description">Здесь показан текущий прогресс по задаче и срок ее выполнения</string>
+    <string name="task_transfer_title">Перенести задачу</string>
+    <string name="task_transfer_description">Эта кнопка переносит задачу из \"Другие\" в \"Сегодняшние\"</string>
+    <string name="daily_title">Ежедневная цель</string>
+    <string name="done_title">Статистика на сегодня</string>
+    <string name="done_description">Она показывается как много помидорок было сделано относительно цели</string>
+    <string name="today_exampletask_title">Задача на сегодня</string>
+    <string name="backlog_exampletask_title">Другая задача</string>
+    <string name="daily_description">Она будет наполняться по мере выполнения помидорок</string>
+</resources>

@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">PomTime</string>
+    <string name="app_name">Tomato Time</string>
 
     <!-- Tab names -->
-    <string name="task_tabs_1">Today tasks</string>
-    <string name="task_tabs_2">Other tasks</string>
+    <string name="task_tabs_1">Today\'s tasks</string>
+    <string name="task_tabs_2">Other\'s tasks</string>
 
     <!-- Fragment headers-->
     <string name="tasks_fragment_title">Tasks</string>
@@ -25,7 +25,7 @@
 
     <!-- Task Add/Edit -->
     <string name="enter_task_hint">Enter title</string>
-    <string name="enter_deadline_hint">Enter deadline (optional)</string>
+    <string name="enter_deadline_hint">Enter deadline</string>
     <string name="is_today_hint">Today</string>
 
     <!-- Statistics-->
@@ -33,25 +33,23 @@
     <string name="statistics_overall_header">Done</string>
 
     <!-- Show case-->
-    <string name="today_tasks_title">Your today\'s focus</string>
-    <string name="today_tasks_description">Put here tasks, that you want to be done today!</string>
+    <string name="today_tasks_title">Tasks for today</string>
+    <string name="today_tasks_description">Here are the tasks that you are going to do today</string>
 
-    <string name="backlog_tasks_title">Your backlog</string>
-    <string name="backlog_tasks_description">Here are the tasks that haven\'t been done during last daily session or just simply other tasks</string>
+    <string name="backlog_tasks_title">Other tasks</string>
+    <string name="backlog_tasks_description">Here are the tasks that haven\'t been done during last session and all other added tasks</string>
 
-    <string name="finish_session_title">Finish daily session</string>
-    <string name="finish_session_description">It gets statistics for the current daily session.
-        It is recommended to finish the session at the end of your working day</string>
+    <string name="finish_session_title">Finish current session</string>
+    <string name="finish_session_description">You will get statistics for the current daily session. It is recommended to finish the session at the end of your working day</string>
 
     <string name="new_session_title">Start new session</string>
-    <string name="new_session_description">It record your result for today and start new session.
-        Also all completed tasks are deleted and uncompleted are moved to backlog</string>
+    <string name="new_session_description">It will record your result for today and start new session. Also, all completed tasks will be deleted and uncompleted will be moved to other tasks</string>
 
-    <string name="task_title">Sample task</string>
-    <string name="task_description">Current completed pomodoros and deadline for the task</string>
+    <string name="task_title">Task example</string>
+    <string name="task_description">It shows the current progress for the task and its deadline</string>
 
-    <string name="task_transfer_title">Transfer</string>
-    <string name="task_transfer_description">This button make the task appear in today\'s tasks</string>
+    <string name="task_transfer_title">Transfer task</string>
+    <string name="task_transfer_description">This button carries the task from \"Other\'s\" to \"Today\'s\"</string>
 
     <string name="daily_title">Daily goal</string>
     <string name="daily_description">It will be filled as you complete pomodoros</string>
@@ -60,5 +58,5 @@
     <string name="done_description">It shows how many tasks you have done for this session relative to daily goal</string>
 
     <string name="today_exampletask_title">Task for today</string>
-    <string name="backlog_exampletask_title">Backlog task</string>
+    <string name="backlog_exampletask_title">Other task</string>
 </resources>

@@ -29,7 +29,6 @@
         android:layout_marginRight="72dp"
         android:gravity="center"
         android:textColor="@color/textColor"
-        android:textSize="48sp"
         app:autoSizeMaxTextSize="48sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"

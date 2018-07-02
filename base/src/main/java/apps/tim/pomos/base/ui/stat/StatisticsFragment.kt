@@ -68,7 +68,7 @@ class StatisticsFragment : BaseFragment() {
                     override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
 
                     override fun onSequenceFinish() {
-                        ShowCase.getTargetView(activity as Activity, result, ShowCase.Type.POMOS)
+                        ShowCase.getTargetView(activity as Activity, result, ShowCase.Type.DONE)
                         showcasePreference.statisticsShowcaseShown = true
                     }
                 })
