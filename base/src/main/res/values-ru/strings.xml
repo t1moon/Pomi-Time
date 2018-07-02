@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Tomato Time</string>
+    <string name="app_name">Pomi</string>
     <string name="task_tabs_1">Сегодняшние задачи</string>
     <string name="task_tabs_2">Другие задачи</string>
     <string name="tasks_fragment_title">Задачи</string>
