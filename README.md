@@ -8,4 +8,4 @@ Imagine that today you are planning to do some very important things:
 - Preferences for work and rest time, as well as daily goal can be changed to your taste
 
 ## Google play link
-Will be soon
+https://play.google.com/store/apps/details?id=apps.tim.pomos.app
