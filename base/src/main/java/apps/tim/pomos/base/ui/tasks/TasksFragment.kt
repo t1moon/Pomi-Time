@@ -71,7 +71,7 @@ class TasksFragment : BaseFragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     val transferBtn = viewPager.getChildAt(BACKLOG_FRAGMENT_PAGE).findViewById<View>(R.id.transferButton)
-                    ShowCase.getTargetView(activity as Activity, transferBtn, ShowCase.Type.TRANSFER)
+                    ShowcaseHelper.getTargetView(activity as Activity, transferBtn, ShowcaseHelper.Type.TRANSFER)
                     showcasePreference.backlogShowcaseShown = true
                 })
     }
@@ -85,9 +85,9 @@ class TasksFragment : BaseFragment() {
         val tab2 = (tabs.getChildAt(0) as ViewGroup).getChildAt(1)
         TapTargetSequence(activity)
                 .targets(
-                        ShowCase.getTarget(tab1, ShowCase.Type.TODAY),
-                        ShowCase.getTarget(tab2, ShowCase.Type.BACKLOG),
-                        ShowCase.getTarget(finishBtn, ShowCase.Type.FINISH))
+                        ShowcaseHelper.getTarget(tab1, ShowcaseHelper.Type.TODAY),
+                        ShowcaseHelper.getTarget(tab2, ShowcaseHelper.Type.BACKLOG),
+                        ShowcaseHelper.getTarget(finishBtn, ShowcaseHelper.Type.FINISH))
                 .continueOnCancel(true)
                 .listener(object : TapTargetSequence.Listener {
                     override fun onSequenceCanceled(lastTarget: TapTarget?) {}
@@ -95,7 +95,7 @@ class TasksFragment : BaseFragment() {
 
                     override fun onSequenceFinish() {
                         val pomo = viewPager.getChildAt(TODAY_FRAGMENT_PAGE).findViewById<View>(R.id.taskDeadlineIcon)
-                        ShowCase.getTargetView(activity as Activity, pomo, ShowCase.Type.POMOS)
+                        ShowcaseHelper.getTargetView(activity as Activity, pomo, ShowcaseHelper.Type.POMOS)
                         showcasePreference.todayShowcaseShown = true
                     }
                 })

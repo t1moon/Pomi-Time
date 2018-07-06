@@ -10,7 +10,7 @@ import androidx.navigation.findNavController
 import apps.tim.pomos.base.*
 import apps.tim.pomos.base.ui.TASK_ARG
 import apps.tim.pomos.base.ui.base.BaseFragment
-import apps.tim.pomos.base.ui.tasks.data.Task
+import apps.tim.pomos.base.data.Task
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_timer.*
 import javax.inject.Inject
@@ -72,18 +72,18 @@ class TimerFragment : BaseFragment() {
         val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
         if (showcasePreference.timerShowcaseShown)
             return
-        ShowCase.getTargetView(activity as Activity, pomoList, ShowCase.Type.DAILY, 150)
+        ShowcaseHelper.getTargetView(activity as Activity, pomoList, ShowcaseHelper.Type.DAILY, 150)
         showcasePreference.timerShowcaseShown = true
     }
 
     private fun setupPomoList() {
         add(timerViewModel.getCompleted()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe ({
                     pomoList.layoutManager = GridLayoutManager(context, 8)
                     pomoAdapter = PomoAdapter(it)
                     pomoList.adapter = pomoAdapter
-                })
+                }, this::showError))
     }
 
     private fun setupHeader() {
@@ -124,16 +124,16 @@ class TimerFragment : BaseFragment() {
         }
 
         add(timerViewModel.getTimerState()
-                .subscribe {
+                .subscribe ({
                     disableControls()
                     responseToTimeStateChanged(it)
-                }
+                }, this::showError)
         )
         add(timerViewModel.getTimerProgress()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe ({
                     timerView.updateProgress(it)
-                })
+                }, this::showError))
         add(timerViewModel.getTimerString().subscribe {
             timerTime.text = it
         })
@@ -152,18 +152,18 @@ class TimerFragment : BaseFragment() {
                 timerView.finish()
                 resetTimer(false)
                 timerViewModel.addPomo(task.id)
-                        .subscribe { _, _ ->
+                        .subscribe({
                             pomoAdapter.addPomo()
-                        }
+                        }, this::showError)
             }
         }
     }
 
     private fun resetTimer(isWork: Boolean = true) {
         add(timerViewModel.defaultTime(isWork)
-                .subscribe {
+                .subscribe({
                     timerTime.text = it
-                })
+                }, this::showError))
         timerMode.text = if (isWork) WORK_MODE else REST_MODE
         enableControls()
     }

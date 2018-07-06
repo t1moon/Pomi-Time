@@ -1,5 +1,6 @@
 package apps.tim.pomos.base.ui.tasks.pager
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -8,32 +9,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import apps.tim.pomos.base.PomoApp
-import apps.tim.pomos.base.PreferenceHelper
-import apps.tim.pomos.base.R
-import apps.tim.pomos.base.ShowcasePreference
+import apps.tim.pomos.base.*
+import apps.tim.pomos.base.data.Task
 import apps.tim.pomos.base.ui.FRAGMENT_PAGE_KEY
 import apps.tim.pomos.base.ui.TASK_ARG
 import apps.tim.pomos.base.ui.TODAY_FRAGMENT_PAGE
 import apps.tim.pomos.base.ui.base.BaseFragment
 import apps.tim.pomos.base.ui.picker.EditTaskFragment
 import apps.tim.pomos.base.ui.tasks.TasksViewModel
-import apps.tim.pomos.base.ui.tasks.data.Task
 import apps.tim.pomos.base.ui.tasks.pager.backlog.BacklogAdapter
 import apps.tim.pomos.base.ui.tasks.pager.today.TodayTasksAdapter
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
-import java.util.*
 import javax.inject.Inject
 
 
 class TaskListFragment : BaseFragment() {
-    private var fragmentPage: Int = 0
+    private var fragmentPage: Int = TODAY_FRAGMENT_PAGE
     private lateinit var todayAdapter: TodayTasksAdapter
     private lateinit var backlogAdapter: BacklogAdapter
 
     @Inject
+    lateinit var viewModelFactory: ViewModelFactory
     lateinit var tasksViewModel: TasksViewModel
 
     companion object {
@@ -50,6 +47,7 @@ class TaskListFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         PomoApp.component.getFragmentComponent().inject(this)
         fragmentPage = arguments?.get(FRAGMENT_PAGE_KEY) as Int
+        tasksViewModel = ViewModelProviders.of(this, viewModelFactory)[TasksViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -58,65 +56,27 @@ class TaskListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setTaskList()
         setTodayAdapter()
         setBacklogAdapter()
-        setTaskList()
-        if (fragmentPage == TODAY_FRAGMENT_PAGE) {
+        observeToData(fragmentPage)
+        // Set initial showcase items just once
+        if (fragmentPage == TODAY_FRAGMENT_PAGE)
             setInitialShowcaseItems()
-            compositeDisposable.add(tasksViewModel
-                    .getTodayTasks()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { items: List<Task> ->
-                        taskList.adapter = todayAdapter
-                        todayAdapter.submitList(items)
-                    }
-            )
-        } else {
-            compositeDisposable.add(tasksViewModel
-                    .getBacklogTasks()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { items: List<Task> ->
-                        taskList.adapter = backlogAdapter
-                        backlogAdapter.submitList(items)
-                    }
-            )
-        }
+
+        tasksViewModel.loadTasks()
     }
 
-    private fun setInitialShowcaseItems() {
-        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
-        if (!showcasePreference.todayExampleTask) {
-            val task = Task(
-                    id = 0,
-                    title = PomoApp.string(R.string.today_exampletask_title),
-                    deadline = Calendar.getInstance().timeInMillis,
-                    pomo = 3,
-                    currentPomo = 3,
-                    created = Calendar.getInstance().timeInMillis,
-                    isActive = true
-            )
-            add(tasksViewModel
-                    .addTask(task)
-                    .subscribe { _ ->
-                        showcasePreference.todayExampleTask = true
-                    })
-        }
-
-        if (!showcasePreference.backlogExampleTask) {
-            val task = Task(
-                    id = 0,
-                    title = PomoApp.string(R.string.backlog_exampletask_title),
-                    pomo = 0,
-                    created = Calendar.getInstance().timeInMillis,
-                    isActive = false
-            )
-            add(tasksViewModel
-                    .addTask(task)
-                    .subscribe { _ ->
-                        showcasePreference.backlogExampleTask = true
-                    })
+    private fun observeToData(fragmentPage: Int) {
+        tasksViewModel.apply {
+            if (fragmentPage == TODAY_FRAGMENT_PAGE)
+                todayListObservable
+                        .subscribe(this@TaskListFragment::updateTodayList, this@TaskListFragment::showError)
+                        .addTo(compositeDisposable)
+            else
+                backlogListObservable
+                        .subscribe(this@TaskListFragment::updateBacklogList, this@TaskListFragment::showError)
+                        .addTo(compositeDisposable)
         }
     }
 
@@ -159,5 +119,36 @@ class TaskListFragment : BaseFragment() {
                     add(tasksViewModel.markIsCompleteTaskById(checked, task.id).subscribe())
                 }))
     }
+
+    private fun updateTodayList(list: List<Task>) {
+        taskList.adapter = todayAdapter
+        todayAdapter.submitList(list)
+    }
+
+    private fun updateBacklogList(list: List<Task>) {
+        taskList.adapter = backlogAdapter
+        backlogAdapter.submitList(list)
+    }
+
+    private fun setInitialShowcaseItems() {
+        if (!ShowcaseHelper.isShowcaseItemsAdded()) {
+            val todayExampleTask = ShowcaseHelper.getTodayExample()
+            tasksViewModel
+                    .addTask(todayExampleTask)
+                    .subscribe(this::onInitialShowcaseItemsAdded, this::showError)
+                    .addTo(compositeDisposable)
+
+            val backlogExampleTask = ShowcaseHelper.getBacklogExample()
+            tasksViewModel
+                    .addTask(backlogExampleTask)
+                    .subscribe(this::onInitialShowcaseItemsAdded, this::showError)
+                    .addTo(compositeDisposable)
+        }
+    }
+
+    private fun onInitialShowcaseItemsAdded() {
+        ShowcaseHelper.setShowcaseItemsAdded()
+    }
+
 
 }

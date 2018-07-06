@@ -1,6 +1,6 @@
 package apps.tim.pomos.base.di.screen
 
-import apps.tim.pomos.base.ui.tasks.data.TasksRepository
+import apps.tim.pomos.base.data.TasksRepository
 import apps.tim.pomos.base.ui.timer.Timer
 import apps.tim.pomos.base.ui.timer.TimerViewModel
 import dagger.Module

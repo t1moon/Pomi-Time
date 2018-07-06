@@ -4,7 +4,7 @@ import apps.tim.pomos.base.PomoApp
 import apps.tim.pomos.base.PreferenceHelper
 import apps.tim.pomos.base.ui.MILLIS_IN_SECOND
 import apps.tim.pomos.base.ui.SECONDS_IN_MINUTE
-import apps.tim.pomos.base.ui.tasks.data.TasksRepository
+import apps.tim.pomos.base.data.TasksRepository
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -51,9 +51,8 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
         return timer.stateObservable
     }
 
-    fun addPomo(id: Long): Single<Unit> {
-        return tasksRepository.addPomo(id)
-    }
+    fun addPomo(id: Long) =
+            tasksRepository.addPomo(id)
 
     fun getCompleted(): Flowable<Int> {
         return tasksRepository.getTasks()

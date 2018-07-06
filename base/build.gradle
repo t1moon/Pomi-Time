@@ -4,12 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 27
     baseFeature true
     defaultConfig {
         resConfigs 'ru'
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 27
         versionCode 2
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -31,11 +31,13 @@ ext {
     constraint = '1.1.2'
     navigation = '1.0.0-alpha02'
     rxjava = '2.1.8'
-    rxandroid = '2.0.1'
+    rxandroid = '2.0.2'
+    rxkotlin = '2.0.1'
     room = '1.1.1'
     dagger = '2.15'
     chart = 'v3.0.3'
     showcase = '1.11.0'
+    lifecycle = "1.1.1"
 }
 
 dependencies {
@@ -56,8 +58,13 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment-ktx:$navigation"
     implementation "android.arch.navigation:navigation-ui-ktx:$navigation"
 
+    implementation "android.arch.lifecycle:runtime:$lifecycle"
+    implementation "android.arch.lifecycle:extensions:$lifecycle"
+
     implementation "io.reactivex.rxjava2:rxjava:$rxjava"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid"
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.0.0'
+
 
     implementation "android.arch.persistence.room:runtime:$room"
     kapt "android.arch.persistence.room:compiler:$room"

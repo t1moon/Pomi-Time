@@ -1,7 +1,7 @@
 package apps.tim.pomos.base.di.fragment
 
 import apps.tim.pomos.base.ui.tasks.TasksViewModel
-import apps.tim.pomos.base.ui.tasks.data.TasksRepository
+import apps.tim.pomos.base.data.TasksRepository
 import dagger.Module
 import dagger.Provides
 

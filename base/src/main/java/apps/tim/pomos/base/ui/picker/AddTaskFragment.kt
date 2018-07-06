@@ -13,7 +13,7 @@ import apps.tim.pomos.base.R
 import apps.tim.pomos.base.toDateLong
 import apps.tim.pomos.base.toDateString
 import apps.tim.pomos.base.ui.tasks.TasksViewModel
-import apps.tim.pomos.base.ui.tasks.data.Task
+import apps.tim.pomos.base.data.Task
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_add.*

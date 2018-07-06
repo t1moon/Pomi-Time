@@ -1,4 +1,4 @@
-package apps.tim.pomos.base.ui.tasks.data
+package apps.tim.pomos.base.data
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase

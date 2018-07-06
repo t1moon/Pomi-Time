@@ -1,24 +1,41 @@
 package apps.tim.pomos.base.ui.tasks
 
+import android.arch.lifecycle.ViewModel
 import apps.tim.pomos.base.PomoApp
 import apps.tim.pomos.base.PreferenceHelper
+import apps.tim.pomos.base.data.Statistics
+import apps.tim.pomos.base.data.Task
+import apps.tim.pomos.base.data.TasksRepository
 import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.base.ui.STATISTIC_COUNT
+import apps.tim.pomos.base.ui.base.BaseViewModel
 import apps.tim.pomos.base.ui.stat.StatisticsItem
-import apps.tim.pomos.base.ui.tasks.data.Statistics
-import apps.tim.pomos.base.ui.tasks.data.Task
-import apps.tim.pomos.base.ui.tasks.data.TasksRepository
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Function3
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.toSingle
+import io.reactivex.subjects.PublishSubject
 
 
-class TasksViewModel(private val tasksRepository: TasksRepository) {
+class TasksViewModel(private val tasksRepository: TasksRepository) : BaseViewModel() {
+
+    val todayListObservable: PublishSubject<List<Task>> = PublishSubject.create()
+    val backlogListObservable: PublishSubject<List<Task>> = PublishSubject.create()
+
+
+
+    fun loadTasks() {
+        getTodayTasks().subscribe { todayListObservable.onNext(it) }.addTo(composite)
+        getBacklogTasks().subscribe { backlogListObservable.onNext(it) }.addTo(composite)
+    }
 
     fun addTask(task: Task) =
             tasksRepository.addTask(task)
 
-    fun getTodayTasks(): Flowable<List<Task>> {
+    private fun getTodayTasks(): Flowable<List<Task>> {
         return tasksRepository.getTasks()
                 .flatMap {
                     Flowable.fromIterable(it)
@@ -33,27 +50,7 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
                 }
     }
 
-    fun getStatisticsForToday(): Flowable<List<StatisticsItem>> {
-        val daily = PreferenceHelper.getDaily(PomoApp.instance)
-        return getTodayTasks()
-                .flatMap {
-                    Flowable.fromIterable(it)
-                            .map {
-                                StatisticsItem(
-                                        it.title,
-                                        it.currentPomo,
-                                        it.deadline,
-                                        it.isComplete,
-                                        (it.currentPomo / daily.toFloat() * 100).toInt()
-                                )
-                            }
-                            .toList()
-                            .toFlowable()
-                }
-
-    }
-
-    fun getBacklogTasks(): Flowable<List<Task>> {
+    private fun getBacklogTasks(): Flowable<List<Task>> {
         return tasksRepository.getTasks()
                 .flatMap {
                     Flowable.fromIterable(it)
@@ -76,41 +73,23 @@ class TasksViewModel(private val tasksRepository: TasksRepository) {
                 }
     }
 
-
     fun deleteTask(task: Task) =
-        tasksRepository.deleteTask(task)
+            tasksRepository.deleteTask(task)
 
     fun markIsCompleteTaskById(complete: Boolean, id: Long) =
-        tasksRepository.completeTaskById(complete, id)
-
+            tasksRepository.setCompleteTaskById(complete, id)
 
     fun activateTask(id: Long) =
-        tasksRepository.activateTask(id)
+            tasksRepository.activateTask(id)
 
-
-    fun finishSession(stat: Statistics) : Single<Unit> {
-        println(stat.date)
+    fun finishSession(stat: Statistics): Completable {
         return Single.zip(
-                tasksRepository.deleteCompletedTasks(),
-        tasksRepository.moveActiveTasksToBacklog(),
-        tasksRepository.addStatistics(stat),
-                Function3<Unit, Unit, Unit, Unit> {
-                    _, _, _ ->
-                    Single.just(Unit)
+                tasksRepository.deleteCompletedTasks().toSingle(),
+                tasksRepository.moveActiveTasksToBacklog().toSingle(),
+                tasksRepository.addStatistics(stat).toSingle(),
+                Function3<Completable, Completable, Completable, Completable> { _, _, _ ->
+                    Completable.complete()
                 })
+                .toCompletable()
     }
-
-    fun getStats() : Flowable<List<Statistics>>{
-        return tasksRepository.getStats()
-                .flatMap {
-                    Flowable.fromIterable(it)
-                            .sorted { o1, o2 ->
-                                o2.date.compareTo(o1.date)
-                            }
-                            .take(STATISTIC_COUNT.toLong())
-                            .toList()
-                            .toFlowable()
-                }
-    }
-
 }

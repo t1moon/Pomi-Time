@@ -60,4 +60,5 @@
     <string name="today_exampletask_title">Task for today</string>
     <string name="backlog_exampletask_title">Other task</string>
     <string name="lang">en</string>
+    <string name="error_text">Something went wrong</string>
 </resources>

@@ -10,7 +10,7 @@ import apps.tim.pomos.base.toDateLong
 import apps.tim.pomos.base.toDateString
 import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.base.ui.TASK_ARG
-import apps.tim.pomos.base.ui.tasks.data.Task
+import apps.tim.pomos.base.data.Task
 import kotlinx.android.synthetic.main.fragment_edit.*
 
 class EditTaskFragment : AddTaskFragment() {

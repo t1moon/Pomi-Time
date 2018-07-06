@@ -37,4 +37,6 @@
     <string name="backlog_exampletask_title">Другая задача</string>
     <string name="daily_description">Она будет наполняться по мере выполнения помидорок</string>
     <string name="lang">ru</string>
+
+    <string name="error_text">Что-то пошло не так</string>
 </resources>

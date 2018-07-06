@@ -1,7 +1,10 @@
 package apps.tim.pomos.base
 
+import android.app.Activity
+import android.content.Context
 import android.content.res.Resources
 import android.util.TypedValue
+import android.widget.Toast
 import apps.tim.pomos.base.ui.DATE_FORMAT
 import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
 import apps.tim.pomos.base.ui.TIME_FORMAT
@@ -54,4 +57,8 @@ fun Long.toDateString() : String {
     val locale = Locale(PomoApp.string(R.string.lang))
     val sdf = SimpleDateFormat(DATE_FORMAT, locale)
     return sdf.format(Date(this))
+}
+
+fun Activity.showError() {
+    Toast.makeText(this, PomoApp.string(R.string.error_text), Toast.LENGTH_SHORT).show()
 }

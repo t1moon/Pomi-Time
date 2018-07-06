@@ -9,7 +9,7 @@ import apps.tim.pomos.base.PomoApp
 import apps.tim.pomos.base.R
 import apps.tim.pomos.base.toDateString
 import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
-import apps.tim.pomos.base.ui.tasks.data.Statistics
+import apps.tim.pomos.base.data.Statistics
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry

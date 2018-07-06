@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import apps.tim.pomos.base.R
 import apps.tim.pomos.base.toDateString
 import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
-import apps.tim.pomos.base.ui.tasks.data.Task
+import apps.tim.pomos.base.data.Task
 import apps.tim.pomos.base.ui.tasks.pager.TaskDiffCallback
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.today_list_item.*
