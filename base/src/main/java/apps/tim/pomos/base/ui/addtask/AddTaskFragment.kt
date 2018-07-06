@@ -9,8 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import apps.tim.pomos.base.*
-import apps.tim.pomos.base.data.Task
+import apps.tim.pomos.base.R
+import apps.tim.pomos.base.app.PomoApp
+import apps.tim.pomos.base.data.entity.Task
+import apps.tim.pomos.base.di.ViewModelFactory
+import apps.tim.pomos.base.toDateLong
+import apps.tim.pomos.base.toDateString
 import apps.tim.pomos.base.ui.base.BaseDialogFragment
 import apps.tim.pomos.base.ui.tasks.TasksViewModel
 import io.reactivex.rxkotlin.addTo

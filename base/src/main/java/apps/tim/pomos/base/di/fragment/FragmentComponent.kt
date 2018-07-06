@@ -4,7 +4,7 @@ import apps.tim.pomos.base.di.screen.TimerScreenComponent
 import apps.tim.pomos.base.ui.addtask.AddTaskFragment
 import apps.tim.pomos.base.ui.edittask.EditTaskFragment
 import apps.tim.pomos.base.ui.stat.StatisticsFragment
-import apps.tim.pomos.base.ui.tasks.pager.TaskListFragment
+import apps.tim.pomos.base.ui.tasks.viewpager.TaskListFragment
 import dagger.Subcomponent
 
 

@@ -8,13 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import apps.tim.pomos.base.BACKLOG_FRAGMENT_PAGE
 import apps.tim.pomos.base.R
-import apps.tim.pomos.base.ShowcaseHelper
-import apps.tim.pomos.base.ui.BACKLOG_FRAGMENT_PAGE
-import apps.tim.pomos.base.ui.TODAY_FRAGMENT_PAGE
+import apps.tim.pomos.base.TODAY_FRAGMENT_PAGE
+import apps.tim.pomos.base.showcase.ShowcaseHelper
 import apps.tim.pomos.base.ui.addtask.AddTaskFragment
 import apps.tim.pomos.base.ui.base.BaseFragment
-import apps.tim.pomos.base.ui.tasks.pager.TaskListFragment
+import apps.tim.pomos.base.ui.tasks.viewpager.TaskListFragment
 import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
 
 

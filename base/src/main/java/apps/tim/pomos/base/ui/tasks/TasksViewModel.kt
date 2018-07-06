@@ -1,9 +1,9 @@
 package apps.tim.pomos.base.ui.tasks
 
-import apps.tim.pomos.base.data.Statistics
-import apps.tim.pomos.base.data.Task
-import apps.tim.pomos.base.data.TasksRepository
-import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
+import apps.tim.pomos.base.DEFAULT_DATE_LONG
+import apps.tim.pomos.base.data.entity.Statistics
+import apps.tim.pomos.base.data.entity.Task
+import apps.tim.pomos.base.data.repository.TasksRepository
 import apps.tim.pomos.base.ui.base.BaseViewModel
 import io.reactivex.Completable
 import io.reactivex.Flowable

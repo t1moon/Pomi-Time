@@ -1,7 +1,7 @@
 package apps.tim.pomos.base.di.app
 
 import android.content.Context
-import apps.tim.pomos.base.PomoApp
+import apps.tim.pomos.base.app.PomoApp
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

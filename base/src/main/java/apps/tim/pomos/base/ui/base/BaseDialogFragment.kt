@@ -4,7 +4,6 @@ import android.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import apps.tim.pomos.base.showError
 import io.reactivex.disposables.CompositeDisposable
 
 open class BaseDialogFragment : DialogFragment() {

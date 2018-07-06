@@ -1,15 +1,13 @@
 package apps.tim.pomos.base.ui.timer
 
 import android.os.CountDownTimer
-import apps.tim.pomos.base.PomoApp
-import apps.tim.pomos.base.PreferenceHelper
-import apps.tim.pomos.base.ui.MILLIS_IN_MINUTE
+import apps.tim.pomos.base.MILLIS_IN_MINUTE
+import apps.tim.pomos.base.preference.SettingsPreference
 import io.reactivex.subjects.PublishSubject
 
 class Timer {
-
-    private var WORK_DURATION = PreferenceHelper.getWorkDuration(PomoApp.instance) * MILLIS_IN_MINUTE
-    private var REST_DURATION = PreferenceHelper.getRestDuration(PomoApp.instance) * MILLIS_IN_MINUTE
+    private var WORK_DURATION = SettingsPreference.workDuration * MILLIS_IN_MINUTE
+    private var REST_DURATION = SettingsPreference.restDuration * MILLIS_IN_MINUTE
 
     enum class TimerState { PLAYED, PAUSED, STARTED, FINISHED, CANCELLED }
 
@@ -100,8 +98,8 @@ class Timer {
 
     fun refresh() {
         stop()
-        WORK_DURATION = PreferenceHelper.getWorkDuration(PomoApp.instance) * MILLIS_IN_MINUTE
-        REST_DURATION = PreferenceHelper.getRestDuration(PomoApp.instance) * MILLIS_IN_MINUTE
+        WORK_DURATION = SettingsPreference.workDuration * MILLIS_IN_MINUTE
+        REST_DURATION = SettingsPreference.restDuration * MILLIS_IN_MINUTE
         remainingTime = WORK_DURATION.toLong()
         state = StoppedState(this)
         mode = WorkMode(this)

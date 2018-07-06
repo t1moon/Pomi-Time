@@ -3,7 +3,7 @@
     package="apps.tim.pomos.base">
 
     <application
-        android:name=".PomoApp"
+        android:name=".app.PomoApp"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"

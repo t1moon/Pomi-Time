@@ -4,13 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import apps.tim.pomos.base.PomoApp
-import apps.tim.pomos.base.R
-import apps.tim.pomos.base.data.Task
-import apps.tim.pomos.base.toDateLong
-import apps.tim.pomos.base.toDateString
-import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
-import apps.tim.pomos.base.ui.TASK_ARG
+import apps.tim.pomos.base.*
+import apps.tim.pomos.base.app.PomoApp
+import apps.tim.pomos.base.data.entity.Task
 import apps.tim.pomos.base.ui.addtask.AddTaskFragment
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_edit.*

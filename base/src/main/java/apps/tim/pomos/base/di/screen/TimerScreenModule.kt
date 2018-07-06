@@ -1,8 +1,8 @@
 package apps.tim.pomos.base.di.screen
 
-import apps.tim.pomos.base.TimerViewModelFactory
-import apps.tim.pomos.base.data.TasksRepository
+import apps.tim.pomos.base.data.repository.TasksRepository
 import apps.tim.pomos.base.ui.timer.Timer
+import apps.tim.pomos.base.ui.timer.viewmodel.TimerViewModelFactory
 import dagger.Module
 import dagger.Provides
 

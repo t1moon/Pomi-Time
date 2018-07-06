@@ -6,11 +6,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import apps.tim.pomos.base.PomoApp
 import apps.tim.pomos.base.R
-import apps.tim.pomos.base.ShowcaseHelper
-import apps.tim.pomos.base.ViewModelFactory
+import apps.tim.pomos.base.app.PomoApp
+import apps.tim.pomos.base.di.ViewModelFactory
+import apps.tim.pomos.base.showcase.ShowcaseHelper
 import apps.tim.pomos.base.ui.base.BaseFragment
+import apps.tim.pomos.base.ui.stat.adapter.StatisticsAdapter
+import apps.tim.pomos.base.ui.stat.viewmodel.StatisticsViewModel
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_statistics.*
 import kotlinx.android.synthetic.main.statistics_overall_item.*

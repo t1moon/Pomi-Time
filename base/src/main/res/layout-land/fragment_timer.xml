@@ -48,7 +48,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_back" />
 
-    <apps.tim.pomos.base.ui.timer.TimerView
+    <apps.tim.pomos.base.ui.timer.timerview.TimerView
         android:id="@+id/timerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
