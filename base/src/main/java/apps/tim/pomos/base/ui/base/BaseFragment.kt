@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import apps.tim.pomos.base.showError
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 open class BaseFragment: Fragment() {
     protected val compositeDisposable = CompositeDisposable()
@@ -22,10 +21,6 @@ open class BaseFragment: Fragment() {
         super.onDestroyView()
     }
 
-
-    protected fun add(d: Disposable) {
-        compositeDisposable.add(d)
-    }
 
     protected fun hideSoftKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -91,7 +91,7 @@ class TaskListFragment : BaseFragment() {
     private fun setBacklogAdapter() {
         backlogAdapter = BacklogAdapter(
                 ({
-                    add(tasksViewModel.activateTask(it.id).subscribe())
+                    tasksViewModel.activateTask(it.id).subscribe().addTo(compositeDisposable)
                 }),
                 ({
                     val bundle = Bundle()
@@ -119,7 +119,7 @@ class TaskListFragment : BaseFragment() {
                     true
                 }),
                 ({ task: Task, checked: Boolean ->
-                    add(tasksViewModel.markIsCompleteTaskById(checked, task.id).subscribe())
+                    tasksViewModel.markIsCompleteTaskById(checked, task.id).subscribe().addTo(compositeDisposable)
                 }))
     }
 

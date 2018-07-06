@@ -19,8 +19,6 @@ class TasksViewModel(private val tasksRepository: TasksRepository) : BaseViewMod
     val todayListObservable: PublishSubject<List<Task>> = PublishSubject.create()
     val backlogListObservable: PublishSubject<List<Task>> = PublishSubject.create()
 
-
-
     fun loadTasks() {
         getTodayTasks().subscribe { todayListObservable.onNext(it) }.addTo(composite)
         getBacklogTasks().subscribe { backlogListObservable.onNext(it) }.addTo(composite)

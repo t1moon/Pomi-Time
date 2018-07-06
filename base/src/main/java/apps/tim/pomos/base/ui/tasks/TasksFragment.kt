@@ -30,7 +30,7 @@ class TasksFragment : BaseFragment() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
         setupViewPager()
         setButtonListeners()
-        checkForInitialShowCase()
+        showCase()
     }
 
     private fun setupViewPager() {
@@ -62,8 +62,6 @@ class TasksFragment : BaseFragment() {
     }
 
     private fun checkShowcaseForBacklog() {
-        if (ShowcaseHelper.isBacklogPageShowcaseShown())
-            return
         Handler().postDelayed({
             val transferBtn = viewPager.getChildAt(BACKLOG_FRAGMENT_PAGE).findViewById<View>(R.id.transferButton)
             ShowcaseHelper.showBacklogPageShowcase(activity, transferBtn)
@@ -71,9 +69,7 @@ class TasksFragment : BaseFragment() {
 
     }
 
-    private fun checkForInitialShowCase() {
-        if (ShowcaseHelper.isTasksPageShowcaseShown())
-            return
+    private fun showCase() {
         val tab1 = (tabs.getChildAt(0) as ViewGroup).getChildAt(0)
         val tab2 = (tabs.getChildAt(0) as ViewGroup).getChildAt(1)
         ShowcaseHelper.showTasksFragmentShowcase(activity, this::getPomoView, tab1, tab2, finishBtn)

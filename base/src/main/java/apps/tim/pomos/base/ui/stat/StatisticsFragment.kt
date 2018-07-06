@@ -34,7 +34,7 @@ class StatisticsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         statisticsViewModel.loadStatistics()
-        checkForInitialShowCase()
+        showCase()
         observeToData()
     }
 
@@ -65,9 +65,7 @@ class StatisticsFragment : BaseFragment() {
         }
     }
 
-    private fun checkForInitialShowCase() {
-        if (ShowcaseHelper.isStatisticsShown())
-            return
+    private fun showCase() {
         ShowcaseHelper.showStatisticsShowcase(activity, newSessionBtn, this::getResultView)
     }
 

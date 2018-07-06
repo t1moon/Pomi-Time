@@ -1,17 +1,21 @@
 package apps.tim.pomos.base.ui.timer
 
-import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import apps.tim.pomos.base.*
+import apps.tim.pomos.base.PomoApp
+import apps.tim.pomos.base.R
+import apps.tim.pomos.base.ShowcaseHelper
+import apps.tim.pomos.base.TimerViewModelFactory
+import apps.tim.pomos.base.data.Task
 import apps.tim.pomos.base.ui.TASK_ARG
 import apps.tim.pomos.base.ui.base.BaseFragment
-import apps.tim.pomos.base.data.Task
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_timer.*
 import javax.inject.Inject
 
@@ -20,13 +24,14 @@ class TimerFragment : BaseFragment() {
     companion object {
         private val WORK_MODE = PomoApp.string(R.string.work)
         private val REST_MODE = PomoApp.string(R.string.rest)
-        private val TIMERVIEW_STATE_KEY = "TIMERVIEW_STATE"
-        private val TIMERCLOCK_STATE_KEY = "TIMERCLOCK_STATE"
-        private val TIMERMODE_STATE_KEY = "TIMERMODE_STATE"
+        private const val TIMERVIEW_STATE = "TIMERVIEW_STATE"
+        private const val TIMERCLOCK_STATE_KEY = "TIMERCLOCK_STATE"
+        private const val CONTROL_DISABLED = "CONTROL_DISABLED"
     }
 
     @Inject
-    lateinit var timerViewModel: TimerViewModel
+    lateinit var timerViewModelFactory: TimerViewModelFactory
+    private lateinit var timerViewModel: TimerViewModel
 
     private lateinit var task: Task
     private lateinit var pomoAdapter: PomoAdapter
@@ -35,71 +40,91 @@ class TimerFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         retainInstance = true
         PomoApp.component.getFragmentComponent().getTimerScreenComponent().inject(this)
+        timerViewModel = ViewModelProviders.of(this, timerViewModelFactory)[TimerViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_timer, container, false)
+        return container?.inflate(R.layout.fragment_timer)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            timerViewModel.refreshTimer()
-            resetTimer(true)
-        } else {
-            timerView.setViewState(savedInstanceState.get(TIMERVIEW_STATE_KEY) as TimerView.TimerViewState)
-            timerTime.text = savedInstanceState.get(TIMERCLOCK_STATE_KEY) as String
-            if (savedInstanceState.get(TIMERMODE_STATE_KEY) as Boolean) {
-                disableControls()
-            }
-        }
-        setupHeader()
+        if (savedInstanceState == null)
+            resetTimer()
+        else
+            recoverTimer(savedInstanceState)
+
+        setupHeaderTask()
         setupPomoList()
-        setupTimer()
-        settings.setOnClickListener {
-            it.findNavController().navigate(R.id.action_timerFragment_to_settingsFragment)
+        observeToTimer()
+        setUIListeners()
+        showCase()
+    }
+
+    private fun resetTimer() {
+        timerViewModel.refreshTimer()
+        setTimerDefault(true)
+    }
+
+    private fun recoverTimer(savedInstanceState: Bundle) {
+        timerView.setViewState(savedInstanceState.get(TIMERVIEW_STATE) as TimerView.TimerViewState)
+        timerTime.text = savedInstanceState.get(TIMERCLOCK_STATE_KEY) as String
+        if (savedInstanceState.get(CONTROL_DISABLED) as Boolean) {
+            disableControls()
         }
-        checkForShowcase()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(TIMERVIEW_STATE_KEY, timerView.getViewState())
-        outState.putString(TIMERCLOCK_STATE_KEY, timerTime.text.toString())
-        outState.putBoolean(TIMERMODE_STATE_KEY, leftControl.visibility == View.GONE)
-    }
-
-    private fun checkForShowcase() {
-        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
-        if (showcasePreference.timerShowcaseShown)
-            return
-        ShowcaseHelper.getTargetView(activity as Activity, pomoList, ShowcaseHelper.Type.DAILY, 150)
-        showcasePreference.timerShowcaseShown = true
+    private fun setupHeaderTask() {
+        task = arguments?.get(TASK_ARG) as Task
+        taskTitle.text = task.title
     }
 
     private fun setupPomoList() {
-        add(timerViewModel.getCompleted()
+        pomoList.layoutManager = GridLayoutManager(context, 8)
+        pomoAdapter = PomoAdapter()
+        pomoList.adapter = pomoAdapter
+
+        timerViewModel
+                .getCompleted()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe ({
-                    pomoList.layoutManager = GridLayoutManager(context, 8)
-                    pomoAdapter = PomoAdapter(it)
-                    pomoList.adapter = pomoAdapter
-                }, this::showError))
+                .subscribe({
+                    pomoAdapter.setPomo(it)
+                    pomoAdapter.notifyDataSetChanged()
+                }, this::showError)
+                .addTo(compositeDisposable)
     }
 
-    private fun setupHeader() {
-        task = arguments?.get(TASK_ARG) as Task
-        taskTitle.text = task.title
-        backButton.setOnClickListener {
-            activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp()
+    private fun observeToTimer() {
+        timerViewModel.apply {
+            getTimerState()
+                .subscribe({
+                    disableControls()
+                    responseToTimeStateChanged(it)
+                }, this@TimerFragment::showError)
+                .addTo(compositeDisposable)
+            getTimerProgress()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ timerView.updateProgress(it) }, this@TimerFragment::showError)
+                    .addTo(compositeDisposable)
+            getTimerString()
+                    .subscribe { timerTime.text = it }
+                    .addTo(compositeDisposable)
         }
     }
 
-    private fun setupTimer() {
-        setTimerView()
-        setControlButtons()
-    }
-
-    private fun setControlButtons() {
+    private fun setUIListeners() {
+        backButton.setOnClickListener {
+            activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp()
+        }
+        settings.setOnClickListener {
+            it.findNavController().navigate(R.id.action_timerFragment_to_settingsFragment)
+        }
+        timerView.setOnClickListener {
+            timerViewModel.timerViewClicked()
+        }
+        timerView.setOnLongClickListener {
+            timerViewModel.timerViewLongClicked()
+            true
+        }
         leftControl.setOnClickListener {
             timerViewModel.timerViewModeChanged()
             changeTimerMode()
@@ -110,33 +135,9 @@ class TimerFragment : BaseFragment() {
         }
     }
 
+
     private fun changeTimerMode() {
-        resetTimer(timerMode.text == REST_MODE)
-    }
-
-    private fun setTimerView() {
-        timerView.setOnClickListener {
-            timerViewModel.timerViewClicked()
-        }
-        timerView.setOnLongClickListener {
-            timerViewModel.timerViewLongClicked()
-            true
-        }
-
-        add(timerViewModel.getTimerState()
-                .subscribe ({
-                    disableControls()
-                    responseToTimeStateChanged(it)
-                }, this::showError)
-        )
-        add(timerViewModel.getTimerProgress()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe ({
-                    timerView.updateProgress(it)
-                }, this::showError))
-        add(timerViewModel.getTimerString().subscribe {
-            timerTime.text = it
-        })
+        setTimerDefault(timerMode.text == REST_MODE)
     }
 
     private fun responseToTimeStateChanged(state: Timer.TimerState?) {
@@ -146,11 +147,11 @@ class TimerFragment : BaseFragment() {
             Timer.TimerState.PLAYED -> timerView.play()
             Timer.TimerState.CANCELLED -> {
                 timerView.finish()
-                resetTimer()
+                setTimerDefault()
             }
             Timer.TimerState.FINISHED -> {
                 timerView.finish()
-                resetTimer(false)
+                setTimerDefault(false)
                 timerViewModel.addPomo(task.id)
                         .subscribe({
                             pomoAdapter.addPomo()
@@ -159,13 +160,19 @@ class TimerFragment : BaseFragment() {
         }
     }
 
-    private fun resetTimer(isWork: Boolean = true) {
-        add(timerViewModel.defaultTime(isWork)
+    private fun setTimerDefault(isWork: Boolean = true) {
+        timerViewModel.getDefaultTime(isWork)
                 .subscribe({
                     timerTime.text = it
-                }, this::showError))
+                }, this::showError)
+                .addTo(compositeDisposable)
         timerMode.text = if (isWork) WORK_MODE else REST_MODE
         enableControls()
+    }
+
+    private fun enableControls() {
+        leftControl.visibility = View.VISIBLE
+        rightControl.visibility = View.VISIBLE
     }
 
     private fun disableControls() {
@@ -173,9 +180,15 @@ class TimerFragment : BaseFragment() {
         rightControl.visibility = View.GONE
     }
 
-    private fun enableControls() {
-        leftControl.visibility = View.VISIBLE
-        rightControl.visibility = View.VISIBLE
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(TIMERVIEW_STATE, timerView.getViewState())
+        outState.putString(TIMERCLOCK_STATE_KEY, timerTime.text.toString())
+        outState.putBoolean(CONTROL_DISABLED, leftControl.visibility == View.GONE)
+    }
+
+    private fun showCase() {
+        ShowcaseHelper.showTimerShowcase(activity, pomoList)
     }
 
 }

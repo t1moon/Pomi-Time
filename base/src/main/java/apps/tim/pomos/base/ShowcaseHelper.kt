@@ -80,13 +80,11 @@ object ShowcaseHelper {
         showcasePreference.exampleTaskAdded = true
     }
 
-    fun isStatisticsShown(): Boolean {
-        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
-        return showcasePreference.statisticsShowcaseShown
-    }
-
     fun showStatisticsShowcase(activity: FragmentActivity?, buttonNewSession: View, getResultView: () -> View) {
         val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
+        if (showcasePreference.statisticsShowcaseShown)
+            return
+
         TapTargetSequence(activity)
                 .targets(ShowcaseHelper.getTarget(buttonNewSession, ShowcaseHelper.Type.NEWSESSION))
                 .continueOnCancel(true)
@@ -104,6 +102,9 @@ object ShowcaseHelper {
 
     fun showTasksFragmentShowcase(activity: FragmentActivity?, getPomoView: () -> View, vararg views: View) {
         val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
+        if (showcasePreference.tasksPageShowcaseShown)
+            return
+
         TapTargetSequence(activity)
                 .targets(
                         ShowcaseHelper.getTarget(views[0], ShowcaseHelper.Type.TODAY),
@@ -124,18 +125,20 @@ object ShowcaseHelper {
 
     fun showBacklogPageShowcase(activity: FragmentActivity?, transferBtn: View) {
         val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
+        if (showcasePreference.backlogPageShowcaseShown)
+            return
+
         ShowcaseHelper.getTargetView(activity as Activity, transferBtn, ShowcaseHelper.Type.TRANSFER)
         showcasePreference.backlogPageShowcaseShown = true
     }
 
-    fun isTasksPageShowcaseShown(): Boolean {
+    fun showTimerShowcase(activity: FragmentActivity?, vararg views: View) {
         val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
-        return showcasePreference.tasksPageShowcaseShown
-    }
+        if (showcasePreference.timerShowcaseShown)
+            return
 
-    fun isBacklogPageShowcaseShown(): Boolean {
-        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
-        return showcasePreference.backlogPageShowcaseShown
+        ShowcaseHelper.getTargetView(activity as Activity, views[0], ShowcaseHelper.Type.DAILY, 150)
+        showcasePreference.timerShowcaseShown = true
     }
 
     data class Text(val title: String, val description: String)

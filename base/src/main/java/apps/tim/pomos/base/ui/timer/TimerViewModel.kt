@@ -2,16 +2,20 @@ package apps.tim.pomos.base.ui.timer
 
 import apps.tim.pomos.base.PomoApp
 import apps.tim.pomos.base.PreferenceHelper
+import apps.tim.pomos.base.data.TasksRepository
 import apps.tim.pomos.base.ui.MILLIS_IN_SECOND
 import apps.tim.pomos.base.ui.SECONDS_IN_MINUTE
-import apps.tim.pomos.base.data.TasksRepository
+import apps.tim.pomos.base.ui.base.BaseViewModel
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 
 
-class TimerViewModel(private val tasksRepository: TasksRepository, private val timer: Timer) {
+class TimerViewModel(private val tasksRepository: TasksRepository, private val timer: Timer)
+    : BaseViewModel() {
+
+    fun addPomo(id: Long) =
+            tasksRepository.addPomo(id)
 
     fun getTimerString(): Observable<String> {
         return timer.timeObservable
@@ -36,7 +40,19 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
         timer.onLongClick()
     }
 
-    fun defaultTime(work: Boolean): Observable<String> {
+    fun getTimerState(): PublishSubject<Timer.TimerState> {
+        return timer.stateObservable
+    }
+
+    fun timerViewModeChanged() {
+        timer.onModeChanged()
+    }
+
+    fun refreshTimer() {
+        timer.refresh()
+    }
+
+    fun getDefaultTime(work: Boolean): Observable<String> {
         val workDuration = PreferenceHelper.getWorkDuration(PomoApp.instance)
         val restDuration = PreferenceHelper.getRestDuration(PomoApp.instance)
 
@@ -46,13 +62,6 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
                     "${it.minutes}:${if (it.seconds < 10) "0" else ""}${it.seconds}"
                 }
     }
-
-    fun getTimerState(): PublishSubject<Timer.TimerState> {
-        return timer.stateObservable
-    }
-
-    fun addPomo(id: Long) =
-            tasksRepository.addPomo(id)
 
     fun getCompleted(): Flowable<Int> {
         return tasksRepository.getTasks()
@@ -71,19 +80,8 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
                 }
     }
 
-    fun timerViewModeChanged() {
-        timer.onModeChanged()
-    }
-
-    fun refreshTimer() {
-        timer.refresh()
-    }
-
-    /**
-     * @input in minutes
-     */
-    class Time(input: Int) {
-        var minutes: Int = (input / SECONDS_IN_MINUTE)
-        var seconds: Int = (input % SECONDS_IN_MINUTE)
+    class Time(inputInMinutes: Int) {
+        var minutes: Int = (inputInMinutes / SECONDS_IN_MINUTE)
+        var seconds: Int = (inputInMinutes % SECONDS_IN_MINUTE)
     }
 }

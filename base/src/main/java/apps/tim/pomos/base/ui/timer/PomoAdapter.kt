@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.item_pomo.*
 
 
 
-class PomoAdapter(var pomos: Int) :
+class PomoAdapter(var pomos: Int = 0) :
         RecyclerView.Adapter<PomoAdapter.ViewHolder>() {
 
     fun addPomo() {
@@ -77,6 +77,10 @@ class PomoAdapter(var pomos: Int) :
             repeatCount = Animation.INFINITE
             start()
         }
+    }
+
+    fun setPomo(it: Int) {
+        pomos = it
     }
 
 }

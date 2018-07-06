@@ -1,8 +1,8 @@
 package apps.tim.pomos.base.di.screen
 
+import apps.tim.pomos.base.TimerViewModelFactory
 import apps.tim.pomos.base.data.TasksRepository
 import apps.tim.pomos.base.ui.timer.Timer
-import apps.tim.pomos.base.ui.timer.TimerViewModel
 import dagger.Module
 import dagger.Provides
 
@@ -15,10 +15,10 @@ class TimerScreenModule {
     fun providesTimer() : Timer {
         return Timer()
     }
-
     @Provides
     @TimerScope
-    fun providesTimerViewModel(tasksRepository: TasksRepository, timer: Timer): TimerViewModel {
-        return TimerViewModel(tasksRepository, timer)
+    fun provideTimerViewModelFactory(tasksRepository: TasksRepository, timer: Timer) : TimerViewModelFactory {
+        return TimerViewModelFactory(tasksRepository, timer)
     }
+
 }
