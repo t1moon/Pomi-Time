@@ -18,7 +18,7 @@ import apps.tim.pomos.base.ui.FRAGMENT_PAGE_KEY
 import apps.tim.pomos.base.ui.TASK_ARG
 import apps.tim.pomos.base.ui.TODAY_FRAGMENT_PAGE
 import apps.tim.pomos.base.ui.base.BaseFragment
-import apps.tim.pomos.base.ui.picker.EditTaskFragment
+import apps.tim.pomos.base.ui.edittask.EditTaskFragment
 import apps.tim.pomos.base.ui.tasks.TasksViewModel
 import apps.tim.pomos.base.ui.tasks.pager.backlog.BacklogAdapter
 import apps.tim.pomos.base.ui.tasks.pager.today.TodayTasksAdapter

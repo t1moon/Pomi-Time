@@ -12,8 +12,8 @@ import apps.tim.pomos.base.R
 import apps.tim.pomos.base.ShowcaseHelper
 import apps.tim.pomos.base.ui.BACKLOG_FRAGMENT_PAGE
 import apps.tim.pomos.base.ui.TODAY_FRAGMENT_PAGE
+import apps.tim.pomos.base.ui.addtask.AddTaskFragment
 import apps.tim.pomos.base.ui.base.BaseFragment
-import apps.tim.pomos.base.ui.picker.AddTaskFragment
 import apps.tim.pomos.base.ui.tasks.pager.TaskListFragment
 import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
 

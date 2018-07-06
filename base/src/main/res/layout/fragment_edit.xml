@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minWidth="300dp"
-    tools:context=".ui.picker.AddTaskFragment">
+    tools:context=".ui.addtask.AddTaskFragment">
 
     <EditText
         android:id="@+id/taskTitle"

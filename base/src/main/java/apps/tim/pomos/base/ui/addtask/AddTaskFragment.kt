@@ -1,55 +1,46 @@
-package apps.tim.pomos.base.ui.picker
+package apps.tim.pomos.base.ui.addtask
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.app.DialogFragment
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import apps.tim.pomos.base.PomoApp
-import apps.tim.pomos.base.R
-import apps.tim.pomos.base.toDateLong
-import apps.tim.pomos.base.toDateString
-import apps.tim.pomos.base.ui.tasks.TasksViewModel
+import apps.tim.pomos.base.*
 import apps.tim.pomos.base.data.Task
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import apps.tim.pomos.base.ui.base.BaseDialogFragment
+import apps.tim.pomos.base.ui.tasks.TasksViewModel
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_add.*
 import java.util.*
 import javax.inject.Inject
 
 
-open class AddTaskFragment : DialogFragment() {
-    private val compositeDisposable = CompositeDisposable()
-
+open class AddTaskFragment : BaseDialogFragment() {
     @Inject
-    lateinit var tasksViewModel: TasksViewModel
+    lateinit var viewModelFactory: ViewModelFactory
+    protected lateinit var tasksViewModel: TasksViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         PomoApp.component.getFragmentComponent().inject(this)
+        tasksViewModel = ViewModelProviders.of(this as Fragment, viewModelFactory)[TasksViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add, container, false)
+        return container?.inflate(R.layout.fragment_add)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        taskTitle.requestFocus()
-        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-
-        setOkButtonClicked()
-        cancel.setOnClickListener { dismiss() }
+        requestKeyboardForInput()
+        setButtonListeners()
         setDatePicker()
-        removeDeadline.setOnClickListener {
-            deadline.setText("")
-            it.visibility = View.GONE
-        }
     }
 
-    protected open fun setOkButtonClicked() {
+    private fun setButtonListeners() {
         ok.setOnClickListener {
             val task = Task(
                     id = 0,
@@ -58,9 +49,23 @@ open class AddTaskFragment : DialogFragment() {
                     created = Calendar.getInstance().timeInMillis,
                     isActive = active.isChecked
             )
-            add(tasksViewModel.addTask(task).subscribe())
+            tasksViewModel.addTask(task)
+                    .subscribe({},this::showError)
+                    .addTo(compositeDisposable)
             dismiss()
         }
+        cancel.setOnClickListener {
+            dismiss()
+        }
+        removeDeadline.setOnClickListener {
+            deadline.setText("")
+            it.visibility = View.GONE
+        }
+    }
+
+    private fun requestKeyboardForInput() {
+        taskTitle.requestFocus()
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
     }
 
     private fun setDatePicker() {
@@ -83,19 +88,10 @@ open class AddTaskFragment : DialogFragment() {
         }
     }
 
+    // Set round corners
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val d = super.onCreateDialog(savedInstanceState)
         d.window.setBackgroundDrawableResource(R.drawable.picker_layout_background)
         return d
-    }
-
-
-    override fun onDestroyView() {
-        compositeDisposable.clear()
-        super.onDestroyView()
-    }
-
-    protected fun add(d: Disposable) {
-        compositeDisposable.add(d)
     }
 }

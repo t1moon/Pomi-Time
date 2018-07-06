@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProvider
 import apps.tim.pomos.base.data.TasksRepository
 import apps.tim.pomos.base.ui.stat.StatisticsViewModel
 import apps.tim.pomos.base.ui.tasks.TasksViewModel
-import apps.tim.pomos.base.ui.timer.TimerViewModel
 import javax.inject.Inject
 
 class ViewModelFactory @Inject constructor(val tasksRepository: TasksRepository) : ViewModelProvider.Factory {

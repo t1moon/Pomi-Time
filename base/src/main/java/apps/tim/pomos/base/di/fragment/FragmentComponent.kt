@@ -1,8 +1,8 @@
 package apps.tim.pomos.base.di.fragment
 
 import apps.tim.pomos.base.di.screen.TimerScreenComponent
-import apps.tim.pomos.base.ui.picker.AddTaskFragment
-import apps.tim.pomos.base.ui.picker.EditTaskFragment
+import apps.tim.pomos.base.ui.addtask.AddTaskFragment
+import apps.tim.pomos.base.ui.edittask.EditTaskFragment
 import apps.tim.pomos.base.ui.stat.StatisticsFragment
 import apps.tim.pomos.base.ui.tasks.pager.TaskListFragment
 import dagger.Subcomponent
