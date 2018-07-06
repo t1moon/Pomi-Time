@@ -4,16 +4,11 @@ import android.app.Activity
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.res.ResourcesCompat
 import android.view.View
-import android.widget.Button
-import apps.tim.pomos.base.R.id.newSessionBtn
-import apps.tim.pomos.base.R.id.result
 import apps.tim.pomos.base.ShowcaseHelper.Type.*
 import apps.tim.pomos.base.data.Task
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.getkeepsafe.taptargetview.TapTargetView
-import kotlinx.android.synthetic.main.fragment_statistics.*
-import kotlinx.android.synthetic.main.statistics_overall_item.*
 import java.util.*
 
 
@@ -77,15 +72,15 @@ object ShowcaseHelper {
 
     fun isShowcaseItemsAdded(): Boolean {
         val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
-        return showcasePreference.exampleTask
+        return showcasePreference.exampleTaskAdded
     }
 
     fun setShowcaseItemsAdded() {
         val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
-        showcasePreference.exampleTask = true
+        showcasePreference.exampleTaskAdded = true
     }
 
-    fun isStatisticsShown() : Boolean {
+    fun isStatisticsShown(): Boolean {
         val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
         return showcasePreference.statisticsShowcaseShown
     }
@@ -107,6 +102,41 @@ object ShowcaseHelper {
                 .start()
     }
 
+    fun showTasksFragmentShowcase(activity: FragmentActivity?, getPomoView: () -> View, vararg views: View) {
+        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
+        TapTargetSequence(activity)
+                .targets(
+                        ShowcaseHelper.getTarget(views[0], ShowcaseHelper.Type.TODAY),
+                        ShowcaseHelper.getTarget(views[1], ShowcaseHelper.Type.BACKLOG),
+                        ShowcaseHelper.getTarget(views[2], ShowcaseHelper.Type.FINISH))
+                .continueOnCancel(true)
+                .listener(object : TapTargetSequence.Listener {
+                    override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+                    override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+
+                    override fun onSequenceFinish() {
+                        ShowcaseHelper.getTargetView(activity as Activity, getPomoView.invoke(), ShowcaseHelper.Type.POMOS)
+                        showcasePreference.tasksPageShowcaseShown = true
+                    }
+                })
+                .start()
+    }
+
+    fun showBacklogPageShowcase(activity: FragmentActivity?, transferBtn: View) {
+        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
+        ShowcaseHelper.getTargetView(activity as Activity, transferBtn, ShowcaseHelper.Type.TRANSFER)
+        showcasePreference.backlogPageShowcaseShown = true
+    }
+
+    fun isTasksPageShowcaseShown(): Boolean {
+        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
+        return showcasePreference.tasksPageShowcaseShown
+    }
+
+    fun isBacklogPageShowcaseShown(): Boolean {
+        val showcasePreference = ShowcasePreference(PreferenceHelper.defaultPrefs(PomoApp.instance))
+        return showcasePreference.backlogPageShowcaseShown
+    }
 
     data class Text(val title: String, val description: String)
 

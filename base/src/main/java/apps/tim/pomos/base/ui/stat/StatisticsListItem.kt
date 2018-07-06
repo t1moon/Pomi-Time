@@ -1,7 +1,7 @@
 package apps.tim.pomos.base.ui.stat
 
 
-class StatisticsItem(
+class StatisticsListItem(
         val title: String,
         val pomo: Int,
         val deadline: Long,

@@ -1,7 +1,7 @@
-package apps.tim.pomos.base.ui.stat
+package apps.tim.pomos.base.ui.stat.graph
 
-import apps.tim.pomos.base.printDate
 import apps.tim.pomos.base.data.Statistics
+import apps.tim.pomos.base.printDate
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import java.util.*

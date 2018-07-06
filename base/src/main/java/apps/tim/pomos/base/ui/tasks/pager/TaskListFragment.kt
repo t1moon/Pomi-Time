@@ -9,7 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import apps.tim.pomos.base.*
+import apps.tim.pomos.base.PomoApp
+import apps.tim.pomos.base.R
+import apps.tim.pomos.base.ShowcaseHelper
+import apps.tim.pomos.base.ViewModelFactory
 import apps.tim.pomos.base.data.Task
 import apps.tim.pomos.base.ui.FRAGMENT_PAGE_KEY
 import apps.tim.pomos.base.ui.TASK_ARG
@@ -31,7 +34,7 @@ class TaskListFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    lateinit var tasksViewModel: TasksViewModel
+    private lateinit var tasksViewModel: TasksViewModel
 
     companion object {
         fun newInstance(pos: Int): TaskListFragment {

@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import apps.tim.pomos.base.PomoApp
 import apps.tim.pomos.base.R
+import apps.tim.pomos.base.data.Statistics
 import apps.tim.pomos.base.toDateString
 import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
-import apps.tim.pomos.base.data.Statistics
+import apps.tim.pomos.base.ui.stat.graph.AxisDateFormatter
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -18,12 +19,12 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.PercentFormatter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.statistics_graph_item.*
-import kotlinx.android.synthetic.main.statistics_overall_item.*
 import kotlinx.android.synthetic.main.statistics_list_item.*
+import kotlinx.android.synthetic.main.statistics_overall_item.*
 import java.text.DecimalFormat
 
 
-class StatisticsAdapter(private val items: List<StatisticsItem>,
+class StatisticsAdapter(private val items: List<StatisticsListItem>,
                         private val stats: List<Statistics>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var totalDonePercentage = 0
@@ -81,8 +82,8 @@ class StatisticsAdapter(private val items: List<StatisticsItem>,
     class StatisticsViewHolder(override val containerView: View)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(statisticsItem: StatisticsItem) {
-            with(statisticsItem) {
+        fun bind(statisticsListItem: StatisticsListItem) {
+            with(statisticsListItem) {
                 taskTitle.text = title
                 if (isComplete)
                     taskTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG

@@ -1,19 +1,13 @@
 package apps.tim.pomos.base.ui.tasks
 
-import android.arch.lifecycle.ViewModel
-import apps.tim.pomos.base.PomoApp
-import apps.tim.pomos.base.PreferenceHelper
 import apps.tim.pomos.base.data.Statistics
 import apps.tim.pomos.base.data.Task
 import apps.tim.pomos.base.data.TasksRepository
 import apps.tim.pomos.base.ui.DEFAULT_DATE_LONG
-import apps.tim.pomos.base.ui.STATISTIC_COUNT
 import apps.tim.pomos.base.ui.base.BaseViewModel
-import apps.tim.pomos.base.ui.stat.StatisticsItem
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.toSingle

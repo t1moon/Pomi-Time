@@ -6,23 +6,20 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import apps.tim.pomos.base.*
-import apps.tim.pomos.base.data.Statistics
+import apps.tim.pomos.base.PomoApp
+import apps.tim.pomos.base.R
+import apps.tim.pomos.base.ShowcaseHelper
+import apps.tim.pomos.base.ViewModelFactory
 import apps.tim.pomos.base.ui.base.BaseFragment
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_statistics.*
 import kotlinx.android.synthetic.main.statistics_overall_item.*
-import java.util.*
 import javax.inject.Inject
 
 class StatisticsFragment : BaseFragment() {
-    private var total = 0
-    private lateinit var currentStat: Statistics
-
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    lateinit var statisticsViewModel: StatisticsViewModel
+    private lateinit var statisticsViewModel: StatisticsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,17 +33,15 @@ class StatisticsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeToData()
-        setButtonListeners()
         statisticsViewModel.loadStatistics()
         checkForInitialShowCase()
+        observeToData()
     }
 
     private fun observeToData() {
         statisticsViewModel.apply {
-            statisticsItemsObservable
-                    .zipWith(statisticsObservable, BiFunction(this@StatisticsFragment::setStatistics))
-                    .subscribe()
+            statsReadyObservable
+                    .subscribe(this@StatisticsFragment::setStatistics, this@StatisticsFragment::showError)
                     .addTo(compositeDisposable)
             finishedObservable
                     .subscribe({ activity?.onBackPressed() },
@@ -55,35 +50,19 @@ class StatisticsFragment : BaseFragment() {
         }
     }
 
-    private fun setButtonListeners() {
-        newSessionBtn.setOnClickListener {
-            statisticsViewModel.finishSession(currentStat)
-        }
-    }
 
-    private fun setStatistics(items: List<StatisticsItem>, statistics: List<Statistics>) {
-        calculateCurrentStat(items)
-        val currentStats = statistics.toMutableList()
-        currentStats.add(0, currentStat)
+    private fun setStatistics(combined: StatisticsViewModel.CombinedStatistics) {
+        val items = combined.items
+        val statistics = combined.stats
 
         taskList.layoutManager = LinearLayoutManager(context)
-        val adapter = StatisticsAdapter(items, currentStats)
-        adapter.totalDonePercentage = total
+        val adapter = StatisticsAdapter(items, statistics)
+        adapter.totalDonePercentage = statistics.first().completed
         taskList.adapter = adapter
         (taskList.adapter as StatisticsAdapter).notifyDataSetChanged()
-    }
-
-
-    //TODO shouldn't be here
-    private fun calculateCurrentStat(items: List<StatisticsItem>) {
-        val daily = PreferenceHelper.getDaily(PomoApp.instance)
-        total = (items.fold(0)
-        { total, next: StatisticsItem -> total + next.pomo } / daily.toFloat() * 100).toInt()
-        currentStat = Statistics(
-                id = 0,
-                date = Calendar.getInstance().timeInMillis,
-                completed = total
-        )
+        newSessionBtn.setOnClickListener {
+            statisticsViewModel.finishSession(statistics.first())
+        }
     }
 
     private fun checkForInitialShowCase() {
