@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import apps.tim.pomos.base.EMPTY_STRING
 import apps.tim.pomos.base.R
 import apps.tim.pomos.base.preference.SettingsPreference
 import apps.tim.pomos.base.ui.base.BaseFragment
@@ -33,9 +34,15 @@ class SettingsFragment : BaseFragment() {
             activity?.onBackPressed()
         }
         save.setOnClickListener {
-            val work = workNumber.text.toString().toInt()
-            val rest = restNumber.text.toString().toInt()
-            val daily = dailyNumber.text.toString().toInt()
+            val work = workNumber.text.toString().let {
+                if (it.isEmpty()) 0 else it.toInt()
+            }
+            val rest = restNumber.text.toString().let {
+                if (it.isEmpty()) 0 else it.toInt()
+            }
+            val daily = dailyNumber.text.toString().let {
+                if (it.isEmpty()) 0 else it.toInt()
+            }
             SettingsPreference.workDuration = getValidatedWork(work)
             SettingsPreference.restDuration = getValidatedRest(rest)
             SettingsPreference.dailyGoal = getValidatedDaily(daily)

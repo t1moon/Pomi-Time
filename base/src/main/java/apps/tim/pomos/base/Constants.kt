@@ -2,6 +2,7 @@ package apps.tim.pomos.base
 
 
 const val TASK_ARG = "task"
+const val EMPTY_STRING = ""
 
 const val SECONDS_IN_MINUTE = 60
 const val MILLIS_IN_SECOND = 1000
