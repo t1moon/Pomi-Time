@@ -5,6 +5,8 @@ import apps.tim.pomos.base.data.entity.Statistics
 import apps.tim.pomos.base.data.entity.Task
 import apps.tim.pomos.base.data.repository.TasksRepository
 import apps.tim.pomos.base.ui.base.BaseViewModel
+import apps.tim.pomos.base.ui.navigation.AppRouter
+import apps.tim.pomos.base.ui.navigation.Screens
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -14,7 +16,9 @@ import io.reactivex.rxkotlin.toSingle
 import io.reactivex.subjects.PublishSubject
 
 
-class TasksViewModel(private val tasksRepository: TasksRepository) : BaseViewModel() {
+class TasksViewModel(
+        private val tasksRepository: TasksRepository,
+        private val router: AppRouter) : BaseViewModel() {
 
     val todayListObservable: PublishSubject<List<Task>> = PublishSubject.create()
     val backlogListObservable: PublishSubject<List<Task>> = PublishSubject.create()
@@ -83,5 +87,13 @@ class TasksViewModel(private val tasksRepository: TasksRepository) : BaseViewMod
                     Completable.complete()
                 })
                 .toCompletable()
+    }
+
+    fun openTimer(task: Task) {
+        router.navigateTo(Screens.TIMER_SCREEN, task)
+    }
+
+    fun openStats() {
+        router.navigateTo(Screens.STATISTICS_SCREEN)
     }
 }

@@ -19,6 +19,9 @@ import kotlinx.android.synthetic.main.statistics_overall_item.*
 import javax.inject.Inject
 
 class StatisticsFragment : BaseFragment() {
+    companion object {
+        fun newInstance() = StatisticsFragment()
+    }
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var statisticsViewModel: StatisticsViewModel

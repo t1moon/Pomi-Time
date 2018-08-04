@@ -38,6 +38,7 @@ ext {
     chart = 'v3.0.3'
     showcase = '1.11.0'
     lifecycle = "1.1.1"
+    ciceroneVersion = '3.0.0'
 }
 
 dependencies {
@@ -54,9 +55,6 @@ dependencies {
     implementation "com.android.support:support-vector-drawable:$appcompat"
     implementation "androidx.constraintlayout:constraintlayout:$constraint"
 
-
-    implementation "android.arch.navigation:navigation-fragment-ktx:$navigation"
-    implementation "android.arch.navigation:navigation-ui-ktx:$navigation"
 
     implementation "android.arch.lifecycle:runtime:$lifecycle"
     implementation "android.arch.lifecycle:extensions:$lifecycle"
@@ -76,5 +74,7 @@ dependencies {
     implementation "com.github.PhilJay:MPAndroidChart:$chart"
 
     implementation "com.getkeepsafe.taptargetview:taptargetview:$showcase"
+
+    implementation "ru.terrakok.cicerone:cicerone:$ciceroneVersion"
     application project(':app')
 }

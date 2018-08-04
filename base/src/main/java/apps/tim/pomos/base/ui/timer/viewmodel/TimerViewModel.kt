@@ -6,12 +6,16 @@ import apps.tim.pomos.base.data.repository.TasksRepository
 import apps.tim.pomos.base.preference.SettingsPreference
 import apps.tim.pomos.base.ui.base.BaseViewModel
 import apps.tim.pomos.base.ui.timer.Timer
+import apps.tim.pomos.base.ui.navigation.AppRouter
+import apps.tim.pomos.base.ui.navigation.Screens
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 
-class TimerViewModel(private val tasksRepository: TasksRepository, private val timer: Timer)
+class TimerViewModel(private val tasksRepository: TasksRepository,
+                     private val timer: Timer,
+                     private val router: AppRouter)
     : BaseViewModel() {
 
     fun addPomo(id: Long) =
@@ -78,6 +82,10 @@ class TimerViewModel(private val tasksRepository: TasksRepository, private val t
                             }
                             .toFlowable()
                 }
+    }
+
+    fun openSettings() {
+        router.navigateTo(Screens.SETTINGS_SCREEN)
     }
 
     class ClockTime(inputInMillis: Int) {

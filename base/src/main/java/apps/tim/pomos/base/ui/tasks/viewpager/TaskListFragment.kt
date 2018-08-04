@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import apps.tim.pomos.base.R
 import apps.tim.pomos.base.TASK_ARG
 import apps.tim.pomos.base.TODAY_FRAGMENT_PAGE
@@ -107,9 +106,7 @@ class TaskListFragment : BaseFragment() {
     private fun setTodayAdapter() {
         todayAdapter = TodayTasksAdapter(
                 ({
-                    val bundle = Bundle()
-                    bundle.putParcelable(TASK_ARG, it)
-                    this@TaskListFragment.findNavController().navigate(R.id.action_tasksFragment_to_timerFragment, bundle)
+                    tasksViewModel.openTimer(it)
                 }),
                 ({
                     val bundle = Bundle()

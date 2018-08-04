@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import apps.tim.pomos.base.R
 import apps.tim.pomos.base.preference.SettingsPreference
 import apps.tim.pomos.base.ui.base.BaseFragment
+import apps.tim.pomos.base.ui.stat.StatisticsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : BaseFragment() {
+    companion object {
+        fun newInstance() = SettingsFragment()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -27,7 +30,7 @@ class SettingsFragment : BaseFragment() {
 
         backButton2.setOnClickListener {
             hideSoftKeyboard()
-            activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp()
+            activity?.onBackPressed()
         }
         save.setOnClickListener {
             val work = workNumber.text.toString().toInt()
@@ -37,7 +40,7 @@ class SettingsFragment : BaseFragment() {
             SettingsPreference.restDuration = getValidatedRest(rest)
             SettingsPreference.dailyGoal = getValidatedDaily(daily)
             hideSoftKeyboard()
-            activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp()
+            activity?.onBackPressed()
         }
     }
 

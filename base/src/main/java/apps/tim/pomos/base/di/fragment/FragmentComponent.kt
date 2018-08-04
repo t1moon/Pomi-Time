@@ -4,6 +4,7 @@ import apps.tim.pomos.base.di.screen.TimerScreenComponent
 import apps.tim.pomos.base.ui.addtask.AddTaskFragment
 import apps.tim.pomos.base.ui.edittask.EditTaskFragment
 import apps.tim.pomos.base.ui.stat.StatisticsFragment
+import apps.tim.pomos.base.ui.tasks.TasksFragment
 import apps.tim.pomos.base.ui.tasks.viewpager.TaskListFragment
 import dagger.Subcomponent
 
@@ -12,6 +13,7 @@ import dagger.Subcomponent
 @FragmentScope
 interface FragmentComponent {
     fun inject(fragment: TaskListFragment)
+    fun inject(fragment: TasksFragment)
     fun inject(fragment: AddTaskFragment)
     fun inject(fragment: EditTaskFragment)
     fun inject(fragment: StatisticsFragment)

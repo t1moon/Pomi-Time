@@ -1,5 +1,6 @@
 package apps.tim.pomos.base.ui.tasks
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.ViewPager
@@ -7,22 +8,35 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import apps.tim.pomos.base.BACKLOG_FRAGMENT_PAGE
 import apps.tim.pomos.base.R
 import apps.tim.pomos.base.TODAY_FRAGMENT_PAGE
+import apps.tim.pomos.base.app.PomoApp
+import apps.tim.pomos.base.di.ViewModelFactory
 import apps.tim.pomos.base.showcase.ShowcaseHelper
 import apps.tim.pomos.base.ui.addtask.AddTaskFragment
 import apps.tim.pomos.base.ui.base.BaseFragment
 import apps.tim.pomos.base.ui.tasks.viewpager.TaskListFragment
 import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
+import javax.inject.Inject
 
 
 class TasksFragment : BaseFragment() {
+    companion object {
+        fun newInstance() = TasksFragment()
+    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private lateinit var tasksViewModel: TasksViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        PomoApp.component.getFragmentComponent().inject(this)
+        tasksViewModel = ViewModelProviders.of(this, viewModelFactory)[TasksViewModel::class.java]
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_tasks_tabs, container, false)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +71,7 @@ class TasksFragment : BaseFragment() {
             picker.show(this@TasksFragment.activity?.fragmentManager, "Picker")
         }
         finishBtn.setOnClickListener {
-            it.findNavController().navigate(R.id.action_tasksFragment_to_statsFragment)
+            tasksViewModel.openStats()
         }
     }
 
@@ -78,7 +92,5 @@ class TasksFragment : BaseFragment() {
     // It is necessary to return pomoView as function,
     // because pomoView won't be null by the time it is requested
     private fun getPomoView() = viewPager.getChildAt(TODAY_FRAGMENT_PAGE).findViewById<View>(R.id.taskDeadlineIcon) as View
-
-
 }
 

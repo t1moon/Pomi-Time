@@ -6,7 +6,6 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import apps.tim.pomos.base.R
 import apps.tim.pomos.base.TASK_ARG
 import apps.tim.pomos.base.app.PomoApp
@@ -24,6 +23,9 @@ import javax.inject.Inject
 class TimerFragment : BaseFragment() {
 
     companion object {
+        fun newInstance(task: Task) = TimerFragment().withArgs {
+            putParcelable(TASK_ARG, task)
+        }
         private val WORK_MODE = PomoApp.string(R.string.work)
         private val REST_MODE = PomoApp.string(R.string.rest)
         private const val TIMERVIEW_STATE = "TIMERVIEW_STATE"
@@ -40,7 +42,6 @@ class TimerFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true
         PomoApp.component.getFragmentComponent().getTimerScreenComponent().inject(this)
         timerViewModel = ViewModelProviders.of(this, timerViewModelFactory)[TimerViewModel::class.java]
     }
@@ -50,7 +51,7 @@ class TimerFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (savedInstanceState == null)
+        if (savedInstanceState?.get(TIMERVIEW_STATE) == null)
             resetTimer()
         else
             recoverTimer(savedInstanceState)
@@ -68,10 +69,15 @@ class TimerFragment : BaseFragment() {
     }
 
     private fun recoverTimer(savedInstanceState: Bundle) {
-        timerView.setViewState(savedInstanceState.get(TIMERVIEW_STATE) as TimerView.TimerViewState)
-        timerTime.text = savedInstanceState.get(TIMERCLOCK_STATE_KEY) as String
-        if (savedInstanceState.get(CONTROL_DISABLED) as Boolean) {
-            disableControls()
+        savedInstanceState.get(TIMERVIEW_STATE)?.let {
+            timerView.setViewState(it as TimerView.TimerViewState)
+        }
+        savedInstanceState.get(TIMERCLOCK_STATE_KEY)?.let {
+            timerTime.text = it as String
+        }
+        savedInstanceState.get(CONTROL_DISABLED)?.let {
+            if (it as Boolean)
+                disableControls()
         }
     }
 
@@ -115,10 +121,10 @@ class TimerFragment : BaseFragment() {
 
     private fun setUIListeners() {
         backButton.setOnClickListener {
-            activity?.findNavController(R.id.mainNavigationFragment)?.navigateUp()
+            activity?.onBackPressed()
         }
         settings.setOnClickListener {
-            it.findNavController().navigate(R.id.action_timerFragment_to_settingsFragment)
+            timerViewModel.openSettings()
         }
         timerView.setOnClickListener {
             timerViewModel.timerViewClicked()
@@ -184,9 +190,11 @@ class TimerFragment : BaseFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(TIMERVIEW_STATE, timerView.getViewState())
-        outState.putString(TIMERCLOCK_STATE_KEY, timerTime.text.toString())
-        outState.putBoolean(CONTROL_DISABLED, leftControl.visibility == View.GONE)
+        timerView?.let{
+            outState.putParcelable(TIMERVIEW_STATE, timerView.getViewState())
+            outState.putString(TIMERCLOCK_STATE_KEY, timerTime.text.toString())
+            outState.putBoolean(CONTROL_DISABLED, leftControl.visibility == View.GONE)
+        }
     }
 
     private fun showCase() {
