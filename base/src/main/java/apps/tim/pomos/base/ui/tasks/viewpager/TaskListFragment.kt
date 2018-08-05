@@ -98,7 +98,7 @@ class TaskListFragment : BaseFragment() {
                     bundle.putParcelable(TASK_ARG, it)
                     val picker = EditTaskFragment()
                     picker.arguments = bundle
-                    picker.show((this@TaskListFragment.activity as AppCompatActivity).fragmentManager, "Picker")
+                    picker.show(activity?.supportFragmentManager, "")
                     true
                 }))
     }
@@ -113,7 +113,7 @@ class TaskListFragment : BaseFragment() {
                     bundle.putParcelable(TASK_ARG, it)
                     val picker = EditTaskFragment()
                     picker.arguments = bundle
-                    picker.show((this@TaskListFragment.activity as AppCompatActivity).fragmentManager, "Picker")
+                    picker.show(activity?.supportFragmentManager, "")
                     true
                 }),
                 ({ task: Task, checked: Boolean ->
