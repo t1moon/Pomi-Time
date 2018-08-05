@@ -1,5 +1,8 @@
 package apps.tim.pomos.base.ui.tasks
 
+import android.app.AlertDialog
+import android.app.DialogFragment
+import android.app.ProgressDialog.show
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +18,7 @@ import apps.tim.pomos.base.app.PomoApp
 import apps.tim.pomos.base.di.ViewModelFactory
 import apps.tim.pomos.base.showcase.ShowcaseHelper
 import apps.tim.pomos.base.ui.addtask.AddTaskFragment
+import apps.tim.pomos.base.ui.base.BaseActivity
 import apps.tim.pomos.base.ui.base.BaseFragment
 import apps.tim.pomos.base.ui.tasks.viewpager.TaskListFragment
 import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
@@ -67,8 +71,10 @@ class TasksFragment : BaseFragment() {
 
     private fun setButtonListeners() {
         addTaskButton.setOnClickListener {
-            val picker = AddTaskFragment()
-            picker.show(activity?.supportFragmentManager, "AddTask")
+            (activity as BaseActivity).show()
+//            DialogFragment().show(activity?.fragmentManager, "")
+//            val picker = AddTaskFragment()
+//            picker.show(activity?.supportFragmentManager, "AddTask")
         }
         finishBtn.setOnClickListener {
             tasksViewModel.openStats()
