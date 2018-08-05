@@ -17,7 +17,7 @@ class EditTaskFragment : AddTaskFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         PomoApp.component.getFragmentComponent().inject(this)
-        task = arguments.get(TASK_ARG) as Task
+        task = arguments?.get(TASK_ARG) as Task
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

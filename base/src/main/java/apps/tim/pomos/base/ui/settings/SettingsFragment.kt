@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import apps.tim.pomos.base.EMPTY_STRING
 import apps.tim.pomos.base.R
+import apps.tim.pomos.base.R.id.*
 import apps.tim.pomos.base.preference.SettingsPreference
 import apps.tim.pomos.base.ui.base.BaseFragment
 import apps.tim.pomos.base.ui.stat.StatisticsFragment

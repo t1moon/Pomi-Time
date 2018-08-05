@@ -2,6 +2,7 @@ package apps.tim.pomos.base.ui.base
 
 import android.os.Bundle
 import android.support.annotation.CallSuper
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder

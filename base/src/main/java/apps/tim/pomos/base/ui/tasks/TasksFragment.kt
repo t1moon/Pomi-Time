@@ -68,7 +68,7 @@ class TasksFragment : BaseFragment() {
     private fun setButtonListeners() {
         addTaskButton.setOnClickListener {
             val picker = AddTaskFragment()
-            picker.show(this@TasksFragment.activity?.fragmentManager, "Picker")
+            picker.show(activity?.supportFragmentManager, "AddTask")
         }
         finishBtn.setOnClickListener {
             tasksViewModel.openStats()

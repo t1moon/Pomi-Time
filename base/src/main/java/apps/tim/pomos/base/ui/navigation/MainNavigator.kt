@@ -5,6 +5,7 @@ import android.content.Intent
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import apps.tim.pomos.base.R
 import apps.tim.pomos.base.data.entity.Task
@@ -15,7 +16,8 @@ import apps.tim.pomos.base.ui.timer.TimerFragment
 import ru.terrakok.cicerone.android.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Command
 
-class MainNavigator(activity: FragmentActivity, @IdRes container: Int)
+class MainNavigator(activity: FragmentActivity,
+                    @IdRes container: Int)
     : SupportAppNavigator(activity, container) {
 
     override fun createActivityIntent(context: Context?, screenKey: String?, data: Any?): Intent? =
