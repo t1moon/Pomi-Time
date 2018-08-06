@@ -8,8 +8,8 @@ android {
         applicationId "apps.tim.pomos.app"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 3
-        versionName "1.1"
+        versionCode 4
+        versionName "1.2"
     }
 
     buildTypes {

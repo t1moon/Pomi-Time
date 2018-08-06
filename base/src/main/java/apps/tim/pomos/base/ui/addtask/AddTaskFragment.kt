@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.view.View
-import android.view.WindowManager
 import apps.tim.pomos.base.R
 import apps.tim.pomos.base.app.PomoApp
 import apps.tim.pomos.base.data.entity.Task
@@ -15,7 +14,6 @@ import apps.tim.pomos.base.toDateString
 import apps.tim.pomos.base.ui.base.BaseDialogFragment
 import apps.tim.pomos.base.ui.tasks.TasksViewModel
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import java.util.*
 import javax.inject.Inject
@@ -26,7 +24,7 @@ open class AddTaskFragment : BaseDialogFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    protected lateinit var tasksViewModel: TasksViewModel
+    private lateinit var tasksViewModel: TasksViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +32,10 @@ open class AddTaskFragment : BaseDialogFragment() {
         tasksViewModel = ViewModelProviders.of(activity as FragmentActivity, viewModelFactory)[TasksViewModel::class.java]
     }
 
+    override fun initView(it: View) {
+        setButtonListeners(it)
+        setDatePicker(it)
+    }
     private fun setButtonListeners(view: View) {
         view.run {
             this.ok.setOnClickListener {
@@ -82,8 +84,5 @@ open class AddTaskFragment : BaseDialogFragment() {
     }
 
 
-    override fun initView(it: View) {
-        setButtonListeners(it)
-        setDatePicker(it)
-    }
+
 }
