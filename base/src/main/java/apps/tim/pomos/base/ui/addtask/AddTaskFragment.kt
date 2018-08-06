@@ -35,7 +35,7 @@ open class AddTaskFragment : BaseDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return container?.inflate(R.layout.fragment_add)
+        return inflater.inflate(R.layout.fragment_add, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

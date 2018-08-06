@@ -21,7 +21,7 @@ class EditTaskFragment : AddTaskFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return container?.inflate(R.layout.fragment_edit)
+        return inflater.inflate(R.layout.fragment_edit, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
