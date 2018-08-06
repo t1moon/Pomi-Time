@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import apps.tim.pomos.base.ui.addtask.AddTaskFragment
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 
@@ -33,8 +32,5 @@ abstract class BaseActivity : AppCompatActivity() {
 
     abstract fun getLayoutId() : Int
     abstract fun provideInjection()
-    fun show() {
-        AddTaskFragment().show(supportFragmentManager, "qwe")
-    }
 
 }

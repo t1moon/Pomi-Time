@@ -14,7 +14,7 @@ import apps.tim.pomos.base.TODAY_FRAGMENT_PAGE
 import apps.tim.pomos.base.app.PomoApp
 import apps.tim.pomos.base.di.ViewModelFactory
 import apps.tim.pomos.base.showcase.ShowcaseHelper
-import apps.tim.pomos.base.ui.base.BaseActivity
+import apps.tim.pomos.base.ui.addtask.AddTaskFragment
 import apps.tim.pomos.base.ui.base.BaseFragment
 import apps.tim.pomos.base.ui.tasks.viewpager.TaskListFragment
 import kotlinx.android.synthetic.main.fragment_tasks_tabs.*
@@ -67,10 +67,8 @@ class TasksFragment : BaseFragment() {
 
     private fun setButtonListeners() {
         addTaskButton.setOnClickListener {
-            (activity as BaseActivity).show()
-//            DialogFragment().show(activity?.fragmentManager, "")
-//            val picker = AddTaskFragment()
-//            picker.show(activity?.supportFragmentManager, "AddTask")
+            val picker = AddTaskFragment()
+            picker.show(activity?.supportFragmentManager, "AddTask")
         }
         finishBtn.setOnClickListener {
             tasksViewModel.openStats()

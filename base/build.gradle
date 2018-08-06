@@ -10,8 +10,8 @@ android {
         resConfigs 'ru'
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 4
-        versionName "1.2"
+        versionCode 2
+        versionName "1.0"
         vectorDrawables.useSupportLibrary = true
         androidExtensions {
             experimental = true
